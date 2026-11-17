@@ -47,7 +47,7 @@ export const capabilities = [
   },
   {
     k: "Production & content",
-    v: "Short-form editing at volume, show packaging and production direction. Broadcast assets and lower thirds come from creative director Lawrence Apalla; I run the pipeline and the deliverable.",
+    v: "Short-form editing at volume, show packaging and production direction. Broadcast assets and lower thirds come from our creative director; I run the pipeline and the deliverable.",
   },
   {
     k: "Brand, social & community",
@@ -228,7 +228,7 @@ export const avante = {
   ],
   motto: "Cebu-born. Esports-driven. Always moving forward.",
   what: [
-    { k: "Production & show packaging", v: "Overlays, replay packages and show packaging for tournaments, watch parties and community events, directed by our creative director Lawrence Apalla." },
+    { k: "Production & show packaging", v: "Overlays, replay packages and show packaging for tournaments, watch parties and community events, directed by our creative director." },
     { k: "Tournament operations", v: "Rulebooks, brackets, scheduling, officiating and floor operations for grassroots and mid-size competitive events." },
     { k: "Talent & creator management", v: "Casters, hosts and creators matched to a show, with the paperwork and scheduling handled." },
     { k: "Content & editor pool", v: "Short-form editing retainers that turn stream VODs into clips that travel across TikTok, Reels and Shorts." },
@@ -251,14 +251,13 @@ export const avante = {
     ["Founded", "2020, Cebu"],
     ["Rebooted", "August 2026"],
     ["Run by", "shycodelix, Founder & CEO"],
-    ["Creative direction", "Lawrence Apalla"],
+    ["Creative direction", "In-house"],
     ["Focus", "Esports media & production"],
     ["Working with", "Brands, teams, tournament organisers"],
   ],
   credit: {
-    role: "Creative Director",
-    name: "Lawrence Apalla",
-    note: "Broadcast assets, lower thirds and the Avante visual system.",
+    role: "Creative direction",
+    note: "Broadcast assets, lower thirds and the Avante visual system are made by our creative director, credited on request.",
   },
   cta: {
     label: "Work with Avante",

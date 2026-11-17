@@ -2,7 +2,6 @@ import Link from "next/link";
 import CopyButton from "../../components/CopyButton";
 import Nav from "../../components/Nav";
 import Reveal from "../../components/Reveal";
-import HScroll from "../../components/HScroll";
 import PixelImg from "../../components/PixelImg";
 import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, avanteMail, sensitivity, sensitivityNote, gear, valorant } from "../data";
 
@@ -33,7 +32,7 @@ const jsonLd = {
 
 function Rows({ rows }) {
   return (
-    <dl className="rows">
+    <dl className="rd-rows">
       {rows.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
     </dl>
   );
@@ -41,192 +40,235 @@ function Rows({ rows }) {
 
 function Job({ j }) {
   return (
-    <li className="job">
+    <li className="rd-job">
+      <p className="rd-mono">{j.period} · {j.place}</p>
       <h3>{j.role}</h3>
-      <p className="meta">{j.org} · {j.period} · {j.type} · {j.place}</p>
-      <p>{j.desc}</p>
+      <p className="rd-job-org">{j.org} · {j.type}</p>
+      <p className="rd-job-desc">{j.desc}</p>
     </li>
   );
 }
+
 
 export default function Profile() {
   const games = [...roles.map((g) => g.game), "Dota 2"];
   const verified = profile.links.filter((l) => l.group === "verified");
   const stream = profile.links.filter((l) => l.group === "stream");
   const social = profile.links.filter((l) => l.group === "social");
+  const ticker = ["Esports operations", "Broadcast production", "Video editing", "Team management", "Social & community", "Events", "Customer experience"];
 
   return (
-    <div className="page rm">
+    <div className="page rd">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Nav />
 
-      <header className="rm-head">
-        <div className="rm-head-in">
-          <div className="rm-id">
-            <span className="rm-chip">{profile.status}</span>
-            <p className="rm-eyebrow">{profile.base} · Available for full-time or contract</p>
-            <h1>{profile.name}</h1>
-            <p className="rm-role">{lookingFor.role}</p>
+      <header className="rd-hero">
+        <div className="rd-hero-bar">
+          <span className="rd-status"><i aria-hidden="true" />{profile.status}</span>
+          <span className="rd-mono">{lookingFor.place}</span>
+          <span className="rd-mono">{lookingFor.start}</span>
+        </div>
+
+        <h1 className="rd-h1">
+          operations,<br />production,<br />content<span className="rd-star">*</span>
+        </h1>
+
+        <div className="rd-hero-grid">
+          <div className="rd-hero-copy">
+            <p className="rd-lede">
+              I run esports teams and tournaments, produce the broadcast around them, and have spent
+              nine years leading customer-facing teams in the corporate world. Currently founding
+              Avante Esports.
+            </p>
+            <div className="rd-actions">
+              <a className="rd-cta" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>
+                Email me <span aria-hidden="true">↗</span>
+              </a>
+              <a className="rd-link" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
+              <a className="rd-link" href="/links">Links</a>
+              <Link className="rd-link" href="/">Desktop</Link>
+            </div>
+            <p className="rd-mono rd-hero-note">Gamer tag {profile.tag} · usually replies within a day, Philippine time</p>
           </div>
-          <div className="rm-head-actions">
-            <a className="rm-btn primary" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>Email me</a>
-            <a className="rm-btn" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
-            <a className="rm-btn" href="/links">Links</a>
-            <Link className="rm-btn ghost" href="/">Desktop</Link>
-          </div>
+
+          <figure className="rd-portrait">
+            <img src="/photos/studio.jpg" alt="shycodelix, studio portrait in a black jacket" width="900" height="1160" />
+            <figcaption className="rd-mono">shycodelix · Cebu, PH</figcaption>
+          </figure>
         </div>
       </header>
 
-      <section id="summary" className="rm-summary">
-        <div className="rm-summary-card">
-          <p className="rm-lede">
-            I run esports teams and tournaments, produce the broadcast around them, and have spent nine
-            years leading customer-facing teams in the corporate world. Currently founding Avante Esports.
-          </p>
-          <dl className="rm-facts">
+      <div className="rd-ticker" aria-hidden="true">
+        <div className="rd-track">
+          {[0, 1].map((k) => (
+            <span key={k}>
+              {ticker.map((t) => <b key={t + k}>{t}</b>)}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <section id="summary" className="rd-sec">
+        <h2><em>(01)</em>Profile</h2>
+        <div className="rd-col">
+          <dl className="rd-facts">
             <div><dt>Looking for</dt><dd>{lookingFor.role}</dd></div>
             <div><dt>Type</dt><dd>{lookingFor.type}</dd></div>
             <div><dt>Based in</dt><dd>{lookingFor.place}</dd></div>
             <div><dt>Availability</dt><dd>{lookingFor.start}</dd></div>
           </dl>
-          <ul className="rm-roles">
+          <ul className="rd-roles">
             {lookingFor.roles.map((r) => (
               <li key={r.k}><b>{r.k}</b><span>{r.v}</span></li>
             ))}
           </ul>
-          <p className="rm-note">{lookingFor.note}</p>
+          <p className="rd-note">{lookingFor.note}</p>
         </div>
-        <figure className="rm-portrait">
-          <img src="/photos/studio.jpg" alt="shycodelix, studio portrait in a black jacket" width="900" height="1160" />
-        </figure>
       </section>
 
-      <section id="verified" className="rm-verified">
-        <p className="rm-eyebrow">Verified record</p>
-        <div className="rm-verified-grid">
-          {verified.map((v) => (
-            <a key={v.href} href={v.href} target="_blank" rel="noreferrer">
-              <b>{v.label}</b>
-              <span>{v.note}</span>
-              <svg className="rm-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-                <path d="M4 12 12 4M6 4h6v6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
-              </svg>
-            </a>
-          ))}
-        </div>
-        <p className="rm-note">
-          Third-party records for the same person: BOOM Esports assistant manager (Aug 2022 – Jan 2023) and
-          Abaddon Abyss manager (Dec 2022 – Mar 2023).
-        </p>
-      </section>
-
-      <section id="work" className="sec">
-        <Reveal as="h2">Selected work</Reveal>
-        <ul className="ach">
+      <section id="work" className="rd-sec">
+        <h2><em>(02)</em>Selected<br />work</h2>
+        <div className="rd-col">
+        <ol className="rd-ach">
           {achievements.map((a, i) => (
-            <Reveal as="li" key={a.event} delay={i * 70}>
-              <span className="place">{a.place}</span>
-              <div>
-                <a href={a.href} target="_blank" rel="noreferrer">{a.event}</a>
-                <p><b>{a.role}</b> · {a.team} · {a.date}</p>
-                <p>{a.note}</p>
+            <Reveal as="li" key={a.event} delay={i * 60}>
+              <span className="rd-ach-place">{a.place}</span>
+              <div className="rd-ach-body">
+                <a href={a.href} target="_blank" rel="noreferrer">{a.event} <span aria-hidden="true">↗</span></a>
+                <p className="rd-mono">{a.role} · {a.team} · {a.date}</p>
+                <p className="rd-ach-note">{a.note}</p>
               </div>
             </Reveal>
           ))}
-        </ul>
+        </ol>
+          <a className="rd-kit" href="/">
+            <img src="/kit/scene-starting.webp" alt="Starting scene from the Pixels-3 stream overlay pack" width="1200" height="675" loading="lazy" />
+            <span className="rd-kit-body">
+              <em className="rd-mono">Stream kit</em>
+              <b>Pixels-3 overlay pack, plus a PNGTuber model</b>
+              <span>Five OBS scenes, chat box, transitions, a Stream Deck profile and a model I can talk through. Open stream_kit.exe on the desktop for the walkthrough.</span>
+            </span>
+          </a>
+        </div>
       </section>
 
-      <section id="experience" className="sec">
-        <Reveal as="h2">Experience</Reveal>
-        <ul className="jobs">{experience.slice(0, 5).map((j) => <Job key={j.org + j.period} j={j} />)}</ul>
-        <details className="more">
-          <summary>Earlier roles ({experience.length - 5})</summary>
-          <ul className="jobs">{experience.slice(5).map((j) => <Job key={j.org + j.period} j={j} />)}</ul>
-        </details>
+      <section id="verified" className="rd-sec">
+        <h2><em>(03)</em>Verified<br />record</h2>
+        <div className="rd-col">
+          <p className="rd-note">
+            Third-party records for the same person. Not self-reported: BOOM Esports assistant manager
+            (Aug 2022 – Jan 2023) and Abaddon Abyss manager (Dec 2022 – Mar 2023).
+          </p>
+          <ul className="rd-verified">
+            {verified.map((v) => (
+              <li key={v.href}>
+                <a href={v.href} target="_blank" rel="noreferrer">
+                  <b>{v.label}</b>
+                  <span>{v.note}</span>
+                  <i aria-hidden="true">↗</i>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
-      <section id="skills" className="sec">
-        <Reveal as="h2">What I do</Reveal>
-        <div className="rm-caps">
+      <section id="experience" className="rd-sec">
+        <h2><em>(04)</em>Experience</h2>
+        <div className="rd-col">
+          <ul className="rd-jobs">{experience.slice(0, 5).map((j) => <Job key={j.org + j.period} j={j} />)}</ul>
+          <details className="rd-more">
+            <summary>Earlier roles ({experience.length - 5})</summary>
+            <ul className="rd-jobs">{experience.slice(5).map((j) => <Job key={j.org + j.period} j={j} />)}</ul>
+          </details>
+        </div>
+      </section>
+
+      <section id="skills" className="rd-sec">
+        <h2><em>(05)</em>What<br />I do</h2>
+        <div className="rd-caps">
           {capabilities.map((c, i) => (
             <Reveal key={c.k} delay={i * 60}>
-              <b>{c.k}</b>
+              <h3>{c.k}</h3>
               <p>{c.v}</p>
             </Reveal>
           ))}
         </div>
       </section>
 
-      <section id="avante" className="avante-sec">
-        <img className="av-logo" src="/avante/logo-white.svg" alt="Avante Esports" />
-        <p className="av-tag">{avante.tagline}</p>
-        <p className="av-copy"><b>{profile.name}</b>, {avante.role}. {avante.about}</p>
-        <dl className="av-facts">
-          {avante.facts.slice(0, 4).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
-        </dl>
-        <p className="av-motto">{avante.motto}</p>
-        <div className="av-links">
-          <a href={avanteMail} data-cursor>Work with Avante</a>
-          {avante.links.map((l) => <a key={l.href} href={l.href} target="_blank" rel="noreferrer" data-cursor>{l.label === "Discord" ? "Join Discord" : l.label}</a>)}
+      <section id="avante" className="rd-avante">
+        <div className="rd-avante-in">
+          <img className="rd-av-logo" src="/avante/logo-white.svg" alt="Avante Esports" />
+          <p className="rd-av-tag">{avante.tagline}</p>
+          <p className="rd-av-copy"><b>{profile.name}</b>, {avante.role}. {avante.about}</p>
+          <dl className="rd-av-facts">
+            {avante.facts.slice(0, 4).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
+          </dl>
+          <p className="rd-av-motto">{avante.motto}</p>
+          <div className="rd-av-links">
+            <a href={avanteMail}>Work with Avante</a>
+            {avante.links.map((l) => <a key={l.href} href={l.href} target="_blank" rel="noreferrer">{l.label === "Discord" ? "Discord" : l.label}</a>)}
+          </div>
         </div>
       </section>
 
-      <section id="career" className="career">
-        <HScroll>
-          <div className="hs-intro">
-            <h2>Career in frames</h2>
-            <p>Lionne → BOOM → Abaddon → Avante</p>
-          </div>
+      <section id="career" className="rd-frames">
+        <div className="rd-frames-head">
+          <h2><em>(06)</em>Career<br />in frames</h2>
+          <p className="rd-mono">Lionne → BOOM → Abaddon → Avante · drag or scroll sideways</p>
+        </div>
+        <div className="rd-frames-strip">
           {photos.map((p) => (
-            <figure key={p.src} className="shot" data-cursor style={{ "--ar": p.ar }}>
-              <PixelImg src={p.src} alt={p.alt} ar={p.ar} fill />
+            <figure key={p.src} className="rd-shot" style={{ "--ar": p.ar }}>
+              <PixelImg src={p.src} alt={p.alt} ar={p.ar} fill plain />
               <figcaption><b>{p.team}</b><span>{p.note}</span></figcaption>
             </figure>
           ))}
-        </HScroll>
+        </div>
       </section>
 
-      <section id="setup" className="sec">
-        <Reveal as="h2">Setup</Reveal>
-        <div className="two">
-          {Object.entries(gear).map(([t, rows]) => <Reveal key={t}><h3>{t}</h3><Rows rows={rows} /></Reveal>)}
-          <Reveal>
-            <h3>Sensitivity</h3>
-            <Rows rows={sensitivity} />
-            <p className="meta">{sensitivityNote.text} <a href={sensitivityNote.href} target="_blank" rel="noreferrer">{sensitivityNote.label}</a>.</p>
-          </Reveal>
-          <Reveal><h3>Valorant mouse</h3><Rows rows={valorant.mouse} /></Reveal>
-        </div>
-        <details className="more">
-          <summary>More Valorant settings</summary>
-          <div className="two">
+      <section id="setup" className="rd-sec">
+        <h2><em>(07)</em>Setup</h2>
+        <div className="rd-col">
+          <div className="rd-setup">
+            {Object.entries(gear).map(([t, rows]) => <div key={t}><h3>{t}</h3><Rows rows={rows} /></div>)}
             <div>
-              <h3>Crosshair</h3>
-              <Rows rows={valorant.crosshair} />
-              <code className="code">{valorant.crosshairCode}</code>
-              <CopyButton text={valorant.crosshairCode} />
+              <h3>Sensitivity</h3>
+              <Rows rows={sensitivity} />
+              <p className="rd-note">{sensitivityNote.text} <a href={sensitivityNote.href} target="_blank" rel="noreferrer">{sensitivityNote.label}</a>.</p>
             </div>
-            <div><h3>Keybinds</h3><Rows rows={valorant.keybinds} /></div>
-            <div><h3>Minimap</h3><Rows rows={valorant.map} /></div>
+            <div><h3>Valorant mouse</h3><Rows rows={valorant.mouse} /></div>
           </div>
-        </details>
-        <p className="rm-note">Plays: {games.join(" · ")}</p>
-      </section>
-
-      <section id="contact" className="contact">
-        <h2>Say hello</h2>
-        <div className="cta">
-          <a className="primary" href={`mailto:${profile.email}`} data-cursor>Email me</a>
-          {[...stream, ...social].map((l) => (
-            <a key={l.href} href={l.href} target="_blank" rel="noreferrer" data-cursor>{l.label}</a>
-          ))}
-          <a className="rm-tip" href="https://www.streamelements.com/shycodelix/tip" target="_blank" rel="noreferrer" data-cursor>Tip jar</a>
+          <details className="rd-more">
+            <summary>More Valorant settings</summary>
+            <div className="rd-setup">
+              <div>
+                <h3>Crosshair</h3>
+                <Rows rows={valorant.crosshair} />
+                <code className="rd-code">{valorant.crosshairCode}</code>
+                <CopyButton text={valorant.crosshairCode} />
+              </div>
+              <div><h3>Keybinds</h3><Rows rows={valorant.keybinds} /></div>
+              <div><h3>Minimap</h3><Rows rows={valorant.map} /></div>
+            </div>
+          </details>
+          <p className="rd-note">Plays: {games.join(" · ")}</p>
         </div>
-        <p className="rm-note rm-contact-note">Usually replies within a day, Philippine time.</p>
       </section>
 
-      <footer>
-        <p>Gamer tag: {profile.tag} · Reader mode of shycodelix OS</p>
+      <section id="contact" className="rd-contact">
+        <p className="rd-mono">(08) — Contact</p>
+        <a className="rd-big-mail" href={`mailto:${profile.email}`}>{profile.email}</a>
+        <div className="rd-contact-links">
+          {[...stream, ...social].map((l) => (
+            <a key={l.href} href={l.href} target="_blank" rel="noreferrer">{l.label}</a>
+          ))}
+          <a href="https://www.streamelements.com/shycodelix/tip" target="_blank" rel="noreferrer">Tip jar</a>
+        </div>
+      </section>
+
+      <footer className="rd-foot">
+        <p>Gamer tag: {profile.tag} · reader mode of shycodelix OS</p>
         <p><Link href="/links">Links</Link> · <Link href="/">Desktop</Link> · <a href={profile.source} target="_blank" rel="noreferrer">Konect</a></p>
       </footer>
     </div>

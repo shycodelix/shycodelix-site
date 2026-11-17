@@ -1,4 +1,5 @@
 import { Archivo, DM_Sans, Press_Start_2P, Silkscreen } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import SmoothScroll from "../components/SmoothScroll";
 import Cursor from "../components/Cursor";
@@ -7,6 +8,8 @@ const display = Archivo({ subsets: ["latin"], weight: ["800", "900"], variable: 
 const pixel = Press_Start_2P({ subsets: ["latin"], weight: "400", variable: "--font-pixel", display: "swap" });
 const micro = Silkscreen({ subsets: ["latin"], weight: "400", variable: "--font-micro", display: "swap" });
 const body = DM_Sans({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+// Self-hosted variable Outfit: the reader-mode display face, no build-time fetch.
+const grotesk = localFont({ src: "./fonts/outfit-latin.woff2", weight: "300 600", variable: "--font-grotesk", display: "swap" });
 
 const description = "Esports operations, content creation and customer experience. Philippines.";
 const url = "https://shycodelix.vercel.app";
@@ -29,7 +32,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${pixel.variable} ${micro.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${grotesk.variable} ${pixel.variable} ${micro.variable}`}>
       <body>
         <Cursor />
         <SmoothScroll>{children}</SmoothScroll>

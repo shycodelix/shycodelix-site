@@ -51,7 +51,7 @@ export default function AvanteStudy() {
           ))}
         </ul>
         <p className="note av-note">
-          Creative direction: <b>{avante.credit.name}</b>, {avante.credit.role}. {avante.credit.note}
+          <b>{avante.credit.role}</b>. {avante.credit.note}
         </p>
       </section>
 

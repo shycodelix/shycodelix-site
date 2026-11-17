@@ -56,7 +56,7 @@ export const clips = [
   { month: "Sep 2026", title: "Had a fun gaming night", id: "1GBFU-hLQeLCKQJBF8hTL4rvNi8a8g619" },
   { month: "Sep 2026", title: "Isubo", id: "1bVeQuA0nCDL8QYGIGUssw0B6Q6OmETwJ" },
   { month: "Sep 2026", title: "KAT - First Draft (8/26)", id: "1f5pFKpn5aZ31dB3OJqCbJSySU8jbBKCz" },
-  { month: "Sep 2026", title: "Lawrence - Shycodelix-Kat-Vid-Short-1", id: "1ISrAwAg7GqUvb9FNR4-kD7EzEjUHNqJn" },
+  { month: "Sep 2026", title: "KAT - Short 1", id: "1ISrAwAg7GqUvb9FNR4-kD7EzEjUHNqJn" },
   { month: "Sep 2026", title: "Shyco-shorts-CS2", id: "1e_6gqdKTu5FQWg4U1XW3LCE8IvLp0LN8" },
   { month: "Sep 2026", title: "Throw gun", id: "1Ky_1QFYouj_H08YR0UKsBqNwLLwS7cBB" },
   { month: "Sep 2026", title: "Tilted", id: "11UeghLqbRvVT6L2FelOcFxc9rRmW7aFD" },

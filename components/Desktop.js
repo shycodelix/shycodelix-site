@@ -10,6 +10,7 @@ import Minesweeper from "./Minesweeper";
 import Player from "./Player";
 import Photos from "./Photos";
 import Notepad from "./Notepad";
+import StreamKit from "./StreamKit";
 import AvanteStudy from "./AvanteStudy";
 import { icons, mascot, fine, cloud } from "../app/sprites";
 import { profile, achievements, experience, sensitivity, sensitivityNote, gear, valorant, avante, schedule } from "../app/data";
@@ -215,6 +216,7 @@ const DEFS = {
   schedule: { title: "Stream.cal", icon: "cal", w: 400, body: ScheduleBody },
   term: { title: "cmd.exe", icon: "term", w: 500, body: Terminal },
   notepad: { title: "notepad.exe", icon: "doc", w: 540, body: Notepad },
+  kit: { title: "stream_kit.exe", icon: "monitor", w: 720, body: StreamKit },
   welcome: { title: "welcome.txt", icon: "doc", w: 470, body: WelcomeBody },
   mines: { title: "Minesweeper", icon: "mine", w: 360, body: Minesweeper },
   drive: { title: "(C:)", icon: "disk", w: 420, body: DriveBody },
@@ -223,7 +225,7 @@ const DEFS = {
   error: { title: "Error", icon: "danger", w: 360, body: ErrorBody },
 };
 // Six primaries on the desktop; everything else lives in the Start menu.
-const ICON_IDS = ["about", "work", "avante", "photos", "player", "links", "notepad"];
+const ICON_IDS = ["about", "work", "avante", "photos", "player", "kit", "links", "notepad"];
 const START_ONLY = ["wins", "clips", "setup", "schedule", "term", "mines", "drive", "dont", "bin"];
 
 const BOOT_LINES = [

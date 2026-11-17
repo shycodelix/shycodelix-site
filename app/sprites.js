@@ -28,6 +28,15 @@ wwwwwwwwwwwwwwww
 `;
 
 export const icons = {
+  monitor: `
+kkkkkkkkkk
+kwwwwwwwwk
+kwbbbbbbwk
+kwbooobbwk
+kwbbbbbbwk
+kwwwwwwwwk
+...kkkk...
+...kkkk...`,
   link: `
 kkkkkkkkkk
 kbbbbbbbbk

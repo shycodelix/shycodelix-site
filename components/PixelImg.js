@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-export default function PixelImg({ src, alt, ar = 1, fill = false }) {
+export default function PixelImg({ src, alt, ar = 1, fill = false, plain = false }) {
   const c = useRef(null);
   useEffect(() => {
     const im = new Image();
@@ -17,8 +17,8 @@ export default function PixelImg({ src, alt, ar = 1, fill = false }) {
     im.src = src;
   }, [src, ar]);
   return (
-    <div className={`pimg ${fill ? "fill" : ""}`} style={fill ? undefined : { aspectRatio: ar }} tabIndex={0}>
-      <canvas ref={c} aria-hidden="true" />
+    <div className={`pimg ${fill ? "fill" : ""} ${plain ? "plain" : ""}`} style={fill ? undefined : { aspectRatio: ar }} tabIndex={plain ? undefined : 0}>
+      {!plain && <canvas ref={c} aria-hidden="true" />}
       <img src={src} alt={alt} loading="lazy" />
     </div>
   );
