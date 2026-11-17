@@ -21,3 +21,7 @@ artifacts
 # os / editor
 .DS_Store
 .vscode
+
+# agent tooling installed locally, not part of the site
+.claude/
+skills-lock.json

@@ -63,40 +63,50 @@ export async function POST(request) {
     return Response.json({ error: "Empty question." }, { status: 400 });
   }
 
-  try {
-    const res = await fetch(ENDPOINT, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        model: MODEL,
-        temperature: 0.6,
-        max_tokens: 220,
-        messages: [
-          { role: "system", content: SYSTEM },
-          { role: "user", content: question },
-        ],
-      }),
-      signal: AbortSignal.timeout(14000),
-    });
+  const payload = JSON.stringify({
+    model: MODEL,
+    temperature: 0.6,
+    max_tokens: 180,
+    messages: [
+      { role: "system", content: SYSTEM },
+      { role: "user", content: question },
+    ],
+  });
 
-    if (!res.ok) throw new Error(`Model request failed (${res.status}). Try again in a moment.`);
+  // The free lane is flaky under load. Two attempts, short timeout each,
+  // so a single hiccup doesn't turn into "the model is offline".
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: payload,
+        signal: AbortSignal.timeout(11000),
+      });
 
-    const data = await res.json();
-    const reply = String(data?.choices?.[0]?.message?.content || "")
-      .replace(/```/g, "")
-      .trim()
-      .slice(0, 700);
+      if (!res.ok) throw new Error(`Model request failed (${res.status}). Try again in a moment.`);
 
-    if (!reply) throw new Error("empty completion");
+      const data = await res.json();
+      const reply = String(data?.choices?.[0]?.message?.content || "")
+        .replace(/```/g, "")
+        .trim()
+        .slice(0, 700);
 
-    return Response.json(
-      { reply },
-      { headers: { "cache-control": "no-store" } }
-    );
-  } catch {
-    return Response.json(
-      { error: "Model unreachable. The shell is offline; everything else still works." },
-      { status: 502 }
-    );
+      if (!reply) throw new Error("empty completion");
+
+      return Response.json(
+        { reply },
+        { headers: { "cache-control": "no-store" } }
+      );
+    } catch (err) {
+      if (attempt === 1) {
+        return Response.json(
+          { error: "The model didn't answer. Try again in a moment; everything else here still works." },
+          { status: 502 }
+        );
+      }
+    }
   }
+
+  return Response.json({ error: "The model didn't answer." }, { status: 502 });
 }

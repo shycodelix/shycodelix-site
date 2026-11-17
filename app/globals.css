@@ -639,3 +639,23 @@ h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
 .greet { font-family: var(--font-display), Impact, sans-serif; font-size: 1.5rem; text-transform: uppercase; letter-spacing: -0.01em; }
 .plain.tight { gap: 0.2rem; }
 .plain.tight li { font-size: 0.84rem; }
+
+/* ==========================================================================
+   MOBILE — two-column desktop so icon filenames stop breaking mid-word
+   ========================================================================== */
+@media (max-width: 700px) {
+  .icons { top: 3rem; left: 0.2rem; right: 0.2rem; bottom: 3.8rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.2rem 0.25rem; align-content: start; }
+  .icons .ico { width: 100%; padding: 0.35rem 0.15rem; }
+  .icons .ico span { font-family: var(--font-body), system-ui, sans-serif; font-weight: 700; font-size: 0.62rem; line-height: 1.25; letter-spacing: 0; word-break: normal; overflow-wrap: anywhere; text-wrap: balance; }
+  .topbar { padding: 0.4rem 0.5rem; }
+  .brand { font-size: 0.6rem; text-shadow: 1px 1px 0 rgba(10, 36, 106, 0.65); }
+  .topbar a { font-size: 0.62rem; padding: 0.3rem 0.45rem; }
+  .task { gap: 0.2rem; }
+  .tabs { overflow-x: auto; }
+}
+
+/* mobile dock: signal that it scrolls, and snap between sections */
+@media (max-width: 700px) {
+  .dock { padding: 0.25rem; scroll-snap-type: x proximity; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 22px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 22px), transparent 100%); }
+  .dock a { scroll-snap-align: center; padding: 0.42rem 0.6rem; font-size: 0.68rem; }
+}
