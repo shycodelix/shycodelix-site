@@ -462,6 +462,7 @@ export default function Desktop() {
       onClick={(e) => { if (!e.target.closest(".start,.startbtn")) setStartOpen(false); }}
     >
       <Wallpaper night={night} innerRef={wall} />
+      <h1 className="sr-only">shycodelix — esports operations, production and content</h1>
 
       {[[8, 5, 90, 0], [22, 3, 130, -40], [40, 6, 160, -90], [62, 4, 110, -20], [76, 3, 140, -60]].map(([t, s, d, dl], i) => (
         <div key={i} className="cloud" style={{ top: `${t}%`, animationDuration: `${d}s`, animationDelay: `${dl}s` }}><Sprite art={cloud} size={s * 26} /></div>
