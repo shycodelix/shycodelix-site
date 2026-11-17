@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from "react";
 
 const HELP = [
   "help            this list",
+  "ask <question>  asks the on-board model (or start with ?)",
   "whoami          who you're looking at",
   "ls              files on this desktop",
-  "open <thing>    opens a window (about, work, wins, avante, photos, setup, mines, drive)",
+  "open <thing>    opens a window (about, work, wins, avante, photos, setup, mines, drive, notepad)",
+  "notepad         opens notepad.exe",
   "neofetch        system info, obviously",
   "ping avante     brand latency",
   "sudo hire-me    escalates to the mail client",
@@ -22,7 +24,7 @@ const FILES = [
   "recycle_bin/   Do not open.exe",
 ];
 
-const WINDOWS = ["about", "work", "wins", "avante", "photos", "clips", "setup", "schedule", "mines", "drive", "term"];
+const WINDOWS = ["about", "work", "wins", "avante", "photos", "clips", "setup", "schedule", "mines", "drive", "term", "notepad"];
 
 const NEO = [
   "        .-\"\"\"-.        shycodelix@OS",
@@ -38,8 +40,9 @@ const NEO = [
 export default function Terminal({ open, close, say }) {
   const [lines, setLines] = useState([
     { k: "ok", t: "shycodelix OS [Version 6.1.7601]" },
-    { k: "", t: "Type `help` and press Enter. It's a real prompt, not a picture." },
+    { k: "", t: "Type `help`. The shell is real, and `ask` reaches the model behind it." },
   ]);
+  const [busy, setBusy] = useState(false);
   const [value, setValue] = useState("");
   const [history, setHistory] = useState([]);
   const [hIndex, setHIndex] = useState(-1);
@@ -57,18 +60,58 @@ export default function Terminal({ open, close, say }) {
   const push = (rows) =>
     setLines((l) => [...l, ...rows.map((row) => (typeof row === "string" ? { k: "", t: row } : row))]);
 
+  async function ask(question) {
+    const q = question.trim();
+    if (!q) {
+      push([{ k: "warn", t: "ask: what do you want to know? Try `ask who is this`." }]);
+      return;
+    }
+    setBusy(true);
+    try {
+      const res = await fetch("/api/shell", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ question: q }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const reason = typeof data?.error === "string" ? data.error : `request failed (${res.status})`;
+        throw new Error(reason);
+      }
+      if (typeof data?.reply !== "string" || !data.reply.trim()) throw new Error("The model returned nothing useful.");
+      push([{ k: "ok", t: data.reply.trim() }]);
+    } catch (err) {
+      const raw = typeof err?.message === "string" && err.message !== "[object Object]" ? err.message : "";
+      push([{ k: "warn", t: raw || "The model didn't answer. Try again in a moment; everything else here still works." }]);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   function run(raw) {
     const cmd = raw.trim();
     if (!cmd) return;
     push([{ k: "cmd", t: `C:\\Users\\shycodelix>${cmd}` }]);
     setHistory((h) => [...h, cmd]);
     setHIndex(-1);
+    if (cmd.startsWith("?")) {
+      ask(cmd.slice(1));
+      return;
+    }
+
     const [head, ...rest] = cmd.toLowerCase().split(/\s+/);
     const arg = rest.join(" ");
 
     switch (head) {
       case "help":
         push(HELP);
+        break;
+      case "ask":
+        ask(cmd.slice(head.length));
+        break;
+      case "notepad":
+        push([{ k: "ok", t: "Opening notepad.exe…" }]);
+        open("notepad");
         break;
       case "whoami":
         push(["shycodelix — esports operations, content, and the support tickets nobody else wanted."]);
@@ -133,6 +176,7 @@ export default function Terminal({ open, close, say }) {
         break;
       default:
         push([{ k: "warn", t: `'${cmd}' is not recognized as an internal or external command, operable program or batch file.` }]);
+        push([{ k: "", t: "If you meant to ask a question, try `ask " + cmd + "`." }]);
     }
   }
 
@@ -165,6 +209,7 @@ export default function Terminal({ open, close, say }) {
       {lines.map((l, i) => (
         <p key={i} className={`term-line ${l.k ? `term-${l.k}` : ""}`}>{l.t}</p>
       ))}
+      {busy && <p className="term-line term-warn">thinking…</p>}
       <div className="term-form">
         <span>C:\Users\shycodelix&gt;</span>
         <input

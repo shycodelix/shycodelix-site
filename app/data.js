@@ -1,7 +1,6 @@
 export const profile = {
   name: "shycodelix",
-  realName: "Adam",
-  status: "Looking for team",
+  status: "Open to work",
   country: "Philippines",
   base: "Cebu, Philippines",
   bio: "Esports operations manager, content producer and founder of Avante Esports.",
@@ -18,6 +17,7 @@ export const profile = {
     { label: "Steam", group: "other", href: "https://steamcommunity.com/id/shycodelix/" },
     { label: "FACEIT", group: "other", href: "https://faceit.com/en/players/shycodelix-" },
     { label: "Spotify", group: "other", href: "https://open.spotify.com/user/f1n8o3gbee19lcxwjhr1rozx7" },
+    { label: "Apple Music", group: "other", href: "https://music.apple.com/profile/shyc0delix" },
     { label: "VLR.gg", group: "verified", href: "https://www.vlr.gg/player/35519/shycodelix", note: "Player profile" },
     { label: "Liquipedia", group: "verified", href: "https://liquipedia.net/dota2/BOOM_Esports", note: "BOOM Esports staff" },
     { label: "Konect", group: "verified", href: "https://konect.gg/shycodelix", note: "Link-in-bio profile" },
@@ -27,11 +27,17 @@ export const profile = {
 
 // The short version a hiring manager or client needs in the first five seconds.
 export const lookingFor = {
-  role: "Esports operations & programme management",
+  role: "Video editing · Team management · Events production · Social media · Marketing",
   type: "Full-time or contract",
   place: "Cebu, Philippines · remote-friendly",
   start: "Available now",
-  note: "Also taking on broadcast production, tournament operations and content retainers through Avante Esports.",
+  note: "Also taking on production, tournament operations and content retainers through Avante Esports.",
+  roles: [
+    { k: "Video editing", v: "Short-form at volume for PUBG Mobile Esports through VNG and Tencent, plus the Avante edits archive." },
+    { k: "Team management", v: "Assistant manager of a Dota 2 squad through The International 2022; team manager of a 20-person customer service floor." },
+    { k: "Events production", v: "Tournament marshalling at CONQuest and Campus ACES; production operations at regional conventions." },
+    { k: "Social media & marketing", v: "Led social, brand and campaign work for Abaddon and Polaris Esports, and now for Avante." },
+  ],
 };
 
 export const capabilities = [
@@ -41,11 +47,11 @@ export const capabilities = [
   },
   {
     k: "Production & content",
-    v: "Broadcast graphics, lower thirds and show packaging, plus short-form editing at volume. Built the Avante visual system and the editing pipeline behind it.",
+    v: "Short-form editing at volume, show packaging and production direction. Broadcast assets and lower thirds come from creative director Lawrence Apalla; I run the pipeline and the deliverable.",
   },
   {
     k: "Brand, social & community",
-    v: "Social strategy, campaign planning, community management and the unglamorous work of answering DMs. Grew and ran social for two esports organisations.",
+    v: "Social strategy, campaign planning, community management and the unglamorous work of answering DMs. Grew and ran social for two esports organisations, and built Avante's visual system.",
   },
   {
     k: "Customer-facing leadership",
@@ -62,15 +68,6 @@ export const roles = [
 
 export const achievements = [
   {
-    place: "9–12th",
-    event: "The International 2022 — Dota 2",
-    date: "Oct 2022",
-    team: "BOOM Esports",
-    role: "Assistant Manager",
-    note: "Ran squad logistics and travel for the SEA champions through TI11 in Singapore. $378,612 result.",
-    href: "https://liquipedia.net/dota2/The_International/2022",
-  },
-  {
     place: "1st",
     event: "VCL Philippines: Split 2 — Open Qualifiers",
     date: "Mar 2023",
@@ -80,12 +77,21 @@ export const achievements = [
     href: "https://www.vlr.gg/event/1505/challengers-league-philippines-split-2/open-qualifier",
   },
   {
+    place: "9–12th",
+    event: "The International 2022 — Dota 2",
+    date: "Oct 2022",
+    team: "BOOM Esports",
+    role: "Assistant Manager",
+    note: "Ran squad logistics, visas and travel for the SEA champions through TI11 in Singapore. $378,612 result.",
+    href: "https://liquipedia.net/dota2/The_International/2022",
+  },
+  {
     place: "6th",
     event: "VCL Philippines: Split 1 — Regular Season",
     date: "Feb 2023",
     team: "Abaddon Esports",
     role: "Operations Director",
-    note: "Qualified for playoffs.",
+    note: "Qualified for playoffs, then rebuilt the roster for the next split.",
     href: "https://www.vlr.gg/event/1442/challengers-league-philippines-split-1/playoffs",
   },
   {
@@ -94,13 +100,13 @@ export const achievements = [
     date: "Mar 2022",
     team: "BOOM Esports",
     role: "Assistant Manager (joined Aug 2022)",
-    note: "A Tier 1 title for the squad I went on to manage that season.",
+    note: "A Tier 1 title for the squad I went on to manage later that season.",
     href: "https://liquipedia.net/dota2/GAMERS_GALAXY/Invitational_Series/Dubai/2022",
   },
 ];
 
 export const teams = [
-  { org: "Avante Esports", role: "Founder & CEO", period: "2026 – now" },
+  { org: "Avante Esports", role: "Founder & CEO", period: "2020 – 2022 · 2026 – now" },
   { org: "AcadArena", role: "Senior Marshal", period: "Jun 2023 – now" },
   { org: "Abaddon Esports", role: "Operations Director / Head of Socials", period: "Dec 2022 – Apr 2023" },
   { org: "BOOM Esports", role: "Assistant Manager, Dota 2", period: "Aug 2022 – Jan 2023" },
@@ -156,7 +162,7 @@ export const valorant = {
 };
 
 export const experience = [
-  { role: "Founder & CEO", org: "Avante Esports", period: "2026 – now", type: "Founder", place: "Cebu City", desc: "Building a Filipino esports media and production outfit: broadcast packaging, tournament operations, a creator/editor pool, an editorial desk and community events." },
+  { role: "Founder & CEO", org: "Avante Esports", period: "Aug 2026 – now", type: "Founder", place: "Cebu City", desc: "Rebooted the org I founded in 2020 after its Lootbox Agency chapter. Building a Filipino esports media and production outfit: production direction, tournament operations, a creator/editor pool, an editorial desk and community events." },
   { role: "Team Manager", org: "Alorica", period: "Nov 2025 – Aug 2026", type: "Full-time", place: "Cebu City", desc: "Managed daily performance and service quality for the DoorDash account. Coached agents using metric analysis, onboarded incoming managers and ran employee engagement and recognition programs." },
   { role: "Subject Matter Expert", org: "IntouchCX Philippines", period: "Apr 2024 – Oct 2025", type: "Full-time", place: "Cebu City", desc: "Floor support and email resolution for the Whatnot live shopping marketplace, covering buyer-seller operations, escalations and real-time agent guidance." },
   { role: "Video Editor", org: "VNG Corporation", period: "Mar 2023 – Mar 2024", type: "Part-time", place: "Remote", desc: "Edited short-form TikTok, Reels and YouTube Shorts content for PUBG Mobile Esports with Tencent Games and VNG." },
@@ -177,7 +183,7 @@ export const experience = [
 export const photos = [
   { src: "/photos/lionne.jpg", ar: 0.667, team: "Lionne Esports", note: "2022", alt: "shycodelix in a black and white Lionne Esports jersey, arms crossed" },
   { src: "/photos/boom-team.jpg", ar: 1.776, team: "BOOM Esports", note: "2022 – 2023", alt: "BOOM Esports roster and staff posing together in white jerseys" },
-  { src: "/photos/boom-solo.jpg", ar: 0.563, team: "BOOM Esports", note: "The International 2022", alt: "A BOOM Esports member leaning forward in a white jersey at the TI11 shoot" },
+  { src: "/photos/boom-solo.jpg", ar: 0.563, team: "BOOM Esports", note: "The International 2022", alt: "shycodelix leaning forward in a BOOM Esports jersey at the TI11 shoot" },
   { src: "/photos/abaddon-team.jpg", ar: 1.501, team: "Abaddon Esports", note: "2022 – 2023", alt: "Abaddon Esports team in purple and white jackets" },
   { src: "/photos/abaddon-solo.jpg", ar: 0.666, team: "Abaddon Esports", note: "Operations Director", alt: "shycodelix in a purple and white Abaddon Esports jacket" },
   { src: "/photos/studio.jpg", ar: 0.776, team: "Studio portrait", note: "Esports shoot", alt: "shycodelix in a black hooded jacket, arms crossed" },
@@ -187,6 +193,7 @@ export const photos = [
 export const archive = {
   me: [
     { src: "/photos/main.jpg", ar: 0.69, label: "Off-duty", note: "2024", alt: "Close-up selfie of shycodelix" },
+    { src: "/photos/boom-solo.jpg", ar: 0.563, label: "BOOM Esports", note: "Pre-TI shoot · 2022", credit: "EZZ Studio", alt: "shycodelix leaning forward in a white BOOM Esports jersey at the TI11 shoot" },
     { src: "/photos/archive/me-studio-01.webp", ar: 0.776, label: "Studio", note: "2022", alt: "shycodelix in a black jacket, arms crossed, studio backdrop" },
     { src: "/photos/archive/me-abaddon-01.webp", ar: 0.666, label: "Abaddon Esports", note: "2022", alt: "shycodelix in a purple and white Abaddon Esports jacket on a green screen" },
   ],
@@ -206,15 +213,22 @@ export const avante = {
   name: "Avante Esports",
   tagline: "Filipino esports media and production, built to move forward.",
   role: "Founder & CEO",
-  founded: "2026",
+  founded: "2020",
+  rebooted: "August 2026",
   base: "Cebu, Philippines",
   intro:
-    "Avante Esports is a Filipino esports media and production outfit. We build the parts of an esports event that people actually see and remember — the broadcast, the graphics, the story around it, and the community that shows up for it.",
+    "Avante Esports is a Filipino esports media and production outfit, founded in Cebu in 2020 and rebooted in August 2026. We build the parts of an esports event that people actually see and remember — the broadcast, the graphics, the story around it, and the community that shows up for it.",
   about:
-    "Founded in 2026 by people who met through ranked queues, tournament floors and esports media. Avante has grown into a full-stack brand working across broadcast production, competitive operations, content and editorial for the Philippine scene.",
+    "The org started in 2020 on the local tournament floor. In 2022 it was absorbed in a merger that became The Lootbox Agency, and when that chapter closed in 2023 the Avante name went quiet. It came back in August 2026 as a media and production outfit, run by shycodelix, with a small crew of editors, casters and tournament staff who were already doing the work under other banners.",
+  history: [
+    { when: "2020", what: "Founded in Cebu by shycodelix and a crew from the local tournament floor." },
+    { when: "2022", what: "Absorbed in a merger that became The Lootbox Agency." },
+    { when: "2023", what: "The Lootbox chapter closed. Avante went inactive." },
+    { when: "Aug 2026", what: "Rebooted as an esports media and production outfit." },
+  ],
   motto: "Cebu-born. Esports-driven. Always moving forward.",
   what: [
-    { k: "Broadcast & event production", v: "Overlays, lower thirds, replay packages and show packaging for tournaments, watch parties and community events." },
+    { k: "Production & show packaging", v: "Overlays, replay packages and show packaging for tournaments, watch parties and community events, directed by our creative director Lawrence Apalla." },
     { k: "Tournament operations", v: "Rulebooks, brackets, scheduling, officiating and floor operations for grassroots and mid-size competitive events." },
     { k: "Talent & creator management", v: "Casters, hosts and creators matched to a show, with the paperwork and scheduling handled." },
     { k: "Content & editor pool", v: "Short-form editing retainers that turn stream VODs into clips that travel across TikTok, Reels and Shorts." },
@@ -234,15 +248,23 @@ export const avante = {
     { when: "2027 · H2", what: "Extending live production into our own event formats once the core service work is steady." },
   ],
   facts: [
-    ["Founded", "2026"],
-    ["Base", "Cebu, Philippines"],
+    ["Founded", "2020, Cebu"],
+    ["Rebooted", "August 2026"],
+    ["Run by", "shycodelix, Founder & CEO"],
+    ["Creative direction", "Lawrence Apalla"],
     ["Focus", "Esports media & production"],
-    ["Desks", "Production · Ops · Content · Newsroom"],
     ["Working with", "Brands, teams, tournament organisers"],
   ],
+  credit: {
+    role: "Creative Director",
+    name: "Lawrence Apalla",
+    note: "Broadcast assets, lower thirds and the Avante visual system.",
+  },
   cta: {
     label: "Work with Avante",
     subject: "Avante Esports — project enquiry",
+    email: "avanteesports@gmail.com",
+    cc: "shycodelix@gmail.com",
   },
   links: [
     { label: "Facebook", href: "https://www.facebook.com/avanteesports.gg" },
@@ -252,6 +274,9 @@ export const avante = {
     { label: "Discord", href: "https://discord.gg/YjEVdVfAjc" },
   ],
 };
+
+export const avanteMail =
+  `mailto:${avante.cta.email}?cc=${avante.cta.cc}&subject=${encodeURIComponent(avante.cta.subject)}`;
 
 // Stream schedule: add entries like { day: "Mon", time: "8 PM", game: "Valorant" }
 export const schedule = [];

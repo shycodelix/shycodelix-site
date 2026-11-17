@@ -13,6 +13,8 @@ const L = (g) => profile.links.filter((l) => l.group === g);
 const mail = `mailto:${profile.email}`;
 
 export default function Links() {
+  const tip = L("support").find((l) => l.label === "Tip me");
+
   return (
     <main className="lb">
       <div className="lb-card">
@@ -43,6 +45,14 @@ export default function Links() {
           ))}
         </div>
 
+        {tip && (
+          <a className="lb-tip" href={tip.href} {...ext}>
+            <span className="lb-tip-tag">Tip jar</span>
+            <b>Send a tip</b>
+            <span className="lb-tip-sub">One-off, no account needed. It pays for the next edit.</span>
+          </a>
+        )}
+
         <p className="lb-lab">Follow</p>
         <div className="lb-grid two">
           {L("social").map((l) => (
@@ -64,7 +74,6 @@ export default function Links() {
           {L("verified").map((l) => <a key={l.href} href={l.href} {...ext}>{l.label}</a>)}
         </div>
         <div className="lb-chips solid">
-          {L("support").map((l) => <a key={l.href} href={l.href} {...ext}>{l.label}</a>)}
           {L("other").map((l) => <a key={l.href} href={l.href} {...ext}>{l.label}</a>)}
         </div>
 

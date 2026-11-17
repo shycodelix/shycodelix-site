@@ -4,7 +4,7 @@ import Nav from "../../components/Nav";
 import Reveal from "../../components/Reveal";
 import HScroll from "../../components/HScroll";
 import PixelImg from "../../components/PixelImg";
-import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, sensitivity, sensitivityNote, gear, valorant } from "../data";
+import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, avanteMail, sensitivity, sensitivityNote, gear, valorant } from "../data";
 
 export const metadata = {
   title: "Reader mode",
@@ -15,9 +15,8 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "shycodelix",
-  alternateName: "Adam B. Aseniero",
-  jobTitle: "Esports operations manager",
-  description: "Esports operations, production and content. Founder of Avante Esports. Philippines.",
+  jobTitle: "Esports operations, production and content",
+  description: "Video editing, team management, events production, social media and marketing. Founder of Avante Esports. Philippines.",
   url: "https://shycodelix.vercel.app/profile",
   email: "mailto:shycodelix@gmail.com",
   address: { "@type": "PostalAddress", addressLocality: "Cebu City", addressCountry: "PH" },
@@ -65,7 +64,7 @@ export default function Profile() {
         <div className="rm-head-in">
           <div className="rm-id">
             <span className="rm-chip">{profile.status}</span>
-            <p className="rm-eyebrow">{profile.realName} · {profile.base}</p>
+            <p className="rm-eyebrow">{profile.base} · Available for full-time or contract</p>
             <h1>{profile.name}</h1>
             <p className="rm-role">{lookingFor.role}</p>
           </div>
@@ -90,6 +89,11 @@ export default function Profile() {
             <div><dt>Based in</dt><dd>{lookingFor.place}</dd></div>
             <div><dt>Availability</dt><dd>{lookingFor.start}</dd></div>
           </dl>
+          <ul className="rm-roles">
+            {lookingFor.roles.map((r) => (
+              <li key={r.k}><b>{r.k}</b><span>{r.v}</span></li>
+            ))}
+          </ul>
           <p className="rm-note">{lookingFor.note}</p>
         </div>
         <figure className="rm-portrait">
@@ -104,7 +108,9 @@ export default function Profile() {
             <a key={v.href} href={v.href} target="_blank" rel="noreferrer">
               <b>{v.label}</b>
               <span>{v.note}</span>
-              <i aria-hidden="true">&nearr;</i>
+              <svg className="rm-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M4 12 12 4M6 4h6v6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
+              </svg>
             </a>
           ))}
         </div>
@@ -160,7 +166,7 @@ export default function Profile() {
         </dl>
         <p className="av-motto">{avante.motto}</p>
         <div className="av-links">
-          <a href={`mailto:${profile.email}?subject=${encodeURIComponent(avante.cta.subject)}`} data-cursor>Work with Avante</a>
+          <a href={avanteMail} data-cursor>Work with Avante</a>
           {avante.links.map((l) => <a key={l.href} href={l.href} target="_blank" rel="noreferrer" data-cursor>{l.label === "Discord" ? "Join Discord" : l.label}</a>)}
         </div>
       </section>
@@ -214,6 +220,7 @@ export default function Profile() {
           {[...stream, ...social].map((l) => (
             <a key={l.href} href={l.href} target="_blank" rel="noreferrer" data-cursor>{l.label}</a>
           ))}
+          <a className="rm-tip" href="https://www.streamelements.com/shycodelix/tip" target="_blank" rel="noreferrer" data-cursor>Tip jar</a>
         </div>
         <p className="rm-note rm-contact-note">Usually replies within a day, Philippine time.</p>
       </section>

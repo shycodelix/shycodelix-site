@@ -9,6 +9,7 @@ import Terminal from "./Terminal";
 import Minesweeper from "./Minesweeper";
 import Player from "./Player";
 import Photos from "./Photos";
+import Notepad from "./Notepad";
 import AvanteStudy from "./AvanteStudy";
 import { icons, mascot, fine, cloud } from "../app/sprites";
 import { profile, achievements, experience, sensitivity, sensitivityNote, gear, valorant, avante, schedule } from "../app/data";
@@ -31,7 +32,13 @@ function LinksBody({ open }) {
       <div className="row2 stream">{L("stream").map((l) => <a key={l.href} className="btn" href={l.href} {...ext}>{l.label}</a>)}</div>
       <p className="lab">Follow</p>
       <div className="row2">{L("social").map((l) => <a key={l.href} className="btn" href={l.href} {...ext}>{l.label}</a>)}</div>
-      {L("support").map((l) => <a key={l.href} className="btn" href={l.href} {...ext}>{l.label}</a>)}
+      <p className="lab">Keep the lights on</p>
+      {L("support").map((l) => (
+        <a key={l.href} className="btn tip" href={l.href} {...ext}>
+          <b>{l.label}</b>
+          <small>One-off tips, no account needed. It funds the next edit.</small>
+        </a>
+      ))}
       <div className="chips">{L("other").map((l) => <a key={l.href} href={l.href} {...ext}>{l.label}</a>)}</div>
       <p className="lab">Verified profiles</p>
       <div className="chips">{L("verified").map((l) => <a key={l.href} href={l.href} {...ext}>{l.label}</a>)}</div>
@@ -49,7 +56,7 @@ function AboutBody() {
       <div>
         <p>Hi, I&rsquo;m <b>shycodelix</b>. I run esports operations, edit content and lead customer-facing teams. A jack of all trades in the corporate world.</p>
         <p className="chips"><span>{profile.status}</span><span>{profile.country}</span><span>{avante.role}, Avante Esports</span></p>
-        <p className="note">Hover the photo to un-pixelate me. Psst: the Konami code works here, and <b>cmd.exe</b> is a real terminal.</p>
+        <p className="note">Hover the photo to un-pixelate me. Psst: the Konami code works here, <b>cmd.exe</b> is a real terminal with a model behind it, and <b>notepad</b> actually saves.</p>
       </div>
     </div>
   );
@@ -135,10 +142,10 @@ function BinBody({ say }) {
       <ul className="plain">
         <li>1 skill issue</li>
         <li>3 ranked losses</li>
-        <li>47 rejected overlays</li>
+        <li>47 rejected thumbnails</li>
         <li>0 regrets</li>
       </ul>
-      <button type="button" className="btn" onClick={() => say("Emptying the bin is how the overlays escape. Absolutely not.")}>Empty Recycle Bin</button>
+      <button type="button" className="btn" onClick={() => say("Emptying the bin is how the thumbnails escape. Absolutely not.")}>Empty Recycle Bin</button>
     </div>
   );
 }
@@ -150,11 +157,11 @@ function DriveBody({ say }) {
       <div className="bar"><i style={{ width: "98%" }} /></div>
       <ul className="plain">
         <li>screenshots of my own crosshair<small>4.2 GB</small></li>
-        <li>overlays I swear I&apos;ll use<small>2.8 GB</small></li>
+        <li>thumbnails I swear I&apos;ll use<small>2.8 GB</small></li>
         <li>VOD review clips I never watched<small>9.1 GB</small></li>
         <li>folders named final / final2 / actually_final<small>600 MB</small></li>
       </ul>
-      <button type="button" className="btn" onClick={() => say("Disk Cleanup cancelled. Those overlays are load-bearing.")}>Disk Cleanup</button>
+      <button type="button" className="btn" onClick={() => say("Disk Cleanup cancelled. Those thumbnails are load-bearing.")}>Disk Cleanup</button>
     </div>
   );
 }
@@ -165,6 +172,28 @@ function DontBody({ close }) {
       <p className="pixel" style={{ fontSize: ".62rem", lineHeight: 1.9 }}>I told you.</p>
       <p className="note">Nothing in here. That was the entire joke. You are now part of it.</p>
       <button type="button" className="btn primary" onClick={close}>Fine</button>
+    </div>
+  );
+}
+
+function WelcomeBody({ open, close }) {
+  return (
+    <div className="stack">
+      <p className="greet">Welcome to shycodelix OS.</p>
+      <p>
+        I run esports teams and tournaments, edit video for a living, and just rebooted Avante Esports.
+        Everything on this desktop opens, including a working terminal and notepad.
+      </p>
+      <ul className="plain tight">
+        <li>Work.exe — the full history, in order</li>
+        <li>Reader mode — the short version, for hiring managers</li>
+        <li>cmd.exe — type <b>help</b>, then <b>ask</b> it something</li>
+      </ul>
+      <div className="row2">
+        <button type="button" className="btn primary" onClick={() => { close(); open("work"); }}>Open Work.exe</button>
+        <a className="btn" href="/profile">Reader mode</a>
+      </div>
+      <button type="button" className="btn" onClick={close}>Just looking around</button>
     </div>
   );
 }
@@ -185,6 +214,8 @@ const DEFS = {
   setup: { title: "Setup.ini", icon: "gear", w: 560, body: SetupBody },
   schedule: { title: "Stream.cal", icon: "cal", w: 400, body: ScheduleBody },
   term: { title: "cmd.exe", icon: "term", w: 500, body: Terminal },
+  notepad: { title: "notepad.exe", icon: "doc", w: 540, body: Notepad },
+  welcome: { title: "welcome.txt", icon: "doc", w: 470, body: WelcomeBody },
   mines: { title: "Minesweeper", icon: "mine", w: 360, body: Minesweeper },
   drive: { title: "(C:)", icon: "disk", w: 420, body: DriveBody },
   dont: { title: "Do not open.exe", icon: "danger", w: 360, body: DontBody },
@@ -192,7 +223,7 @@ const DEFS = {
   error: { title: "Error", icon: "danger", w: 360, body: ErrorBody },
 };
 // Six primaries on the desktop; everything else lives in the Start menu.
-const ICON_IDS = ["about", "work", "avante", "photos", "player", "links"];
+const ICON_IDS = ["about", "work", "avante", "photos", "player", "links", "notepad"];
 const START_ONLY = ["wins", "clips", "setup", "schedule", "term", "mines", "drive", "dont", "bin"];
 
 const BOOT_LINES = [
@@ -336,6 +367,16 @@ export default function Desktop() {
   useEffect(() => {
     if (sound) chime();
   }, [sound, chime]);
+
+  // One welcome note per session, so the desktop isn't a blank wallpaper for a first-timer.
+  useEffect(() => {
+    if (phase !== "ready") return;
+    let seen = false;
+    try { seen = !!sessionStorage.getItem("welcomed"); } catch {}
+    if (seen) return;
+    try { sessionStorage.setItem("welcomed", "1"); } catch {}
+    open("welcome");
+  }, [phase, open]);
 
   useEffect(() => {
     const seq = ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"];

@@ -44,7 +44,6 @@ export const clips = [
   { month: "Oct 2026", title: "Wangan tripalovski", id: "1vrB9rXg5z1PC1a-HGzudlMCAJGSCMcuO" },
   { month: "Oct 2026", title: "What are your strengths", id: "17UUv17TkZCMkh-irtSs5QwTeKJEIuGOF" },
   { month: "Oct 2026", title: "You think dora knew", id: "10632mmZ0n17FnVKPldQx0NGcr8rCDg9p" },
-  { month: "Sep 2026", title: "Draft - Lawrence", id: "19DBd4L6SeskDR--H0w-_bV2pRtU7OIHB" },
   { month: "Sep 2026", title: "A day in a life", id: "1LI5aj2vgG8ZC5vXY9VMEXQkWlo02bmts" },
   { month: "Sep 2026", title: "Baby baby boy", id: "1RJkLBOjKIu8R7VH7l7hkVzPphr-ZPTmc" },
   { month: "Sep 2026", title: "Birthday mo ba ngayon pre", id: "1y7P50Jv1hcVhxBihTDNarOKuuudMpE7R" },

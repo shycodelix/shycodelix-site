@@ -601,3 +601,41 @@ h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
 /* media player: keep the Drive embed close to the clip's portrait aspect */
 .wmp-screen { width: 100%; max-width: 24rem; margin: 0 auto; aspect-ratio: 9 / 16; max-height: 46vh; background: #fff; }
 .wmp-screen iframe { background: #fff; }
+
+/* ==========================================================================
+   TIP JAR — promoted on the links page and in Links.exe
+   ========================================================================== */
+.lb-tip { display: grid; gap: 0.1rem; padding: 0.7rem 0.75rem; text-decoration: none; color: #2A1200; background: linear-gradient(#FFB15E, #EE6A0B); border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); transition: transform 0.15s, box-shadow 0.15s; }
+.lb-tip:hover { transform: translate(-1px, -1px); box-shadow: 6px 6px 0 var(--ink); }
+.lb-tip-tag { font-family: var(--font-micro), monospace; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.lb-tip b { font-family: var(--font-display), Impact, sans-serif; font-size: 1.5rem; line-height: 1; text-transform: uppercase; letter-spacing: -0.01em; }
+.lb-tip-sub { font-size: 0.78rem; }
+.btn.tip { display: grid; gap: 0.15rem; justify-items: start; text-align: left; padding: 0.6rem 0.7rem; background: linear-gradient(#FFB15E, #EE6A0B); border-color: #B34B00; }
+.btn.tip b { font-family: var(--font-display), Impact, sans-serif; font-size: 1.15rem; text-transform: uppercase; letter-spacing: -0.01em; }
+.btn.tip small { font-size: 0.72rem; color: #3A1A00; line-height: 1.3; }
+
+/* ==========================================================================
+   NOTEPAD
+   ========================================================================== */
+.np { display: grid; grid-template-rows: auto 1fr auto; gap: 0.4rem; height: min(58vh, 26rem); }
+.np-menu { display: flex; gap: 0.25rem; flex-wrap: wrap; padding-bottom: 0.35rem; border-bottom: 1px solid var(--line); }
+.np-menu button { font-size: 0.72rem; padding: 0.2rem 0.5rem; background: linear-gradient(#FFFDF8, #E4DFCF); border: 1px solid var(--xp-edge); border-radius: 3px; cursor: pointer; }
+.np-menu button:hover { filter: brightness(1.03); }
+.np-area { width: 100%; height: 100%; min-height: 10rem; resize: none; padding: 0.5rem 0.6rem; font-family: var(--font-micro), monospace; font-size: 0.82rem; line-height: 1.6; color: var(--ink); background: #fff; border: 2px inset #B9B4A2; }
+.np-status { display: flex; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; font-family: var(--font-micro), monospace; font-size: 0.66rem; color: var(--dusk); border-top: 1px solid var(--line); padding-top: 0.25rem; }
+
+/* ==========================================================================
+   READER MODE — role list, fixed verified arrow, tip link
+   ========================================================================== */
+.rm-roles { display: grid; gap: 0.4rem; border-top: 2px solid var(--ink); padding-top: 0.8rem; list-style: none; }
+.rm-roles li { display: grid; gap: 0.1rem; }
+.rm-roles b { font-family: var(--font-display), Impact, sans-serif; text-transform: uppercase; font-size: 0.92rem; letter-spacing: -0.01em; }
+.rm-roles span { font-size: 0.82rem; color: var(--dusk); }
+.rm-verified-grid a { padding-right: 2.2rem; align-content: start; }
+.rm-verified-grid .rm-arrow { position: absolute; top: 0.7rem; right: 0.75rem; width: 0.85rem; height: 0.85rem; color: var(--dusk); }
+.rm-verified-grid a:hover .rm-arrow { color: var(--ink); }
+.rm-tip { font-family: var(--font-micro), monospace; font-size: 0.74rem; color: var(--dusk); align-self: center; border-bottom: 1px solid var(--line); }
+.av-mail { font-family: var(--font-micro), monospace; font-size: 0.72rem; color: #B9B9B9; margin-top: 0.4rem; }
+.greet { font-family: var(--font-display), Impact, sans-serif; font-size: 1.5rem; text-transform: uppercase; letter-spacing: -0.01em; }
+.plain.tight { gap: 0.2rem; }
+.plain.tight li { font-size: 0.84rem; }

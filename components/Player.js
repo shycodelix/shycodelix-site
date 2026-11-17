@@ -3,9 +3,8 @@ import { useMemo, useState } from "react";
 import { clips } from "../app/videos";
 
 const MONTHS = ["All", ...new Set(clips.map((c) => c.month))];
-const drive = (id) => `https://drive.google.com/file/d/${id}/view`;
 const preview = (id) => `https://drive.google.com/file/d/${id}/preview`;
-const poster = (id) => `https://drive.google.com/thumbnail?id=${id}&sz=w320`;
+const poster = (id) => `/thumbs/${id}.webp`;
 
 export default function Player() {
   const [month, setMonth] = useState("All");
@@ -56,8 +55,7 @@ export default function Player() {
       </ol>
 
       <p className="note">
-        {clips.length} clips, streaming straight from the edits archive.{" "}
-        <a href={drive(clip.id)} target="_blank" rel="noreferrer">Open in Drive</a>
+        {clips.length} clips from the edits archive, playing in place. Nothing here is downloadable.
       </p>
     </div>
   );

@@ -1,7 +1,7 @@
-import { avante, profile } from "../app/data";
+import { avante, avanteMail } from "../app/data";
 
 const ext = { target: "_blank", rel: "noreferrer" };
-const mailto = `mailto:${profile.email}?subject=${encodeURIComponent(avante.cta.subject)}`;
+const mailto = avanteMail;
 
 export default function AvanteStudy() {
   return (
@@ -10,7 +10,7 @@ export default function AvanteStudy() {
         <img className="logo" src="/avante/logo-white.svg" alt="Avante Esports" width="320" height="80" />
         <p className="study-tag">{avante.tagline}</p>
         <p className="study-meta">
-          Founded {avante.founded} · {avante.base} · Filipino esports media &amp; production
+          Founded {avante.founded} · Rebooted {avante.rebooted} · {avante.base}
         </p>
       </header>
 
@@ -29,7 +29,19 @@ export default function AvanteStudy() {
       </section>
 
       <section>
-        <p className="study-kicker">02 — What we do</p>
+        <p className="study-kicker">02 — History</p>
+        <ul className="av-road">
+          {avante.history.map((h) => (
+            <li key={h.when}>
+              <span className="av-when">{h.when}</span>
+              <span>{h.what}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <p className="study-kicker">03 — What we do</p>
         <ul className="study-list">
           {avante.what.map((p) => (
             <li key={p.k}>
@@ -38,10 +50,13 @@ export default function AvanteStudy() {
             </li>
           ))}
         </ul>
+        <p className="note av-note">
+          Creative direction: <b>{avante.credit.name}</b>, {avante.credit.role}. {avante.credit.note}
+        </p>
       </section>
 
       <section>
-        <p className="study-kicker">03 — How we work</p>
+        <p className="study-kicker">04 — How we work</p>
         <ul className="study-list">
           {avante.how.map((p) => (
             <li key={p.k}>
@@ -53,7 +68,7 @@ export default function AvanteStudy() {
       </section>
 
       <section>
-        <p className="study-kicker">04 — Where we&rsquo;re going</p>
+        <p className="study-kicker">05 — Where we&rsquo;re going</p>
         <ul className="av-road">
           {avante.roadmap.map((r) => (
             <li key={r.what}>
@@ -65,13 +80,17 @@ export default function AvanteStudy() {
       </section>
 
       <section className="av-cta">
-        <p className="study-kicker">05 — Work with us</p>
+        <p className="study-kicker">06 — Work with us</p>
         <p className="study-motto">{avante.motto}</p>
-        <p className="note av-note">Run by {profile.name} &mdash; {avante.role}. Briefs, budgets and timelines to the same inbox.</p>
+        <p className="note av-note">
+          Run by <b>shycodelix</b> — {avante.role}, and founder since {avante.founded}. Briefs, budgets
+          and timelines go to the Avante inbox; I am copied on every one.
+        </p>
         <div className="row2">
           <a className="btn gold" href={mailto}>Work with Avante</a>
           <a className="btn" href={avante.links[0].href} {...ext}>Follow the org</a>
         </div>
+        <p className="av-mail">{avante.cta.email}</p>
         <div className="av-social">
           {avante.links.map((l) => (
             <a key={l.href} href={l.href} {...ext}>{l.label === "Discord" ? "Join Discord" : l.label}</a>
