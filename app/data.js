@@ -1,24 +1,57 @@
 export const profile = {
   name: "shycodelix",
+  realName: "Adam",
   status: "Looking for team",
   country: "Philippines",
-  bio: "Content creator for Avante Esports.",
+  base: "Cebu, Philippines",
+  bio: "Esports operations manager, content producer and founder of Avante Esports.",
   tag: "shycodelix",
   email: "shycodelix@gmail.com",
   links: [
     { label: "Twitch", group: "stream", href: "https://twitch.tv/shycodelix" },
     { label: "TikTok", group: "stream", href: "https://www.tiktok.com/@.shycodelix" },
+    { label: "Kick", group: "stream", href: "https://kick.com/shycodelix" },
+    { label: "YouTube", group: "stream", href: "https://www.youtube.com/@shycodelix" },
     { label: "Facebook", group: "social", href: "https://www.facebook.com/shycodelix/" },
     { label: "Instagram", group: "social", href: "https://www.instagram.com/shycodelix/" },
     { label: "Tip me", group: "support", href: "https://www.streamelements.com/shycodelix/tip" },
-    { label: "Kick", group: "other", href: "https://kick.com/shycodelix" },
-    { label: "YouTube", group: "other", href: "https://www.youtube.com/@shycodelix" },
     { label: "Steam", group: "other", href: "https://steamcommunity.com/id/shycodelix/" },
     { label: "FACEIT", group: "other", href: "https://faceit.com/en/players/shycodelix-" },
     { label: "Spotify", group: "other", href: "https://open.spotify.com/user/f1n8o3gbee19lcxwjhr1rozx7" },
+    { label: "VLR.gg", group: "verified", href: "https://www.vlr.gg/player/35519/shycodelix", note: "Player profile" },
+    { label: "Liquipedia", group: "verified", href: "https://liquipedia.net/dota2/BOOM_Esports", note: "BOOM Esports staff" },
+    { label: "Konect", group: "verified", href: "https://konect.gg/shycodelix", note: "Link-in-bio profile" },
   ],
   source: "https://konect.gg/shycodelix",
 };
+
+// The short version a hiring manager or client needs in the first five seconds.
+export const lookingFor = {
+  role: "Esports operations & programme management",
+  type: "Full-time or contract",
+  place: "Cebu, Philippines · remote-friendly",
+  start: "Available now",
+  note: "Also taking on broadcast production, tournament operations and content retainers through Avante Esports.",
+};
+
+export const capabilities = [
+  {
+    k: "Team & programme operations",
+    v: "Roster management, player welfare, contracts and logistics. Ran a Dota 2 squad through The International, plus boots-on-the-ground tournament marshalling at CONQuest and Campus ACES.",
+  },
+  {
+    k: "Production & content",
+    v: "Broadcast graphics, lower thirds and show packaging, plus short-form editing at volume. Built the Avante visual system and the editing pipeline behind it.",
+  },
+  {
+    k: "Brand, social & community",
+    v: "Social strategy, campaign planning, community management and the unglamorous work of answering DMs. Grew and ran social for two esports organisations.",
+  },
+  {
+    k: "Customer-facing leadership",
+    v: "Nine years across Amazon, IntouchCX and Alorica, up to team manager: metric coaching, onboarding, escalations and employee engagement.",
+  },
+];
 
 export const roles = [
   { game: "Valorant", roles: ["Controller", "Sentinel", "Duelist", "Initiator"] },
@@ -28,15 +61,49 @@ export const roles = [
 ];
 
 export const achievements = [
-  { place: "1st", event: "VCL Philippines: Split 2 – Open Qualifiers", date: "Mar 2023", team: "Abaddon Esports", note: "First team to qualify for the regular season", href: "https://www.vlr.gg/event/1505/challengers-league-philippines-split-2/open-qualifier" },
-  { place: "6th", event: "VCL Philippines: Split 1 – Regular Season", date: "Feb 2023", team: "Abaddon Esports", note: "Qualified for playoffs", href: "https://www.vlr.gg/event/1442/challengers-league-philippines-split-1/playoffs" },
-  { place: "9th", event: "The International 2022 – Dota 2", date: "Oct 2022", team: "BOOM Esports", note: "Finished top 9th–12th", href: "https://liquipedia.net/dota2/The_International/2022" },
+  {
+    place: "9–12th",
+    event: "The International 2022 — Dota 2",
+    date: "Oct 2022",
+    team: "BOOM Esports",
+    role: "Assistant Manager",
+    note: "Ran squad logistics and travel for the SEA champions through TI11 in Singapore. $378,612 result.",
+    href: "https://liquipedia.net/dota2/The_International/2022",
+  },
+  {
+    place: "1st",
+    event: "VCL Philippines: Split 2 — Open Qualifiers",
+    date: "Mar 2023",
+    team: "Abaddon Esports",
+    role: "Operations Director",
+    note: "First team to qualify for the regular season.",
+    href: "https://www.vlr.gg/event/1505/challengers-league-philippines-split-2/open-qualifier",
+  },
+  {
+    place: "6th",
+    event: "VCL Philippines: Split 1 — Regular Season",
+    date: "Feb 2023",
+    team: "Abaddon Esports",
+    role: "Operations Director",
+    note: "Qualified for playoffs.",
+    href: "https://www.vlr.gg/event/1442/challengers-league-philippines-split-1/playoffs",
+  },
+  {
+    place: "1st",
+    event: "GAMERS GALAXY: Dubai 2022 — Dota 2",
+    date: "Mar 2022",
+    team: "BOOM Esports",
+    role: "Assistant Manager (joined Aug 2022)",
+    note: "A Tier 1 title for the squad I went on to manage that season.",
+    href: "https://liquipedia.net/dota2/GAMERS_GALAXY/Invitational_Series/Dubai/2022",
+  },
 ];
 
 export const teams = [
+  { org: "Avante Esports", role: "Founder & CEO", period: "2026 – now" },
   { org: "AcadArena", role: "Senior Marshal", period: "Jun 2023 – now" },
   { org: "Abaddon Esports", role: "Operations Director / Head of Socials", period: "Dec 2022 – Apr 2023" },
-  { org: "BOOM Esports", role: "Assistant Manager", period: "Aug 2022 – Jan 2023" },
+  { org: "BOOM Esports", role: "Assistant Manager, Dota 2", period: "Aug 2022 – Jan 2023" },
   { org: "Lionne Esports", role: "Chief Operating Officer", period: "Jun 2022 – Aug 2022" },
 ];
 
@@ -88,16 +155,8 @@ export const valorant = {
   map: [["Orientation", "Rotate"], ["Minimap size", "1.102"], ["Minimap zoom", "0.9"], ["Vision cones", "On"], ["Region names", "Always"]],
 };
 
-// Link-in-bio landing page settings
-export const landing = {
-  // Put your photo at public/avatar.jpg and optional music at public/music.mp3
-  avatar: "/photos/main.jpg",
-  music: "/music.mp3",
-  enterText: "Click to enter",
-  typewriter: ["Content creator for Avante Esports", "Valorant · CS2 · Overwatch", "Looking for team"],
-};
-
 export const experience = [
+  { role: "Founder & CEO", org: "Avante Esports", period: "2026 – now", type: "Founder", place: "Cebu City", desc: "Building a Filipino esports media and production outfit: broadcast packaging, tournament operations, a creator/editor pool, an editorial desk and community events." },
   { role: "Team Manager", org: "Alorica", period: "Nov 2025 – Aug 2026", type: "Full-time", place: "Cebu City", desc: "Managed daily performance and service quality for the DoorDash account. Coached agents using metric analysis, onboarded incoming managers and ran employee engagement and recognition programs." },
   { role: "Subject Matter Expert", org: "IntouchCX Philippines", period: "Apr 2024 – Oct 2025", type: "Full-time", place: "Cebu City", desc: "Floor support and email resolution for the Whatnot live shopping marketplace, covering buyer-seller operations, escalations and real-time agent guidance." },
   { role: "Video Editor", org: "VNG Corporation", period: "Mar 2023 – Mar 2024", type: "Part-time", place: "Remote", desc: "Edited short-form TikTok, Reels and YouTube Shorts content for PUBG Mobile Esports with Tencent Games and VNG." },
@@ -114,43 +173,76 @@ export const experience = [
   { role: "Assistant Secretary", org: "Bertulfo-Piasidad Law Firm", period: "Sep 2014 – May 2015", type: "Part-time", place: "Cebu City", desc: "Handled calls, schedules, meeting minutes and notary and filing work for legal staff." },
 ];
 
+// Career strip in reader mode
 export const photos = [
   { src: "/photos/lionne.jpg", ar: 0.667, team: "Lionne Esports", note: "2022", alt: "shycodelix in a black and white Lionne Esports jersey, arms crossed" },
   { src: "/photos/boom-team.jpg", ar: 1.776, team: "BOOM Esports", note: "2022 – 2023", alt: "BOOM Esports roster and staff posing together in white jerseys" },
-  { src: "/photos/boom-solo.jpg", ar: 0.563, team: "BOOM Esports", note: "The International 2022", alt: "shycodelix leaning forward in a BOOM Esports jersey" },
+  { src: "/photos/boom-solo.jpg", ar: 0.563, team: "BOOM Esports", note: "The International 2022", alt: "A BOOM Esports member leaning forward in a white jersey at the TI11 shoot" },
   { src: "/photos/abaddon-team.jpg", ar: 1.501, team: "Abaddon Esports", note: "2022 – 2023", alt: "Abaddon Esports team in purple and white jackets" },
   { src: "/photos/abaddon-solo.jpg", ar: 0.666, team: "Abaddon Esports", note: "Operations Director", alt: "shycodelix in a purple and white Abaddon Esports jacket" },
   { src: "/photos/studio.jpg", ar: 0.776, team: "Studio portrait", note: "Esports shoot", alt: "shycodelix in a black hooded jacket, arms crossed" },
 ];
 
+// Photo folder: two tabs. "me" is only the frames I can verify are him.
+export const archive = {
+  me: [
+    { src: "/photos/main.jpg", ar: 0.69, label: "Off-duty", note: "2024", alt: "Close-up selfie of shycodelix" },
+    { src: "/photos/archive/me-studio-01.webp", ar: 0.776, label: "Studio", note: "2022", alt: "shycodelix in a black jacket, arms crossed, studio backdrop" },
+    { src: "/photos/archive/me-abaddon-01.webp", ar: 0.666, label: "Abaddon Esports", note: "2022", alt: "shycodelix in a purple and white Abaddon Esports jacket on a green screen" },
+  ],
+  team: [
+    { src: "/photos/archive/team-abaddon-01.webp", ar: 1.5, label: "Abaddon Esports", note: "Roster & staff · 2022", credit: "Green screen shoot", alt: "Abaddon Esports roster and staff posing on a green screen in purple jackets" },
+    { src: "/photos/archive/team-abaddon-02.webp", ar: 1.5, label: "Abaddon Esports", note: "Roster & staff · 2022", credit: "Green screen shoot", alt: "Abaddon Esports team group photo on a green screen" },
+    { src: "/photos/archive/team-boom-01.webp", ar: 1.776, label: "BOOM Esports", note: "Pre-TI shoot · 2022", credit: "EZZ Studio", alt: "BOOM Esports team gathered in white jerseys in a studio" },
+    { src: "/photos/archive/team-boom-02.webp", ar: 1.776, label: "BOOM Esports", note: "Pre-TI shoot · 2022", credit: "EZZ Studio", alt: "BOOM Esports players huddled arm in arm with heads down" },
+    { src: "/photos/archive/team-boom-03.webp", ar: 1.776, label: "BOOM Esports", note: "Pre-TI shoot · 2022", credit: "EZZ Studio", alt: "BOOM Esports players huddled together laughing" },
+    { src: "/photos/archive/team-boom-04.webp", ar: 1.776, label: "BOOM Esports", note: "Pre-TI shoot · 2022", credit: "EZZ Studio", alt: "BOOM Esports lineup standing in a row on a white studio floor" },
+    { src: "/photos/archive/team-boom-05.webp", ar: 1.776, label: "BOOM Esports", note: "Pre-TI shoot · 2022", credit: "EZZ Studio", alt: "BOOM Esports group photo in dark navy jerseys" },
+    { src: "/photos/archive/team-boom-06.webp", ar: 1.776, label: "BOOM Esports", note: "Pre-TI shoot · 2022", credit: "EZZ Studio", alt: "BOOM Esports lineup seen from behind with player names on jerseys" },
+  ],
+};
+
 export const avante = {
   name: "Avante Esports",
-  tagline: "Filipino media platform built to move forward.",
+  tagline: "Filipino esports media and production, built to move forward.",
   role: "Founder & CEO",
-  about: "Founded in 2026 by passionate esports enthusiasts who crossed paths through video games and esports media. Avante has since evolved into a full-stack brand that caters to gamers, creators and media consumers.",
+  founded: "2026",
+  base: "Cebu, Philippines",
+  intro:
+    "Avante Esports is a Filipino esports media and production outfit. We build the parts of an esports event that people actually see and remember — the broadcast, the graphics, the story around it, and the community that shows up for it.",
+  about:
+    "Founded in 2026 by people who met through ranked queues, tournament floors and esports media. Avante has grown into a full-stack brand working across broadcast production, competitive operations, content and editorial for the Philippine scene.",
   motto: "Cebu-born. Esports-driven. Always moving forward.",
-  study: {
-    intro:
-      "Avante started as a group chat between people who met through ranked queues and esports media, and turned into a media brand with a real visual system. The brief I set was simple: look like a broadcast outfit, not a Facebook page. Everything here is built by a small team that also has day jobs, so the system had to survive being handed to whoever is free that week.",
-    brand:
-      "Gold on black, one wordmark, one mark, and a lower-third package that works at 1080p and in a vertical clip. Three colours, two type sizes, no endless variations — the rule is that anyone on the team can produce a post that still looks like Avante without me in the room.",
-    palette: [
-      ["#101010", "Ink"],
-      ["#D2AE37", "Gold"],
-      ["#E8E8E8", "Bone"],
-    ],
-    pillars: [
-      { k: "Brand & identity", v: "Wordmark, mark, lower thirds, social templates, tone of voice." },
-      { k: "Content operation", v: "Editorial calendar, short-form edits, coverage of Filipino esports scenes." },
-      { k: "Live production", v: "Broadcast graphics, overlays and show packaging for events and watch parties." },
-      { k: "Community", v: "Discord, threads and comments, plus the unglamorous work of answering DMs." },
-    ],
-    steps: [
-      "Pick the story before the graphic. Every post starts as a sentence, not a template.",
-      "Design for the worst case: a phone screen at 30% brightness, over someone's shoulder, on mobile data.",
-      "Ship, then cut. If a format does not survive two weeks, it gets deleted without ceremony.",
-      "Keep one person accountable per platform so the brand does not drift while nobody is looking.",
-    ],
+  what: [
+    { k: "Broadcast & event production", v: "Overlays, lower thirds, replay packages and show packaging for tournaments, watch parties and community events." },
+    { k: "Tournament operations", v: "Rulebooks, brackets, scheduling, officiating and floor operations for grassroots and mid-size competitive events." },
+    { k: "Talent & creator management", v: "Casters, hosts and creators matched to a show, with the paperwork and scheduling handled." },
+    { k: "Content & editor pool", v: "Short-form editing retainers that turn stream VODs into clips that travel across TikTok, Reels and Shorts." },
+    { k: "Editorial newsroom", v: "Coverage of the Philippine esports scene: results, community stories and the people behind them." },
+  ],
+  how: [
+    { k: "Fixed scope, fixed rate card", v: "Every engagement starts with a written deliverable list and a rate, not an estimate that moves." },
+    { k: "Two revision rounds", v: "Included in the quote. Anything after that is a new line item, agreed before we start." },
+    { k: "Crew confirmed before lock", v: "Nobody gets promised to a client until they've confirmed availability in writing." },
+    { k: "One point of contact", v: "You talk to one person who is accountable for the whole deliverable, not a group chat." },
+  ],
+  roadmap: [
+    { when: "2027 · H1", what: "Formalising Avante as a registered production outfit and publishing our service packages and rate cards." },
+    { when: "2027 · H1", what: "One flagship community tournament, fully produced in-house from rulebook to broadcast." },
+    { when: "2027 · H2", what: "Scaling the creator/editor pipeline into standing retainers for partner streamers." },
+    { when: "2027 · H2", what: "An Avante apparel line through print-on-demand and a local jersey partner, with no inventory risk." },
+    { when: "2027 · H2", what: "Extending live production into our own event formats once the core service work is steady." },
+  ],
+  facts: [
+    ["Founded", "2026"],
+    ["Base", "Cebu, Philippines"],
+    ["Focus", "Esports media & production"],
+    ["Desks", "Production · Ops · Content · Newsroom"],
+    ["Working with", "Brands, teams, tournament organisers"],
+  ],
+  cta: {
+    label: "Work with Avante",
+    subject: "Avante Esports — project enquiry",
   },
   links: [
     { label: "Facebook", href: "https://www.facebook.com/avanteesports.gg" },

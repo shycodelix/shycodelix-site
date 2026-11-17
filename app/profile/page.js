@@ -1,33 +1,37 @@
+import Link from "next/link";
 import CopyButton from "../../components/CopyButton";
 import Nav from "../../components/Nav";
 import Reveal from "../../components/Reveal";
-import ScrollWords from "../../components/ScrollWords";
 import HScroll from "../../components/HScroll";
-import Parallax from "../../components/Parallax";
 import PixelImg from "../../components/PixelImg";
-import { profile, roles, achievements, experience, photos, avante, sensitivity, sensitivityNote, gear, valorant } from "../data";
+import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, sensitivity, sensitivityNote, gear, valorant } from "../data";
 
 export const metadata = {
   title: "Reader mode",
-  description: "The no-nonsense version of shycodelix: esports operations, content and customer experience, without the operating system.",
+  description: "shycodelix, without the operating system: esports operations, production, content and customer-facing leadership. Verified career record and contact.",
 };
 
-function Letters({ text }) {
-  return (
-    <span aria-label={text}>
-      {[...text].map((c, i) => <span key={i} aria-hidden="true" className="ch" style={{ "--i": i }}>{c}</span>)}
-    </span>
-  );
-}
-function Job({ j, i }) {
-  return (
-    <Reveal as="li" delay={(i % 3) * 80} className="job">
-      <h3>{j.role}</h3>
-      <p className="meta">{j.org} · {j.period} · {j.type} · {j.place}</p>
-      <p>{j.desc}</p>
-    </Reveal>
-  );
-}
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "shycodelix",
+  alternateName: "Adam B. Aseniero",
+  jobTitle: "Esports operations manager",
+  description: "Esports operations, production and content. Founder of Avante Esports. Philippines.",
+  url: "https://shycodelix.vercel.app/profile",
+  email: "mailto:shycodelix@gmail.com",
+  address: { "@type": "PostalAddress", addressLocality: "Cebu City", addressCountry: "PH" },
+  worksFor: { "@type": "Organization", name: "Avante Esports" },
+  sameAs: [
+    "https://www.vlr.gg/player/35519/shycodelix",
+    "https://liquipedia.net/dota2/BOOM_Esports",
+    "https://konect.gg/shycodelix",
+    "https://twitch.tv/shycodelix",
+    "https://www.youtube.com/@shycodelix",
+    "https://www.tiktok.com/@.shycodelix",
+  ],
+};
+
 function Rows({ rows }) {
   return (
     <dl className="rows">
@@ -36,60 +40,127 @@ function Rows({ rows }) {
   );
 }
 
+function Job({ j }) {
+  return (
+    <li className="job">
+      <h3>{j.role}</h3>
+      <p className="meta">{j.org} · {j.period} · {j.type} · {j.place}</p>
+      <p>{j.desc}</p>
+    </li>
+  );
+}
+
 export default function Profile() {
   const games = [...roles.map((g) => g.game), "Dota 2"];
-  const ig = profile.links.find((l) => l.label === "Instagram");
-  const tt = profile.links.find((l) => l.label === "TikTok");
-  const yt = profile.links.find((l) => l.label === "YouTube");
+  const verified = profile.links.filter((l) => l.group === "verified");
+  const stream = profile.links.filter((l) => l.group === "stream");
+  const social = profile.links.filter((l) => l.group === "social");
+
   return (
-    <div className="page">
+    <div className="page rm">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Nav />
-      <header className="hero">
-        <div className="hero-top"><span className="chip">{profile.status}</span><span>{profile.country}</span></div>
-        <div>
-          <h1><Letters text={profile.name} /></h1>
-          <div className="hero-row">
-            <p className="bio">{profile.bio} A jack of all trades in the corporate world.</p>
-            <Parallax speed={0.12}>
-              <figure className="hero-photo" data-cursor>
-                <img src="/photos/main.jpg" alt="Portrait of shycodelix" width="400" height="533" />
-              </figure>
-            </Parallax>
+
+      <header className="rm-head">
+        <div className="rm-head-in">
+          <div className="rm-id">
+            <span className="rm-chip">{profile.status}</span>
+            <p className="rm-eyebrow">{profile.realName} · {profile.base}</p>
+            <h1>{profile.name}</h1>
+            <p className="rm-role">{lookingFor.role}</p>
+          </div>
+          <div className="rm-head-actions">
+            <a className="rm-btn primary" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>Email me</a>
+            <a className="rm-btn" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
+            <a className="rm-btn" href="/links">Links</a>
+            <Link className="rm-btn ghost" href="/">Desktop</Link>
           </div>
         </div>
       </header>
 
-      <div className="marquee" aria-hidden="true">
-        <div className="track">
-          {[0, 1].map((n) => <span key={n}>{games.map((g) => <b key={g + n}>{g}</b>)}</span>)}
+      <section id="summary" className="rm-summary">
+        <div className="rm-summary-card">
+          <p className="rm-lede">
+            I run esports teams and tournaments, produce the broadcast around them, and have spent nine
+            years leading customer-facing teams in the corporate world. Currently founding Avante Esports.
+          </p>
+          <dl className="rm-facts">
+            <div><dt>Looking for</dt><dd>{lookingFor.role}</dd></div>
+            <div><dt>Type</dt><dd>{lookingFor.type}</dd></div>
+            <div><dt>Based in</dt><dd>{lookingFor.place}</dd></div>
+            <div><dt>Availability</dt><dd>{lookingFor.start}</dd></div>
+          </dl>
+          <p className="rm-note">{lookingFor.note}</p>
         </div>
-      </div>
-
-      <section className="intro">
-        <ScrollWords text="I run esports operations, manage teams and tournaments, edit content and lead customer-facing teams. A jack of all trades, at home in a corporate office and a tournament hall." />
+        <figure className="rm-portrait">
+          <img src="/photos/studio.jpg" alt="shycodelix, studio portrait in a black jacket" width="900" height="1160" />
+        </figure>
       </section>
 
-      <section id="achievements" className="sec">
-        <Reveal as="h2">Wins</Reveal>
+      <section id="verified" className="rm-verified">
+        <p className="rm-eyebrow">Verified record</p>
+        <div className="rm-verified-grid">
+          {verified.map((v) => (
+            <a key={v.href} href={v.href} target="_blank" rel="noreferrer">
+              <b>{v.label}</b>
+              <span>{v.note}</span>
+              <i aria-hidden="true">&nearr;</i>
+            </a>
+          ))}
+        </div>
+        <p className="rm-note">
+          Third-party records for the same person: BOOM Esports assistant manager (Aug 2022 – Jan 2023) and
+          Abaddon Abyss manager (Dec 2022 – Mar 2023).
+        </p>
+      </section>
+
+      <section id="work" className="sec">
+        <Reveal as="h2">Selected work</Reveal>
         <ul className="ach">
           {achievements.map((a, i) => (
-            <Reveal as="li" key={a.event} delay={i * 100}>
+            <Reveal as="li" key={a.event} delay={i * 70}>
               <span className="place">{a.place}</span>
               <div>
                 <a href={a.href} target="_blank" rel="noreferrer">{a.event}</a>
-                <p>{a.team} · {a.note} · {a.date}</p>
+                <p><b>{a.role}</b> · {a.team} · {a.date}</p>
+                <p>{a.note}</p>
               </div>
             </Reveal>
           ))}
         </ul>
       </section>
 
+      <section id="experience" className="sec">
+        <Reveal as="h2">Experience</Reveal>
+        <ul className="jobs">{experience.slice(0, 5).map((j) => <Job key={j.org + j.period} j={j} />)}</ul>
+        <details className="more">
+          <summary>Earlier roles ({experience.length - 5})</summary>
+          <ul className="jobs">{experience.slice(5).map((j) => <Job key={j.org + j.period} j={j} />)}</ul>
+        </details>
+      </section>
+
+      <section id="skills" className="sec">
+        <Reveal as="h2">What I do</Reveal>
+        <div className="rm-caps">
+          {capabilities.map((c, i) => (
+            <Reveal key={c.k} delay={i * 60}>
+              <b>{c.k}</b>
+              <p>{c.v}</p>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
       <section id="avante" className="avante-sec">
         <img className="av-logo" src="/avante/logo-white.svg" alt="Avante Esports" />
         <p className="av-tag">{avante.tagline}</p>
         <p className="av-copy"><b>{profile.name}</b>, {avante.role}. {avante.about}</p>
+        <dl className="av-facts">
+          {avante.facts.slice(0, 4).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
         <p className="av-motto">{avante.motto}</p>
         <div className="av-links">
+          <a href={`mailto:${profile.email}?subject=${encodeURIComponent(avante.cta.subject)}`} data-cursor>Work with Avante</a>
           {avante.links.map((l) => <a key={l.href} href={l.href} target="_blank" rel="noreferrer" data-cursor>{l.label === "Discord" ? "Join Discord" : l.label}</a>)}
         </div>
       </section>
@@ -98,7 +169,7 @@ export default function Profile() {
         <HScroll>
           <div className="hs-intro">
             <h2>Career in frames</h2>
-            <p>Keep scrolling</p>
+            <p>Lionne → BOOM → Abaddon → Avante</p>
           </div>
           {photos.map((p) => (
             <figure key={p.src} className="shot" data-cursor style={{ "--ar": p.ar }}>
@@ -107,21 +178,6 @@ export default function Profile() {
             </figure>
           ))}
         </HScroll>
-      </section>
-
-      <section id="experience" className="sec">
-        <Reveal as="h2">Work</Reveal>
-        <ul className="jobs">{experience.slice(0, 5).map((j, i) => <Job key={j.org + j.period} j={j} i={i} />)}</ul>
-        <details className="more">
-          <summary>Show earlier roles ({experience.length - 5})</summary>
-          <ul className="jobs">{experience.slice(5).map((j, i) => <Job key={j.org + j.period} j={j} i={i} />)}</ul>
-        </details>
-      </section>
-
-      <section id="clips" className="clips">
-        <p>Clips and shorts</p>
-        <a href={ig.href} target="_blank" rel="noreferrer" data-cursor>Watch on Instagram</a>
-        <p className="clips-more">Also on <a href={tt.href} target="_blank" rel="noreferrer">TikTok</a> and <a href={yt.href} target="_blank" rel="noreferrer">YouTube</a></p>
       </section>
 
       <section id="setup" className="sec">
@@ -148,21 +204,23 @@ export default function Profile() {
             <div><h3>Minimap</h3><Rows rows={valorant.map} /></div>
           </div>
         </details>
+        <p className="rm-note">Plays: {games.join(" · ")}</p>
       </section>
 
       <section id="contact" className="contact">
         <h2>Say hello</h2>
         <div className="cta">
           <a className="primary" href={`mailto:${profile.email}`} data-cursor>Email me</a>
-          {profile.links.filter((l) => l.group !== "other").map((l) => (
+          {[...stream, ...social].map((l) => (
             <a key={l.href} href={l.href} target="_blank" rel="noreferrer" data-cursor>{l.label}</a>
           ))}
         </div>
+        <p className="rm-note rm-contact-note">Usually replies within a day, Philippine time.</p>
       </section>
 
       <footer>
         <p>Gamer tag: {profile.tag} · Reader mode of shycodelix OS</p>
-        <a href={profile.source} target="_blank" rel="noreferrer">Konect profile</a>
+        <p><Link href="/links">Links</Link> · <Link href="/">Desktop</Link> · <a href={profile.source} target="_blank" rel="noreferrer">Konect</a></p>
       </footer>
     </div>
   );

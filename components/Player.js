@@ -1,25 +1,64 @@
 "use client";
-import { profile } from "../app/data";
+import { useMemo, useState } from "react";
+import { clips } from "../app/videos";
 
-const ext = { target: "_blank", rel: "noreferrer" };
-const pick = (n) => profile.links.find((l) => l.label === n);
+const MONTHS = ["All", ...new Set(clips.map((c) => c.month))];
+const drive = (id) => `https://drive.google.com/file/d/${id}/view`;
+const preview = (id) => `https://drive.google.com/file/d/${id}/preview`;
+const poster = (id) => `https://drive.google.com/thumbnail?id=${id}&sz=w320`;
 
 export default function Player() {
+  const [month, setMonth] = useState("All");
+  const [i, setI] = useState(0);
+
+  const list = useMemo(() => (month === "All" ? clips : clips.filter((c) => c.month === month)), [month]);
+  const clip = list[Math.min(i, list.length - 1)] || clips[0];
+
+  function pick(m) {
+    setMonth(m);
+    setI(0);
+  }
+
   return (
-    <div className="player">
-      <p className="lab">Now playing — Avante Esports · lower thirds reel</p>
-      <video muted loop playsInline controls preload="metadata" poster="/avante/kv.jpg">
-        <source src="/avante/lower-thirds.webm" type="video/webm" />
-        <source src="/avante/lower-thirds.mp4" type="video/mp4" />
-      </video>
-      <div className="eq" aria-hidden="true">
-        {Array.from({ length: 28 }, (_, i) => <i key={i} style={{ animationDelay: `${(i % 7) * 0.11}s` }} />)}
+    <div className="wmp">
+      <div className="wmp-screen">
+        <iframe
+          key={clip.id}
+          src={preview(clip.id)}
+          title={clip.title}
+          allow="autoplay; fullscreen; encrypted-media"
+          allowFullScreen
+          loading="lazy"
+        />
       </div>
-      <p className="note">Every graphic in here I built, cut, or argued about at 3 AM.</p>
-      <div className="row2">
-        <a className="btn primary" href={pick("Twitch").href} {...ext}>Twitch</a>
-        <a className="btn" href={pick("YouTube").href} {...ext}>YouTube</a>
+
+      <div className="wmp-now">
+        <span className="wmp-dot" aria-hidden="true" />
+        <b>{clip.title}</b>
+        <span className="wmp-meta">{clip.month} · edits archive</span>
       </div>
+
+      <div className="wmp-filters" role="group" aria-label="Filter by month">
+        {MONTHS.map((m) => (
+          <button key={m} type="button" aria-pressed={month === m} className={month === m ? "on" : ""} onClick={() => pick(m)}>{m}</button>
+        ))}
+      </div>
+
+      <ol className="wmp-list">
+        {list.map((c, n) => (
+          <li key={c.id}>
+            <button type="button" aria-current={c.id === clip.id} onClick={() => setI(n)}>
+              <img src={poster(c.id)} alt="" loading="lazy" width="48" height="64" />
+              <span><b>{c.title}</b><small>{c.month}</small></span>
+            </button>
+          </li>
+        ))}
+      </ol>
+
+      <p className="note">
+        {clips.length} clips, streaming straight from the edits archive.{" "}
+        <a href={drive(clip.id)} target="_blank" rel="noreferrer">Open in Drive</a>
+      </p>
     </div>
   );
 }

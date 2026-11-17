@@ -8,9 +8,10 @@ import Wallpaper from "./Wallpaper";
 import Terminal from "./Terminal";
 import Minesweeper from "./Minesweeper";
 import Player from "./Player";
+import Photos from "./Photos";
 import AvanteStudy from "./AvanteStudy";
 import { icons, mascot, fine, cloud } from "../app/sprites";
-import { profile, achievements, experience, photos, sensitivity, sensitivityNote, gear, valorant, avante, schedule } from "../app/data";
+import { profile, achievements, experience, sensitivity, sensitivityNote, gear, valorant, avante, schedule } from "../app/data";
 
 const ext = { target: "_blank", rel: "noreferrer" };
 const L = (g) => profile.links.filter((l) => l.group === g);
@@ -26,15 +27,17 @@ function LinksBody({ open }) {
     <div className="stack">
       <p className="flag">Open to work — <a href={MAIL_WORK}>email me</a></p>
       <a className="btn primary" href={mail}>Email me</a>
-      <p className="lab">Streaming</p>
+      <p className="lab">Live on all four, at the same time</p>
       <div className="row2 stream">{L("stream").map((l) => <a key={l.href} className="btn" href={l.href} {...ext}>{l.label}</a>)}</div>
-      <p className="note">Also multistreaming on YouTube, Facebook and Kick</p>
       <p className="lab">Follow</p>
       <div className="row2">{L("social").map((l) => <a key={l.href} className="btn" href={l.href} {...ext}>{l.label}</a>)}</div>
       {L("support").map((l) => <a key={l.href} className="btn" href={l.href} {...ext}>{l.label}</a>)}
       <div className="chips">{L("other").map((l) => <a key={l.href} href={l.href} {...ext}>{l.label}</a>)}</div>
+      <p className="lab">Verified profiles</p>
+      <div className="chips">{L("verified").map((l) => <a key={l.href} href={l.href} {...ext}>{l.label}</a>)}</div>
       <p className="lab">My startup</p>
       <button type="button" className="btn gold" onClick={() => open("avante")}>Avante Esports</button>
+      <a className="note" href="/links">Open the links page &rarr;</a>
     </div>
   );
 }
@@ -76,16 +79,6 @@ function WinsBody() {
         </li>
       ))}
     </ul>
-  );
-}
-
-function PhotosBody() {
-  return (
-    <div className="grid2">
-      {photos.map((p) => (
-        <figure key={p.src}><PixelImg src={p.src} alt={p.alt} ar={p.ar > 1 ? 1.5 : 0.75} /><figcaption><b>{p.team}</b> · {p.note}</figcaption></figure>
-      ))}
-    </div>
   );
 }
 
@@ -186,7 +179,7 @@ const DEFS = {
   about: { title: "about_me.txt", icon: "doc", w: 540, body: AboutBody },
   work: { title: "Work.exe", icon: "briefcase", w: 560, body: WorkBody },
   wins: { title: "GG.exe", icon: "trophy", w: 480, body: WinsBody },
-  photos: { title: "definitely_not_homework", icon: "folder", w: 620, body: PhotosBody },
+  photos: { title: "definitely_not_homework", icon: "folder", w: 660, body: Photos },
   clips: { title: "it_was_lag.mp4", icon: "play", w: 420, body: ClipsBody },
   player: { title: "Media Player", icon: "play", w: 460, body: Player },
   setup: { title: "Setup.ini", icon: "gear", w: 560, body: SetupBody },
@@ -198,8 +191,9 @@ const DEFS = {
   bin: { title: "Recycle Bin", icon: "bin", w: 380, body: BinBody },
   error: { title: "Error", icon: "danger", w: 360, body: ErrorBody },
 };
-const ICON_IDS = ["links", "avante", "about", "work", "wins", "photos", "clips", "player", "setup", "term", "mines", "dont", "bin"];
-const START_ONLY = ["schedule", "drive"];
+// Six primaries on the desktop; everything else lives in the Start menu.
+const ICON_IDS = ["about", "work", "avante", "photos", "player", "links"];
+const START_ONLY = ["wins", "clips", "setup", "schedule", "term", "mines", "drive", "dont", "bin"];
 
 const BOOT_LINES = [
   "Reticulating splines…",
@@ -223,7 +217,7 @@ function pickLines(n) {
 function Boot({ onDone }) {
   const [p, setP] = useState(0);
   const [lines] = useState(() => pickLines(5));
-  useEffect(() => { const t = setInterval(() => setP((v) => Math.min(100, v + 4)), 90); return () => clearInterval(t); }, []);
+  useEffect(() => { const t = setInterval(() => setP((v) => Math.min(100, v + 7)), 60); return () => clearInterval(t); }, []);
   useEffect(() => { if (p >= 100) { const t = setTimeout(onDone, 320); return () => clearTimeout(t); } }, [p, onDone]);
   const line = lines[Math.min(lines.length - 1, Math.floor(p / (100 / lines.length)))];
   return (
@@ -320,13 +314,13 @@ export default function Desktop() {
     let seen = false;
     try { seen = !!sessionStorage.getItem("booted"); } catch {}
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (seen || reduce) { setPhase("ready"); open("links"); } else setPhase("boot");
+    if (seen || reduce) setPhase("ready"); else setPhase("boot");
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const finishBoot = useCallback(() => {
     try { sessionStorage.setItem("booted", "1"); } catch {}
-    setPhase("ready"); open("links");
-  }, [open]);
+    setPhase("ready");
+  }, []);
 
   useEffect(() => {
     const tick = () => {
@@ -434,7 +428,10 @@ export default function Desktop() {
 
       <header className="topbar">
         <span className="brand">shycodelix OS</span>
-        <Link href="/profile">Reader mode &rarr;</Link>
+        <span className="topbar-links">
+          <Link href="/links">Links</Link>
+          <Link href="/profile">Reader mode &rarr;</Link>
+        </span>
       </header>
 
       <div className="icons">
@@ -479,6 +476,7 @@ export default function Desktop() {
           <p className="lab">Avante Esports</p>
           {avante.links.map((l) => <a key={l.href} href={l.href} {...ext}>{l.label}</a>)}
           <p className="lab">Elsewhere</p>
+          <Link href="/links">Links page</Link>
           <Link href="/profile">Reader mode</Link>
           <button type="button" onClick={() => open("error")}>Shut Down&hellip;</button>
         </div>

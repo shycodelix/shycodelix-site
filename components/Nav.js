@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useLenis } from "lenis/react";
 import { useEffect, useRef, useState } from "react";
 
-const items = [["achievements", "Wins"], ["avante", "Avante"], ["career", "Career"], ["experience", "Work"], ["clips", "Clips"], ["setup", "Setup"], ["contact", "Contact"]];
+const items = [["summary", "Summary"], ["verified", "Verified"], ["work", "Work"], ["experience", "Experience"], ["skills", "Skills"], ["avante", "Avante"], ["career", "Frames"], ["setup", "Setup"], ["contact", "Contact"]];
 
 export default function Nav() {
   const [active, setActive] = useState("");
@@ -34,6 +34,7 @@ export default function Nav() {
       <div className="progress" ref={bar} aria-hidden="true" />
       <nav className="dock" aria-label="Sections">
         <Link href="/">Desktop</Link>
+        <Link href="/links">Links</Link>
         {items.map(([id, label]) => (
           <a key={id} href={`#${id}`} onClick={(e) => go(e, id)} aria-current={active === id ? "true" : undefined}>{label}</a>
         ))}
