@@ -129,6 +129,29 @@ export const avante = {
   role: "Founder & CEO",
   about: "Founded in 2026 by passionate esports enthusiasts who crossed paths through video games and esports media. Avante has since evolved into a full-stack brand that caters to gamers, creators and media consumers.",
   motto: "Cebu-born. Esports-driven. Always moving forward.",
+  study: {
+    intro:
+      "Avante started as a group chat between people who met through ranked queues and esports media, and turned into a media brand with a real visual system. The brief I set was simple: look like a broadcast outfit, not a Facebook page. Everything here is built by a small team that also has day jobs, so the system had to survive being handed to whoever is free that week.",
+    brand:
+      "Gold on black, one wordmark, one mark, and a lower-third package that works at 1080p and in a vertical clip. Three colours, two type sizes, no endless variations — the rule is that anyone on the team can produce a post that still looks like Avante without me in the room.",
+    palette: [
+      ["#101010", "Ink"],
+      ["#D2AE37", "Gold"],
+      ["#E8E8E8", "Bone"],
+    ],
+    pillars: [
+      { k: "Brand & identity", v: "Wordmark, mark, lower thirds, social templates, tone of voice." },
+      { k: "Content operation", v: "Editorial calendar, short-form edits, coverage of Filipino esports scenes." },
+      { k: "Live production", v: "Broadcast graphics, overlays and show packaging for events and watch parties." },
+      { k: "Community", v: "Discord, threads and comments, plus the unglamorous work of answering DMs." },
+    ],
+    steps: [
+      "Pick the story before the graphic. Every post starts as a sentence, not a template.",
+      "Design for the worst case: a phone screen at 30% brightness, over someone's shoulder, on mobile data.",
+      "Ship, then cut. If a format does not survive two weeks, it gets deleted without ceremony.",
+      "Keep one person accountable per platform so the brand does not drift while nobody is looking.",
+    ],
+  },
   links: [
     { label: "Facebook", href: "https://www.facebook.com/avanteesports.gg" },
     { label: "Instagram", href: "https://www.instagram.com/avanteesports.gg/" },

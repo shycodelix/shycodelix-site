@@ -4,12 +4,18 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Sprite from "./Sprite";
 import PixelImg from "./PixelImg";
 import CopyButton from "./CopyButton";
-import { icons, mascot, cloud } from "../app/sprites";
+import Wallpaper from "./Wallpaper";
+import Terminal from "./Terminal";
+import Minesweeper from "./Minesweeper";
+import Player from "./Player";
+import AvanteStudy from "./AvanteStudy";
+import { icons, mascot, fine, cloud } from "../app/sprites";
 import { profile, achievements, experience, photos, sensitivity, sensitivityNote, gear, valorant, avante, schedule } from "../app/data";
 
 const ext = { target: "_blank", rel: "noreferrer" };
 const L = (g) => profile.links.filter((l) => l.group === g);
 const mail = `mailto:${profile.email}`;
+const MAIL_WORK = `mailto:${profile.email}?subject=Let%27s%20work%20together`;
 
 function Rows({ rows }) {
   return <dl className="rows">{rows.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>;
@@ -18,6 +24,7 @@ function Rows({ rows }) {
 function LinksBody({ open }) {
   return (
     <div className="stack">
+      <p className="flag">Open to work — <a href={MAIL_WORK}>email me</a></p>
       <a className="btn primary" href={mail}>Email me</a>
       <p className="lab">Streaming</p>
       <div className="row2 stream">{L("stream").map((l) => <a key={l.href} className="btn" href={l.href} {...ext}>{l.label}</a>)}</div>
@@ -39,7 +46,7 @@ function AboutBody() {
       <div>
         <p>Hi, I&rsquo;m <b>shycodelix</b>. I run esports operations, edit content and lead customer-facing teams. A jack of all trades in the corporate world.</p>
         <p className="chips"><span>{profile.status}</span><span>{profile.country}</span><span>{avante.role}, Avante Esports</span></p>
-        <p className="note">Hover the photo to un-pixelate me. Psst: the Konami code works here.</p>
+        <p className="note">Hover the photo to un-pixelate me. Psst: the Konami code works here, and <b>cmd.exe</b> is a real terminal.</p>
       </div>
     </div>
   );
@@ -102,7 +109,7 @@ function SetupBody() {
         <p className="note">{sensitivityNote.text} <a href={sensitivityNote.href} {...ext}>{sensitivityNote.label}</a>.</p>
       </div>
       <div><p className="lab">Valorant mouse</p><Rows rows={valorant.mouse} /></div>
-      <details><summary>More Valorant settings</summary>
+      <details><summary className="lab">More Valorant settings</summary>
         <p className="lab">Crosshair</p><Rows rows={valorant.crosshair} />
         <code className="code">{valorant.crosshairCode}</code><CopyButton text={valorant.crosshairCode} />
         <p className="lab">Keybinds</p><Rows rows={valorant.keybinds} />
@@ -114,32 +121,59 @@ function SetupBody() {
 
 function ScheduleBody() {
   if (!schedule.length) {
-    return <div className="stack"><p>Schedule loading&hellip; just kidding, I&rsquo;m still deciding.</p><p>Follow me on Twitch or TikTok and you&rsquo;ll catch the next stream.</p><div className="row2">{L("stream").map((l) => <a key={l.href} className="btn" href={l.href} {...ext}>{l.label}</a>)}</div></div>;
+    return (
+      <div className="stack">
+        <div className="finebox">
+          <Sprite art={fine} size={128} />
+          <p className="pixel">This is fine.</p>
+        </div>
+        <p className="note">No stream schedule posted. I&rsquo;m still deciding, which is a schedule of sorts. Follow on Twitch or TikTok and you&rsquo;ll catch the next one live.</p>
+        <div className="row2">{L("stream").map((l) => <a key={l.href} className="btn" href={l.href} {...ext}>{l.label}</a>)}</div>
+      </div>
+    );
   }
   return <Rows rows={schedule.map((s) => [`${s.day} ${s.time}`, s.game])} />;
 }
 
-function AvanteBody() {
+function BinBody({ say }) {
   return (
-    <div className="av">
-      <div className="av-hero">
-        <img className="logo" src="/avante/logo-white.svg" alt="Avante Esports" />
-        <video autoPlay muted loop playsInline preload="metadata" aria-hidden="true">
-          <source src="/avante/lower-thirds.webm" type="video/webm" />
-          <source src="/avante/lower-thirds.mp4" type="video/mp4" />
-        </video>
-      </div>
-      <p className="gold">{avante.tagline}</p>
-      <p><b>{profile.name}</b>, {avante.role}</p>
-      <p>{avante.about}</p>
-      <p className="motto">{avante.motto}</p>
-      <div className="row2">{avante.links.map((l) => <a key={l.href} className="btn gold" href={l.href} {...ext}>{l.label === "Discord" ? "Join Discord" : l.label}</a>)}</div>
+    <div className="stack">
+      <p>Contents:</p>
+      <ul className="plain">
+        <li>1 skill issue</li>
+        <li>3 ranked losses</li>
+        <li>47 rejected overlays</li>
+        <li>0 regrets</li>
+      </ul>
+      <button type="button" className="btn" onClick={() => say("Emptying the bin is how the overlays escape. Absolutely not.")}>Empty Recycle Bin</button>
     </div>
   );
 }
 
-function BinBody() {
-  return <div className="stack"><p>Contents:</p><ul className="plain"><li>1 skill issue</li><li>3 ranked losses</li><li>47 rejected overlays</li><li>0 regrets</li></ul></div>;
+function DriveBody({ say }) {
+  return (
+    <div className="drive">
+      <p className="lab">Local Disk (C:) — 98% full</p>
+      <div className="bar"><i style={{ width: "98%" }} /></div>
+      <ul className="plain">
+        <li>screenshots of my own crosshair<small>4.2 GB</small></li>
+        <li>overlays I swear I&apos;ll use<small>2.8 GB</small></li>
+        <li>VOD review clips I never watched<small>9.1 GB</small></li>
+        <li>folders named final / final2 / actually_final<small>600 MB</small></li>
+      </ul>
+      <button type="button" className="btn" onClick={() => say("Disk Cleanup cancelled. Those overlays are load-bearing.")}>Disk Cleanup</button>
+    </div>
+  );
+}
+
+function DontBody({ close }) {
+  return (
+    <div className="stack">
+      <p className="pixel" style={{ fontSize: ".62rem", lineHeight: 1.9 }}>I told you.</p>
+      <p className="note">Nothing in here. That was the entire joke. You are now part of it.</p>
+      <button type="button" className="btn primary" onClick={close}>Fine</button>
+    </div>
+  );
 }
 
 function ErrorBody({ close }) {
@@ -148,30 +182,56 @@ function ErrorBody({ close }) {
 
 const DEFS = {
   links: { title: "Links.exe", icon: "link", w: 380, body: LinksBody },
+  avante: { title: "Avante.exe", icon: "star", w: 660, body: AvanteStudy },
   about: { title: "about_me.txt", icon: "doc", w: 540, body: AboutBody },
   work: { title: "Work.exe", icon: "briefcase", w: 560, body: WorkBody },
   wins: { title: "GG.exe", icon: "trophy", w: 480, body: WinsBody },
-  photos: { title: "definitely_not_homework", icon: "folder", w: 600, body: PhotosBody },
+  photos: { title: "definitely_not_homework", icon: "folder", w: 620, body: PhotosBody },
   clips: { title: "it_was_lag.mp4", icon: "play", w: 420, body: ClipsBody },
+  player: { title: "Media Player", icon: "play", w: 460, body: Player },
   setup: { title: "Setup.ini", icon: "gear", w: 560, body: SetupBody },
-  schedule: { title: "Stream.cal", icon: "cal", w: 380, body: ScheduleBody },
-  avante: { title: "Avante.exe", icon: "star", w: 640, body: AvanteBody },
+  schedule: { title: "Stream.cal", icon: "cal", w: 400, body: ScheduleBody },
+  term: { title: "cmd.exe", icon: "term", w: 500, body: Terminal },
+  mines: { title: "Minesweeper", icon: "mine", w: 360, body: Minesweeper },
+  drive: { title: "(C:)", icon: "disk", w: 420, body: DriveBody },
+  dont: { title: "Do not open.exe", icon: "danger", w: 360, body: DontBody },
   bin: { title: "Recycle Bin", icon: "bin", w: 380, body: BinBody },
-  error: { title: "Error", icon: "bin", w: 360, body: ErrorBody },
+  error: { title: "Error", icon: "danger", w: 360, body: ErrorBody },
 };
-const ICON_IDS = ["links", "about", "work", "wins", "photos", "clips", "setup", "schedule", "avante"];
+const ICON_IDS = ["links", "avante", "about", "work", "wins", "photos", "clips", "player", "setup", "term", "mines", "dont", "bin"];
+const START_ONLY = ["schedule", "drive"];
+
+const BOOT_LINES = [
+  "Reticulating splines…",
+  "Installing aim (1 of 47)…",
+  "Buffering like it's 2012…",
+  "Skill issue not found.",
+  "Registering 47 unused overlays…",
+  "Loading personality.dll…",
+  "Defragmenting ego…",
+  "Searching for a fifth teammate…",
+  "Unmuting the microphone…",
+];
+
+function pickLines(n) {
+  const pool = [...BOOT_LINES];
+  const out = [];
+  for (let i = 0; i < n; i++) out.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+  return out;
+}
 
 function Boot({ onDone }) {
-  const lines = ["Reticulating splines…", "Installing aim (1 of 47)…", "Buffering like it’s 2012…", "Skill issue not found."];
   const [p, setP] = useState(0);
+  const [lines] = useState(() => pickLines(5));
   useEffect(() => { const t = setInterval(() => setP((v) => Math.min(100, v + 4)), 90); return () => clearInterval(t); }, []);
-  useEffect(() => { if (p >= 100) { const t = setTimeout(onDone, 350); return () => clearTimeout(t); } }, [p, onDone]);
+  useEffect(() => { if (p >= 100) { const t = setTimeout(onDone, 320); return () => clearTimeout(t); } }, [p, onDone]);
+  const line = lines[Math.min(lines.length - 1, Math.floor(p / (100 / lines.length)))];
   return (
     <div className="boot">
       <Sprite art={mascot} size={96} />
       <h1>shycodelix OS</h1>
       <div className="bar"><i style={{ width: `${p}%` }} /></div>
-      <p>{lines[Math.min(3, Math.floor(p / 26))]}</p>
+      <p>{line}</p>
       <button type="button" onClick={onDone}>Skip</button>
     </div>
   );
@@ -183,11 +243,15 @@ export default function Desktop() {
   const [startOpen, setStartOpen] = useState(false);
   const [sound, setSound] = useState(false);
   const [time, setTime] = useState("");
+  const [night, setNight] = useState(false);
   const [toast, setToast] = useState("");
   const [conf, setConf] = useState([]);
+  const [bubble, setBubble] = useState(false);
+  const [bubbleRound, setBubbleRound] = useState(0);
   const z = useRef(10);
   const drag = useRef(null);
   const ac = useRef(null);
+  const wall = useRef(null);
 
   const beep = useCallback((f = 520) => {
     if (!sound) return;
@@ -199,23 +263,55 @@ export default function Desktop() {
     } catch {}
   }, [sound]);
 
+  const chime = useCallback(() => {
+    try {
+      ac.current = ac.current || new (window.AudioContext || window.webkitAudioContext)();
+      [523, 659, 784].forEach((f, i) => {
+        const o = ac.current.createOscillator(), g = ac.current.createGain();
+        o.type = "square"; o.frequency.value = f; g.gain.value = 0.025;
+        o.connect(g); g.connect(ac.current.destination);
+        const t = ac.current.currentTime + i * 0.11;
+        o.start(t); o.stop(t + 0.11);
+      });
+    } catch {}
+  }, []);
+
+  const patch = useCallback((id, o) => setWins((ws) => ws.map((w) => (w.id === id ? { ...w, ...o } : w))), []);
+
   const open = useCallback((id) => {
     setStartOpen(false); beep(660);
+    const def = DEFS[id];
+    if (!def) return;
     setWins((ws) => {
       const zi = ++z.current;
-      if (ws.some((w) => w.id === id)) return ws.map((w) => (w.id === id ? { ...w, hid: false, z: zi } : w));
-      const n = ws.length % 6, base = window.innerWidth > 900 ? 230 : 20;
-      return [...ws, { id, z: zi, hid: false, max: false, x: base + n * 34, y: 60 + n * 30 }];
+      if (ws.some((w) => w.id === id)) return ws.map((w) => (w.id === id ? { ...w, hid: false, min: false, out: false, z: zi } : w));
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const ww = Math.min(def.w, vw - 16);
+      const n = ws.length % 6;
+      const base = vw > 900 ? 240 : 8;
+      const x = Math.max(8, Math.min(base + n * 34, vw - ww - 8));
+      const y = Math.max(44, Math.min(52 + n * 26, vh - 220));
+      return [...ws, { id, z: zi, hid: false, min: false, out: false, max: false, snap: null, x, y }];
     });
   }, [beep]);
-  const patch = (id, o) => setWins((ws) => ws.map((w) => (w.id === id ? { ...w, ...o } : w)));
-  const close = (id) => { beep(330); setWins((ws) => ws.filter((w) => w.id !== id)); };
-  const focus = (id) => patch(id, { z: ++z.current });
 
-  const say = useCallback((m) => { setToast(m); setTimeout(() => setToast(""), 2800); }, []);
+  const close = useCallback((id) => {
+    beep(330);
+    patch(id, { out: true });
+    setTimeout(() => setWins((ws) => ws.filter((w) => w.id !== id)), 140);
+  }, [beep, patch]);
+
+  const focus = useCallback((id) => patch(id, { z: ++z.current }), [patch]);
+
+  const say = useCallback((m) => {
+    setToast(m);
+    clearTimeout(say.t);
+    say.t = setTimeout(() => setToast(""), 3000);
+  }, []);
+
   const party = useCallback(() => {
     const cols = ["#FF7A1A", "#CFE0F7", "#D9CFF7", "#D2AE37"];
-    setConf(Array.from({ length: 44 }, () => ({ l: Math.random() * 100, d: Math.random(), c: cols[Math.floor(Math.random() * 4)] })));
+    setConf(Array.from({ length: 48 }, () => ({ l: Math.random() * 100, d: Math.random(), c: cols[Math.floor(Math.random() * 4)] })));
     say("+30 lives. Cheat code accepted.");
     setTimeout(() => setConf([]), 3800);
   }, [say]);
@@ -233,9 +329,19 @@ export default function Desktop() {
   }, [open]);
 
   useEffect(() => {
-    const tick = () => setTime(new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }));
-    tick(); const t = setInterval(tick, 30000); return () => clearInterval(t);
+    const tick = () => {
+      const now = new Date();
+      setTime(now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }));
+      setNight(now.getHours() < 6 || now.getHours() >= 19);
+    };
+    tick();
+    const t = setInterval(tick, 30000);
+    return () => clearInterval(t);
   }, []);
+
+  useEffect(() => {
+    if (sound) chime();
+  }, [sound, chime]);
 
   useEffect(() => {
     const seq = ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"];
@@ -249,83 +355,168 @@ export default function Desktop() {
     return () => window.removeEventListener("keydown", h);
   }, [party]);
 
+  // Esc closes the focused window, Alt+Tab cycles the stack.
+  useEffect(() => {
+    const h = (e) => {
+      if (e.key === "Escape") {
+        if (startOpen) { setStartOpen(false); return; }
+        const top = wins.filter((w) => !w.hid).sort((a, b) => b.z - a.z)[0];
+        if (top) close(top.id);
+        return;
+      }
+      if (e.altKey && (e.key === "Tab" || e.key === "Dead")) {
+        e.preventDefault();
+        if (wins.length < 2) return;
+        const sorted = [...wins].sort((a, b) => b.z - a.z);
+        const next = sorted[1];
+        patch(next.id, { hid: false, min: false, z: ++z.current });
+      }
+    };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [close, patch, startOpen, wins]);
+
+  // Windows Update never lets go.
+  useEffect(() => {
+    if (phase !== "ready") return;
+    const t = setTimeout(() => setBubble(true), bubbleRound === 0 ? 45000 : 120000);
+    return () => clearTimeout(t);
+  }, [phase, bubbleRound]);
+
   function startDrag(e, w) {
     if (e.target.closest("button") || window.innerWidth < 700 || w.max) return;
     drag.current = { id: w.id, dx: e.clientX - w.x, dy: e.clientY - w.y };
     e.currentTarget.setPointerCapture(e.pointerId);
+    if (w.snap) patch(w.id, { snap: null });
   }
+
   function moveDrag(e) {
     const d = drag.current;
     if (!d) return;
-    patch(d.id, { x: Math.max(0, e.clientX - d.dx), y: Math.max(0, Math.min(window.innerHeight - 90, e.clientY - d.dy)) });
+    const maxY = Math.max(0, window.innerHeight - 120);
+    patch(d.id, {
+      x: Math.max(-40, Math.min(window.innerWidth - 80, e.clientX - d.dx)),
+      y: Math.max(0, Math.min(maxY, e.clientY - d.dy)),
+    });
   }
 
+  function endDrag(e) {
+    const d = drag.current;
+    drag.current = null;
+    if (!d) return;
+    if (e.clientY <= 4) { patch(d.id, { max: true, snap: null }); return; }
+    if (e.clientX <= 16) { patch(d.id, { snap: "l", max: false }); return; }
+    if (e.clientX >= window.innerWidth - 16) { patch(d.id, { snap: "r", max: false }); return; }
+    patch(d.id, { snap: null });
+  }
+
+  function parallax(e) {
+    if (!wall.current) return;
+    const nx = (e.clientX / window.innerWidth - 0.5) * -16;
+    const ny = (e.clientY / window.innerHeight - 0.5) * -10;
+    wall.current.style.transform = `translate3d(${nx}px, ${ny}px, 0)`;
+  }
+
+  const ctx = { open, close, say, party, beep };
+
   return (
-    <div className="desk" data-lenis-prevent onClick={(e) => { if (!e.target.closest(".start,.startbtn")) setStartOpen(false); }}>
-      {[[8, 6, 90, 0], [22, 4, 120, -40], [40, 7, 150, -90], [62, 5, 110, -20], [76, 3, 140, -60]].map(([t, s, d, dl], i) => (
-        <div key={i} className="cloud" style={{ top: `${t}%`, animationDuration: `${d}s`, animationDelay: `${dl}s` }}><Sprite art={cloud} size={s * 24} /></div>
+    <div
+      className="desk"
+      data-lenis-prevent
+      onPointerMove={parallax}
+      onClick={(e) => { if (!e.target.closest(".start,.startbtn")) setStartOpen(false); }}
+    >
+      <Wallpaper night={night} innerRef={wall} />
+
+      {[[8, 5, 90, 0], [22, 3, 130, -40], [40, 6, 160, -90], [62, 4, 110, -20], [76, 3, 140, -60]].map(([t, s, d, dl], i) => (
+        <div key={i} className="cloud" style={{ top: `${t}%`, animationDuration: `${d}s`, animationDelay: `${dl}s` }}><Sprite art={cloud} size={s * 26} /></div>
       ))}
 
       <header className="topbar">
-        <span className="pixel">shycodelix OS</span>
-        <Link href="/profile">Plain version &rarr;</Link>
+        <span className="brand">shycodelix OS</span>
+        <Link href="/profile">Reader mode &rarr;</Link>
       </header>
 
       <div className="icons">
         {ICON_IDS.map((id) => (
           <button key={id} type="button" className="ico" onClick={() => open(id)}>
-            <Sprite art={icons[DEFS[id].icon]} size={44} /><span>{DEFS[id].title}</span>
+            <Sprite art={icons[DEFS[id].icon]} size={42} /><span>{DEFS[id].title}</span>
           </button>
         ))}
-        <a className="ico" href="/resume.pdf" {...ext}><Sprite art={icons.pdf} size={44} /><span>resume.pdf</span></a>
-        <a className="ico" href={mail}><Sprite art={icons.mail} size={44} /><span>Mail</span></a>
-        <button type="button" className="ico" onClick={() => open("bin")}><Sprite art={icons.bin} size={44} /><span>Recycle Bin</span></button>
+        <a className="ico" href="/resume.pdf" {...ext}><Sprite art={icons.pdf} size={42} /><span>resume_FINAL_v3.pdf</span></a>
+        <a className="ico" href={MAIL_WORK}><Sprite art={icons.mail} size={42} /><span>Hire me</span></a>
       </div>
 
       {wins.map((w) => {
         const d = DEFS[w.id], Body = d.body;
         return (
-          <div key={w.id} className={`win ${w.id === "avante" ? "avante" : ""} ${w.max ? "max" : ""} ${w.hid ? "hid" : ""}`}
-            style={{ left: w.x, top: w.y, width: d.w, zIndex: w.z }} onPointerDown={() => focus(w.id)} role="dialog" aria-label={d.title}>
-            <div className="wbar" onPointerDown={(e) => startDrag(e, w)} onPointerMove={moveDrag} onPointerUp={() => (drag.current = null)}>
+          <div
+            key={w.id}
+            className={`win ${w.id === "avante" ? "avante" : ""} ${w.id === "term" ? "termwin" : ""} ${w.max ? "max" : ""} ${w.snap === "l" ? "snap-l" : ""} ${w.snap === "r" ? "snap-r" : ""} ${w.hid ? "hid" : ""} ${w.min ? "min" : ""} ${w.out ? "out" : ""}`}
+            style={{ left: w.x, top: w.y, width: d.w, zIndex: w.z }}
+            onPointerDown={() => focus(w.id)}
+            role="dialog"
+            aria-label={d.title}
+          >
+            <div className="wbar" onPointerDown={(e) => startDrag(e, w)} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={() => (drag.current = null)}>
               <Sprite art={icons[d.icon]} size={16} /><span>{d.title}</span>
               <div className="wbtns">
-                <button type="button" aria-label="Minimize" onClick={() => patch(w.id, { hid: true })}>_</button>
-                <button type="button" aria-label="Maximize" onClick={() => patch(w.id, { max: !w.max })}>&#9633;</button>
+                <button type="button" aria-label="Minimize" onClick={() => { beep(392); patch(w.id, { min: true }); setTimeout(() => patch(w.id, { hid: true, min: false }), 120); }}>_</button>
+                <button type="button" aria-label="Maximize" onClick={() => { beep(440); patch(w.id, { max: !w.max, snap: null }); }}>&#9633;</button>
                 <button type="button" className="x" aria-label="Close" onClick={() => close(w.id)}>&times;</button>
               </div>
             </div>
-            <div className="wbody" data-lenis-prevent><Body open={open} close={() => close(w.id)} /></div>
+            <div className="wbody" data-lenis-prevent><Body {...ctx} /></div>
           </div>
         );
       })}
 
       {startOpen && (
         <div className="start" role="menu">
-          {[...ICON_IDS].map((id) => <button key={id} type="button" onClick={() => open(id)}><Sprite art={icons[DEFS[id].icon]} size={18} />{DEFS[id].title}</button>)}
+          {[...ICON_IDS, ...START_ONLY].map((id) => (
+            <button key={id} type="button" onClick={() => open(id)}><Sprite art={icons[DEFS[id].icon]} size={18} />{DEFS[id].title}</button>
+          ))}
           <p className="lab">Avante Esports</p>
           {avante.links.map((l) => <a key={l.href} href={l.href} {...ext}>{l.label}</a>)}
           <p className="lab">Elsewhere</p>
-          <Link href="/profile">Plain version</Link>
+          <Link href="/profile">Reader mode</Link>
           <button type="button" onClick={() => open("error")}>Shut Down&hellip;</button>
         </div>
       )}
 
+      {bubble && (
+        <div className="bubble" role="status">
+          <b>Your aim is out of date</b>
+          <p>Windows found newer drivers for your crosshair. Installing them will not help, but the notification will keep coming back.</p>
+          <div className="row2">
+            <button type="button" className="btn primary" onClick={() => { setBubble(false); setBubbleRound((r) => r + 1); say("Update deferred. See you in two minutes."); }}>Later</button>
+            <button type="button" className="btn" onClick={() => { setBubble(false); setBubbleRound((r) => r + 1); open("setup"); }}>Remind me later</button>
+          </div>
+        </div>
+      )}
+
       <footer className="task">
-        <button type="button" className="startbtn" onClick={() => { setStartOpen((v) => !v); beep(440); }}>Start</button>
+        <button type="button" className="startbtn" onClick={() => { setStartOpen((v) => !v); beep(440); }}>
+          Start
+        </button>
         <div className="tabs">
-          {wins.map((w) => <button key={w.id} type="button" onClick={() => (w.hid ? (patch(w.id, { hid: false }), focus(w.id)) : patch(w.id, { hid: true }))}>{DEFS[w.id].title}</button>)}
+          {wins.map((w) => (
+            <button key={w.id} type="button" aria-current={!w.hid ? "true" : undefined} onClick={() => (w.hid ? (patch(w.id, { hid: false, min: false }), focus(w.id)) : patch(w.id, { hid: true }))}>
+              {DEFS[w.id].title}
+            </button>
+          ))}
         </div>
         <div className="tray">
-          <a className="mail" href={mail}>Email me</a>
-          <button type="button" onClick={() => setSound((v) => !v)} aria-pressed={sound}>{sound ? "Sound on" : "Sound off"}</button>
+          <a className="mail" href={MAIL_WORK}>Hire me</a>
+          <button type="button" onClick={() => { setSound((v) => !v); if (!sound) say("Sound on. Sorry in advance."); }} aria-pressed={sound}>{sound ? "Sound on" : "Sound off"}</button>
           <span title="Time to touch grass">{time}</span>
         </div>
       </footer>
 
-      {toast && <div className="toast pixel" role="status">{toast}</div>}
+      {toast && <div className="toast" role="status">{toast}</div>}
       {conf.map((c, i) => <i key={i} className="conf" style={{ left: `${c.l}%`, animationDelay: `${c.d}s`, background: c.c }} />)}
       {phase === "boot" && <Boot onDone={finishBoot} />}
+      <div className="crt" aria-hidden="true" />
     </div>
   );
 }

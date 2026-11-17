@@ -7,6 +7,11 @@ import Parallax from "../../components/Parallax";
 import PixelImg from "../../components/PixelImg";
 import { profile, roles, achievements, experience, photos, avante, sensitivity, sensitivityNote, gear, valorant } from "../data";
 
+export const metadata = {
+  title: "Reader mode",
+  description: "The no-nonsense version of shycodelix: esports operations, content and customer experience, without the operating system.",
+};
+
 function Letters({ text }) {
   return (
     <span aria-label={text}>
@@ -156,7 +161,7 @@ export default function Profile() {
       </section>
 
       <footer>
-        <p>Gamer tag: {profile.tag}</p>
+        <p>Gamer tag: {profile.tag} · Reader mode of shycodelix OS</p>
         <a href={profile.source} target="_blank" rel="noreferrer">Konect profile</a>
       </footer>
     </div>

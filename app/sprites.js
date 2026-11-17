@@ -1,4 +1,4 @@
-export const PAL = { k: "#1E1633", o: "#FF7A1A", b: "#CFE0F7", l: "#D9CFF7", w: "#FFFFFF", y: "#FFD76A", a: "#D2AE37", r: "#E5484D", s: "#F0C2A0" };
+export const PAL = { k: "#1E1633", o: "#FF7A1A", b: "#CFE0F7", l: "#D9CFF7", w: "#FFFFFF", y: "#FFD76A", a: "#D2AE37", r: "#E5484D", s: "#F0C2A0", n: "#39D353", c: "#0B0B10", d: "#8A8578" };
 
 export const mascot = `
 ......kkkkkk....
@@ -136,4 +136,54 @@ kkkkkkkkkk
 .kbwbwbwk.
 .kbbbbbbk.
 ..kkkkkk..`,
+  term: `
+kkkkkkkkkk
+kcccccccck
+kcncccccck
+kcccnccckk
+kcncccccck
+kcccccccck
+kcccccccck
+kkkkkkkkkk`,
+  mine: `
+....kk....
+....kwk...
+...kkkk...
+..kwwwwk..
+.kwwwwwwk.
+.kwwwwwwk.
+..kwwwwk..
+...kkkk...`,
+  disk: `
+kkkkkkkkkk
+kwwwwwwwwk
+kwwwwwwwwk
+kkkkkkkkkk
+kwwwwwwwwk
+kwooooowwk
+kwwwwwwwwk
+kkkkkkkkkk`,
+  danger: `
+....kk....
+....kk....
+...koook..
+..kooook..
+..kooook..
+.koooooook
+.koooooook
+kkkkkkkkkk`,
 };
+
+export const fine = `
+................
+..kk........kk..
+.kyyk......kyyk.
+.kyyykkkkkkyyyk.
+.kyyyyyyyyyyyyk.
+.kykkkyyyykkkyk.
+.kykkkyyyykkkyk.
+.kyyyyyyyyyyyyk.
+.kyyyykkkkyyyyk.
+..kyyykkkkyyyk..
+...kyyyyyyyyk...
+....kkkkkkkk....`;
