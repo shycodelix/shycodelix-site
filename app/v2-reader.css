@@ -10,7 +10,13 @@
   --rd-measure: 65ch;
   font-family: var(--font-grotesk), var(--font-body), system-ui, sans-serif;
   line-height: var(--rd-line);
+  font-size: 1rem;
 }
+.page.rd[data-size="minus"] { font-size: 0.86rem; }
+.page.rd[data-size="plus"] { font-size: 1.16rem; }
+/* Keep the hero headline tracking the reader size so A-/A+ is visible up top.
+   (Buttons use rem relative to the root, so they stay put while body scales.) */
+.page.rd .rh { font-size: inherit; }
 .page.rd * {
   line-height: var(--rd-line);
 }
@@ -207,21 +213,10 @@
   border-color: var(--rd-accent);
 }
 
-/* ---------- Liquid Glass — ONLY on floating HUDs / controls ---------- */
-.lg-glass {
-  background: var(--glass);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--rd-line);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px -12px rgba(0, 0, 0, 0.35);
-}
-.lg-glass-raised {
-  background: var(--glass);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--rd-line);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04), 0 10px 30px -14px rgba(0, 0, 0, 0.4);
-}
+/* ---------- Liquid Glass — ONLY on floating HUD controls ---------- */
+/* (Glass is applied directly on .rd-theme-btn / .rd-theme-hud children;
+   no separate utility classes are used, so the reader never carries glass
+   behind dense body copy.) */
 
 /* ---------- Reader theme HUD — floating control, glass only here ---------- */
 .rd-theme-hud {

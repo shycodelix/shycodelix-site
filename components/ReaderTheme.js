@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 const THEMES = {
   dark: {
     label: "Dark",
-    root:
-      "linear-gradient(180deg, #15111f 0%, #0e0b16 100%)",
+    root: "linear-gradient(180deg, #15111f 0%, #0e0b16 100%)",
     paper: "#1a1525",
     paper2: "#231d32",
     ink: "#f3ecf7",
@@ -26,8 +25,7 @@ const THEMES = {
   },
   sepia: {
     label: "Sepia",
-    root:
-      "linear-gradient(180deg, #ece3d2 0%, #e4dcc6 100%)",
+    root: "linear-gradient(180deg, #ece3d2 0%, #e4dcc6 100%)",
     paper: "#f1e9d6",
     paper2: "#f7f1e2",
     ink: "#3a2f22",
@@ -48,8 +46,7 @@ const THEMES = {
   },
   light: {
     label: "Light",
-    root:
-      "linear-gradient(180deg, #fbfaf6 0%, #f6f3ea 100%)",
+    root: "linear-gradient(180deg, #fbfaf6 0%, #f6f3ea 100%)",
     paper: "#f6f3ea",
     paper2: "#fbfaf5",
     ink: "#1e1633",
@@ -70,48 +67,52 @@ const THEMES = {
   },
 };
 
-const KEYS = {
-  dark: { scale: 80, speed: 22, lineH: 1.72 },
-  sepia: { scale: 92, speed: 22, lineH: 1.62 },
-  light: { scale: 100, speed: 22, lineH: 1.66 },
-};
-
 export default function ReaderTheme({ onIndexToggle }) {
   const [theme, setTheme] = useState("dark");
-  const [thick, setThick] = useState(true);
+  const [size, setSize] = useState("default");
   const [showIndex, setShowIndex] = useState(true);
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem("rd-theme");
       if (stored && THEMES[stored]) setTheme(stored);
-      const thickStored = localStorage.getItem("rd-thick");
-      if (thickStored !== null) setThick(thickStored === "1");
+      const sizeStored = localStorage.getItem("rd-size");
+      if (sizeStored === "minus" || sizeStored === "plus" || sizeStored === "default") {
+        setSize(sizeStored);
+      }
       const idxStored = localStorage.getItem("rd-show-index");
       if (idxStored !== null) setShowIndex(idxStored === "1");
     } catch {}
   }, []);
 
-  // Apply data-rd-theme to the .page.rd root so the three-surface CSS activates.
+  // Apply data-rd-theme (surface) and data-size (text scale) to the .page.rd
+  // root so the three-surface + A-/A+ CSS activates.
   useEffect(() => {
     const root = document.querySelector(".page.rd");
     if (!root) return;
     root.setAttribute("data-rd-theme", theme);
-    return () => root.removeAttribute("data-rd-theme");
-  }, [theme]);
+    if (size === "default") {
+      root.removeAttribute("data-size");
+    } else {
+      root.setAttribute("data-size", size);
+    }
+    return () => {
+      root.removeAttribute("data-rd-theme");
+      root.removeAttribute("data-size");
+    };
+  }, [theme, size]);
 
   useEffect(() => {
     try {
       localStorage.setItem("rd-theme", theme);
-      localStorage.setItem("rd-thick", thick ? "1" : "0");
+      localStorage.setItem("rd-size", size);
       localStorage.setItem("rd-show-index", showIndex ? "1" : "0");
     } catch {}
-  }, [theme, thick, showIndex]);
+  }, [theme, size, showIndex]);
 
   const t = THEMES[theme];
-  const k = KEYS[theme];
 
-  // Pick the right glass tint depending on the surface this HUD floats over.
+  // Liquid glass tint for floating HUD controls only.
   const glass = `${t.glass}; backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%)`;
 
   return (
@@ -120,67 +121,74 @@ export default function ReaderTheme({ onIndexToggle }) {
         className="rd-theme-hud"
         role="toolbar"
         aria-label="Reader controls"
-        style={{ "--glass": glass, "--accent": t.accent, "--ink": t.ink, "--ink-soft": t.inkSoft, "--paper": t.paper2, "--dusk": t.dusk }}
+        style={{
+          "--glass": glass,
+          "--accent": t.accent,
+          "--ink": t.ink,
+          "--ink-soft": t.inkSoft,
+          "--paper": t.paper2,
+          "--dusk": t.dusk,
+        }}
       >
-      {/* Font-size scaler: A- / A+ */}
-      <div className="rd-theme-group" role="group" aria-label="Text size">
-        <button
-          type="button"
-          className="rd-theme-btn"
-          aria-label="Smaller text"
-          title="Smaller text (A-)"
-          onClick={() => setThick((v) => !v)}
-          aria-pressed={!thick}
-        >
-          A-
-        </button>
-        <span className="rd-theme-scale mono" style={{ fontSize: `${k.scale}%` }} aria-hidden="true">
-          A
-        </span>
-        <button
-          type="button"
-          className="rd-theme-btn"
-          aria-label="Larger text"
-          title="Larger text (A+)"
-          onClick={() => setThick((v) => !v)}
-          aria-pressed={thick}
-        >
-          A+
-        </button>
-      </div>
-
-      {/* Theme switcher — only three surfaces. */}
-      <div className="rd-theme-group" role="group" aria-label="Reading surface">
-        {Object.entries(THEMES).map(([key, th]) => (
-          <button
-            key={key}
-            type="button"
-            className={`rd-theme-chip ${theme === key ? "on" : ""}`}
-            aria-label={`${th.label} reading surface`}
-            title={`${th.label} surface`}
-            onClick={() => setTheme(key)}
-            aria-pressed={theme === key}
-          >
-            {th.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Index toggle — only when the parent supplies it. */}
-      {onIndexToggle && (
-        <div className="rd-theme-group" role="group" aria-label="Section index">
+        {/* Font-size scaler: A- / A+ (wired to data-size on .page.rd). */}
+        <div className="rd-theme-group" role="group" aria-label="Text size">
           <button
             type="button"
             className="rd-theme-btn"
-            aria-label={showIndex ? "Hide section index" : "Show section index"}
-            title={showIndex ? "Hide section index" : "Show section index"}
-            onClick={() => onIndexToggle(!showIndex)}
-            aria-pressed={showIndex}
+            aria-label="Smaller text"
+            title="Smaller text (A-)"
+            onClick={() => setSize((v) => (v === "minus" ? "default" : "minus"))}
+            aria-pressed={size === "minus"}
           >
-            {showIndex ? "Index" : "Index off"}
+            A-
+          </button>
+          <span className="rd-theme-scale mono" aria-hidden="true">
+            A
+          </span>
+          <button
+            type="button"
+            className="rd-theme-btn"
+            aria-label="Larger text"
+            title="Larger text (A+)"
+            onClick={() => setSize((v) => (v === "plus" ? "default" : "plus"))}
+            aria-pressed={size === "plus"}
+          >
+            A+
           </button>
         </div>
-      )}
+
+        {/* Theme switcher — only three surfaces. */}
+        <div className="rd-theme-group" role="group" aria-label="Reading surface">
+          {Object.entries(THEMES).map(([key, th]) => (
+            <button
+              key={key}
+              type="button"
+              className={`rd-theme-chip ${theme === key ? "on" : ""}`}
+              aria-label={`${th.label} reading surface`}
+              title={`${th.label} surface`}
+              onClick={() => setTheme(key)}
+              aria-pressed={theme === key}
+            >
+              {th.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Index toggle — only when the parent supplies it. */}
+        {onIndexToggle && (
+          <div className="rd-theme-group" role="group" aria-label="Section index">
+            <button
+              type="button"
+              className="rd-theme-btn"
+              aria-label={showIndex ? "Hide section index" : "Show section index"}
+              title={showIndex ? "Hide section index" : "Show section index"}
+              onClick={() => onIndexToggle(!showIndex)}
+              aria-pressed={showIndex}
+            >
+              {showIndex ? "Index" : "Index off"}
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
