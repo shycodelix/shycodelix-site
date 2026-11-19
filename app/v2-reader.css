@@ -78,7 +78,7 @@
   --rd-reader-bg: #15111f;
   --rd-text: #f3ecf7;
   --rd-text-soft: #c9c0da;
-  --rd-bar-ink: #1a1525;
+  --rd-on-accent: #1a1525;
 }
 .page.rd[data-rd-theme="sepia"] {
   --rd-paper: #f1e9d6;
@@ -92,7 +92,7 @@
   --rd-reader-bg: #ece3d2;
   --rd-text: #3a2f22;
   --rd-text-soft: #6b5d47;
-  --rd-bar-ink: #ffffff;
+  --rd-on-accent: #ffffff;
 }
 .page.rd[data-rd-theme="light"] {
   --rd-paper: #f6f3ea;
@@ -106,7 +106,7 @@
   --rd-reader-bg: #f6f3ea;
   --rd-text: #1e1633;
   --rd-text-soft: #4a4366;
-  --rd-bar-ink: #1e1633;
+  --rd-on-accent: #1e1633;
 }
 
 /* Reader chrome that should react to the surface, but only inside the reader. */
@@ -143,19 +143,22 @@
 .page.rd .rm-btn.primary,
 .page.rd .rd-av-links a {
   background: var(--rd-tang);
-  color: var(--rd-paper);
+  color: var(--rd-on-accent);
 }
-/* The accent band carries its own foreground per surface: the soft paper ink
-   used elsewhere fails on orange (2.35:1 on the light accent, 4.05:1 sepia). */
-.page.rd .rd-hero-bar {
-  color: var(--rd-bar-ink);
+/* Everything painted on the accent shares one foreground per surface. The soft
+   paper ink used elsewhere fails there (2.35:1 light, 4.05:1 sepia), so each
+   surface declares --rd-on-accent instead of reusing --rd-paper. */
+.page.rd .rd-theme-btn[aria-pressed="true"],
+.page.rd .rd-kit .rd-kit-body em,
+.page.rd .rd-kit .rd-kit-body > span {
+  color: var(--rd-on-accent);
 }
 .page.rd .rd-hero-bar .rd-mono,
 .page.rd .rd-hero-bar .rd-status {
-  color: var(--rd-bar-ink);
+  color: var(--rd-on-accent);
 }
 .page.rd .rd-hero-bar .rd-status i {
-  background: var(--rd-bar-ink);
+  background: var(--rd-on-accent);
 }
 .page.rd .rd-hero-note,
 .page.rd .rd-mono {
@@ -1106,8 +1109,8 @@
   transition: color 0.15s, border-color 0.15s;
 }
 .rd-foot a:hover {
-  color: var(--rd-paper);
-  border-color: var(--rd-paper);
+  color: var(--rd-text);
+  border-color: var(--rd-accent);
 }
 
 @keyframes rdScroll {
@@ -1167,6 +1170,41 @@
 
 /* ---------- Responsive reader cosmetics ---------- */
 @media (max-width: 48rem) {
+  /* One sticky row instead of three wrapped ones: the old dock spent 114px of
+     the first screen on nav, which pushed the hero CTA under the fold. */
+  .page.rd .dock {
+    position: sticky;
+    top: 0;
+    z-index: 45;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    transform: none;
+    width: 100%;
+    max-width: none;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid var(--rd-line);
+    box-shadow: none;
+    background: var(--rd-paper);
+    scrollbar-width: none;
+    /* Fade the trailing link so the row reads as scrollable, not clipped. */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 28px), transparent 100%);
+  }
+  /* The dock now sits on top of anchor targets: keep headings clear of it. */
+  .page.rd [id] {
+    scroll-margin-top: 2.9rem;
+  }
+  .page.rd .dock a {
+    flex: 0 0 auto;
+    padding: 0.55rem 0.75rem;
+    border-right: 1px solid var(--rd-line);
+  }
   .rd-theme-hud {
     padding: 0.45rem clamp(1rem, 4vw, 1.6rem);
     gap: 0.4rem;
@@ -1184,10 +1222,12 @@
 }
 
 /* ---------- Zero horizontal overflow guards ---------- */
+/* clip, not hidden: hidden turns html/body/.page.rd into scroll containers,
+   which breaks the sticky reader nav. clip still hides the overflow. */
 html,
 body,
 .page.rd {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ---------- Desktop motion polish (only on the desktop surface) ---------- */
