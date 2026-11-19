@@ -279,6 +279,23 @@ export default function Desktop() {
   const drag = useRef(null);
   const ac = useRef(null);
   const wall = useRef(null);
+  const winRefs = useRef({});
+  const winsRef = useRef([]);
+  const pendingFocus = useRef(null);
+  const lastTrigger = useRef(null);
+  const startRef = useRef(null);
+  const menuRef = useRef(null);
+
+  // Keyboard focus lives on the window frame, so screen readers announce the dialog
+  // before the user tabs into its controls.
+  useEffect(() => { winsRef.current = wins; }, [wins]);
+  useEffect(() => {
+    const id = pendingFocus.current;
+    if (!id) return;
+    pendingFocus.current = null;
+    const el = winRefs.current[id];
+    if (el) el.focus({ preventScroll: true });
+  }, [wins]);
 
   const beep = useCallback((f = 520) => {
     if (!sound) return;
@@ -309,6 +326,10 @@ export default function Desktop() {
     setStartOpen(false); beep(660);
     const def = DEFS[id];
     if (!def) return;
+    const from = document.activeElement;
+    if (from && from !== document.body && !from.closest(".win")) lastTrigger.current = from;
+    // Focus the window once it mounts, whether it was opened by mouse or keyboard.
+    pendingFocus.current = id;
     setWins((ws) => {
       const zi = ++z.current;
       if (ws.some((w) => w.id === id)) return ws.map((w) => (w.id === id ? { ...w, hid: false, min: false, out: false, z: zi } : w));
@@ -325,10 +346,56 @@ export default function Desktop() {
   const close = useCallback((id) => {
     beep(330);
     patch(id, { out: true });
-    setTimeout(() => setWins((ws) => ws.filter((w) => w.id !== id)), 140);
+    setTimeout(() => {
+      setWins((ws) => ws.filter((w) => w.id !== id));
+      // Hand focus to whatever is still on screen instead of dropping it on <body>.
+      const next = winsRef.current.filter((w) => w.id !== id && !w.hid).sort((a, b) => b.z - a.z)[0];
+      if (next) pendingFocus.current = next.id;
+      else if (lastTrigger.current && lastTrigger.current.isConnected) { lastTrigger.current.focus({ preventScroll: true }); lastTrigger.current = null; }
+    }, 140);
   }, [beep, patch]);
 
   const focus = useCallback((id) => patch(id, { z: ++z.current }), [patch]);
+
+  // Bring a window forward and put the keyboard on it (taskbar, Alt+Tab, Alt+number).
+  const activate = useCallback((id) => {
+    const el = winRefs.current[id];
+    if (el) el.focus({ preventScroll: true });
+    else pendingFocus.current = id;
+    focus(id);
+  }, [focus]);
+
+  // Alt+Tab cycles: demote the current top window so repeated presses keep going.
+  const cycle = useCallback((dir = 1) => {
+    const list = winsRef.current.filter((w) => !w.hid && !w.out).sort((a, b) => b.z - a.z);
+    if (!list.length) return;
+    const [top, ...rest] = list;
+    if (!rest.length) { activate(top.id); return; }
+    const next = dir > 0 ? rest[0] : rest[rest.length - 1];
+    const low = Math.min(...list.map((w) => w.z)) - 1;
+    const zi = ++z.current;
+    beep(560);
+    setWins((ws) => ws.map((w) => (w.id === top.id ? { ...w, z: low } : w.id === next.id ? { ...w, z: zi } : w)));
+    pendingFocus.current = next.id;
+  }, [activate, beep]);
+
+  // Arrow keys on the title bar nudge the window; Shift takes bigger steps.
+  const nudge = useCallback((id, dx, dy) => {
+    setWins((ws) => ws.map((w) => {
+      if (w.id !== id) return w;
+      const el = winRefs.current[id];
+      const ww = el ? el.offsetWidth : 320;
+      const maxX = Math.max(0, window.innerWidth - Math.min(ww, 160));
+      const maxY = Math.max(0, window.innerHeight - 160);
+      return {
+        ...w,
+        max: false,
+        snap: null,
+        x: Math.max(0, Math.min(maxX, w.x + dx)),
+        y: Math.max(0, Math.min(maxY, w.y + dy)),
+      };
+    }));
+  }, []);
 
   const say = useCallback((m) => {
     setToast(m);
@@ -392,26 +459,52 @@ export default function Desktop() {
     return () => window.removeEventListener("keydown", h);
   }, [party]);
 
-  // Esc closes the focused window, Alt+Tab cycles the stack.
+  // Esc closes the window that has focus (or the top one), Alt+Tab cycles the stack,
+  // Alt+1…9 jumps straight to the nth window.
   useEffect(() => {
     const h = (e) => {
       if (e.key === "Escape") {
         if (startOpen) { setStartOpen(false); return; }
-        const top = wins.filter((w) => !w.hid).sort((a, b) => b.z - a.z)[0];
-        if (top) close(top.id);
+        const focused = document.activeElement && document.activeElement.closest(".win");
+        const winId = focused ? focused.getAttribute("data-win") : null;
+        if (winId) { e.preventDefault(); close(winId); return; }
+        const top = winsRef.current.filter((w) => !w.hid && !w.out).sort((a, b) => b.z - a.z)[0];
+        if (top) { e.preventDefault(); close(top.id); }
         return;
       }
-      if (e.altKey && (e.key === "Tab" || e.key === "Dead")) {
+      if (e.altKey && !e.ctrlKey && !e.metaKey && e.key === "Tab") {
         e.preventDefault();
-        if (wins.length < 2) return;
-        const sorted = [...wins].sort((a, b) => b.z - a.z);
-        const next = sorted[1];
-        patch(next.id, { hid: false, min: false, z: ++z.current });
+        cycle(e.shiftKey ? -1 : 1);
+        return;
+      }
+      if (e.altKey && !e.ctrlKey && !e.metaKey && /^[1-9]$/.test(e.key)) {
+        const list = winsRef.current.filter((w) => !w.hid && !w.out);
+        const target = list[Number(e.key) - 1];
+        if (!target) return;
+        e.preventDefault();
+        beep(600);
+        activate(target.id);
       }
     };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
-  }, [close, patch, startOpen, wins]);
+  }, [activate, beep, close, cycle, startOpen]);
+
+  // The Start menu is a menu, so the keyboard enters it and comes back to the button.
+  const wasStartOpen = useRef(false);
+  useEffect(() => {
+    const was = wasStartOpen.current;
+    wasStartOpen.current = startOpen;
+    if (startOpen) {
+      const first = menuRef.current && menuRef.current.querySelector("button, a");
+      if (first) first.focus({ preventScroll: true });
+    } else if (was) {
+      const a = document.activeElement;
+      if (!a || a === document.body || !a.isConnected) {
+        if (startRef.current) startRef.current.focus({ preventScroll: true });
+      }
+    }
+  }, [startOpen]);
 
   // Windows Update never lets go.
   useEffect(() => {
@@ -456,6 +549,16 @@ export default function Desktop() {
 
   const ctx = { open, close, say, party, beep };
 
+  // Esc from anywhere inside a window closes it; this keeps that true while focus is in the frame.
+  const frameKeys = (e, w) => {
+    if (e.key === "Escape") { e.stopPropagation(); close(w.id); return; }
+    const step = e.shiftKey ? 64 : 16;
+    if (e.key === "ArrowLeft") { e.preventDefault(); nudge(w.id, -step, 0); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); nudge(w.id, step, 0); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); nudge(w.id, 0, -step); }
+    else if (e.key === "ArrowDown") { e.preventDefault(); nudge(w.id, 0, step); }
+  };
+
   return (
     <div
       className="desk"
@@ -497,9 +600,24 @@ export default function Desktop() {
             style={{ left: w.x, top: w.y, width: d.w, zIndex: w.z }}
             onPointerDown={() => focus(w.id)}
             role="dialog"
+            aria-modal="false"
             aria-label={d.title}
+            data-win={w.id}
+            tabIndex={-1}
+            ref={(el) => { if (el) winRefs.current[w.id] = el; else delete winRefs.current[w.id]; }}
           >
-            <div className="wbar" onPointerDown={(e) => startDrag(e, w)} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={() => (drag.current = null)}>
+            <div
+              className="wbar"
+              tabIndex={0}
+              role="group"
+              aria-label={`${d.title} window — arrow keys move it, Esc closes it`}
+              title="Arrows move · Shift+Arrows jump · Esc closes · Alt+Tab switches windows"
+              onKeyDown={(e) => frameKeys(e, w)}
+              onPointerDown={(e) => startDrag(e, w)}
+              onPointerMove={moveDrag}
+              onPointerUp={endDrag}
+              onPointerCancel={() => (drag.current = null)}
+            >
               <Sprite art={icons[d.icon]} size={16} /><span>{d.title}</span>
               <div className="wbtns">
                 <button type="button" aria-label="Minimize" onClick={() => { beep(392); patch(w.id, { min: true }); setTimeout(() => patch(w.id, { hid: true, min: false }), 120); }}>_</button>
@@ -513,7 +631,7 @@ export default function Desktop() {
       })}
 
       {startOpen && (
-        <div className="start" role="menu">
+        <div className="start" role="menu" ref={menuRef}>
           {[...ICON_IDS, ...START_ONLY].map((id) => (
             <button key={id} type="button" onClick={() => open(id)}><Sprite art={icons[DEFS[id].icon]} size={18} />{DEFS[id].title}</button>
           ))}
@@ -538,12 +656,25 @@ export default function Desktop() {
       )}
 
       <footer className="task">
-        <button type="button" className="startbtn" onClick={() => { setStartOpen((v) => !v); beep(440); }}>
+        <button
+          type="button"
+          className="startbtn"
+          ref={startRef}
+          aria-expanded={startOpen}
+          aria-haspopup="menu"
+          onClick={() => { setStartOpen((v) => !v); beep(440); }}
+        >
           Start
         </button>
         <div className="tabs">
           {wins.map((w) => (
-            <button key={w.id} type="button" aria-current={!w.hid ? "true" : undefined} onClick={() => (w.hid ? (patch(w.id, { hid: false, min: false }), focus(w.id)) : patch(w.id, { hid: true }))}>
+            <button
+              key={w.id}
+              type="button"
+              aria-current={!w.hid ? "true" : undefined}
+              aria-label={w.hid ? `Show ${DEFS[w.id].title}` : `${DEFS[w.id].title} — press to minimise`}
+              onClick={() => (w.hid ? (patch(w.id, { hid: false, min: false }), activate(w.id)) : patch(w.id, { hid: true }))}
+            >
               {DEFS[w.id].title}
             </button>
           ))}

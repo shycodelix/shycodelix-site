@@ -1,0 +1,589 @@
+/* ==========================================================================
+   V2.0 READER — kinetic motion, three surfaces, liquid glass only on floating
+   controls, low-contrast marquee, and responsive reader typography.
+   Loaded only on /profile so it never touches the desktop surface.
+   ========================================================================== */
+
+/* ---------- Reading measure / hierarchy across the three surfaces ---------- */
+.page.rd {
+  --rd-line: 1.72;
+  --rd-measure: 65ch;
+  font-family: var(--font-grotesk), var(--font-body), system-ui, sans-serif;
+  line-height: var(--rd-line);
+}
+.page.rd * {
+  line-height: var(--rd-line);
+}
+.page.rd p,
+.page.rd li,
+.page.rd dd,
+.page.rd .rd-lede,
+.page.rd .rd-note,
+.page.rd .rd-job-desc,
+.page.rd .rd-ach-note,
+.page.rd .rd-av-copy,
+.page.rd .rd-motto,
+.page.rd .rd-facts dd,
+.page.rd .rm-lede,
+.page.rd .rm-note {
+  max-width: var(--rd-measure);
+}
+.page.rd h1,
+.page.rd h2,
+.page.rd h3 {
+  font-family: var(--font-grotesk), var(--font-display), Impact, sans-serif;
+  letter-spacing: -0.018em;
+  text-transform: none;
+  font-weight: 800;
+}
+.page.rd h2 em {
+  font-style: normal;
+  font-weight: 600;
+  opacity: 0.55;
+  font-size: 0.55em;
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 0.2em;
+}
+
+/* ---------- Three reading surfaces, all driven by [data-rd-theme] ---------- */
+.page.rd {
+  background: var(--paper);
+  color: var(--ink);
+}
+.page.rd[data-rd-theme="dark"] {
+  background: var(--rd-reader-bg, #15111f);
+  color: var(--rd-text, #f3ecf7);
+}
+.page.rd[data-rd-theme="sepia"] {
+  background: var(--rd-reader-bg, #ece3d2);
+  color: var(--rd-text, #3a2f22);
+}
+.page.rd[data-rd-theme="light"] {
+  background: var(--rd-reader-bg, #f6f3ea);
+  color: var(--rd-text, #1e1633);
+}
+
+/* Surface local variables — defined once under .page.rd so child surfaces can
+   override without leaking into the desktop chrome. */
+.page.rd[data-rd-theme="dark"] {
+  --rd-paper: #1a1525;
+  --rd-paper2: #231d32;
+  --rd-ink: #f3ecf7;
+  --rd-ink-soft: #c9c0da;
+  --rd-dusk: #8a82a8;
+  --rd-tang: #ff7a1a;
+  --rd-line: rgba(243, 236, 247, 0.14);
+  --rd-accent: #ff7a1a;
+  --rd-reader-bg: #15111f;
+  --rd-text: #f3ecf7;
+  --rd-text-soft: #c9c0da;
+}
+.page.rd[data-rd-theme="sepia"] {
+  --rd-paper: #f1e9d6;
+  --rd-paper2: #f7f1e2;
+  --rd-ink: #3a2f22;
+  --rd-ink-soft: #6b5d47;
+  --rd-dusk: #8a7a5e;
+  --rd-tang: #b8531a;
+  --rd-line: rgba(58, 47, 34, 0.18);
+  --rd-accent: #b8531a;
+  --rd-reader-bg: #ece3d2;
+  --rd-text: #3a2f22;
+  --rd-text-soft: #6b5d47;
+}
+.page.rd[data-rd-theme="light"] {
+  --rd-paper: #f6f3ea;
+  --rd-paper2: #fbfaf5;
+  --rd-ink: #1e1633;
+  --rd-ink-soft: #4a4366;
+  --rd-dusk: #6b6486;
+  --rd-tang: #ff7a1a;
+  --rd-line: rgba(30, 22, 51, 0.18);
+  --rd-accent: #ff7a1a;
+  --rd-reader-bg: #f6f3ea;
+  --rd-text: #1e1633;
+  --rd-text-soft: #4a4366;
+}
+
+/* Reader chrome that should react to the surface, but only inside the reader. */
+.page.rd .rd-hero,
+.page.rd .rd-sec,
+.page.rd .rd-avante,
+.page.rd .rd-contact,
+.page.rd .rd-foot,
+.page.rd .rd-ticker {
+  background: transparent;
+  border-color: var(--rd-line);
+  color: var(--rd-text);
+}
+.page.rd .rd-mono,
+.page.rd .rd-facts dt,
+.page.rd .rm-eyebrow {
+  color: var(--rd-ink-soft);
+}
+.page.rd .rd-facts dd,
+.page.rd .rm-facts dd,
+.page.rd .rm-verified-grid b,
+.page.rd .rd-roles b,
+.page.rd .rd-roles span,
+.page.rd .rd-ach-note,
+.page.rd .rd-job-desc,
+.page.rd .rd-note,
+.page.rd .rd-motto,
+.page.rd .av-facts dd {
+  color: var(--rd-text-soft);
+}
+.page.rd .rd-hero-bar,
+.page.rd .rd-kit,
+.page.rd .rd-cta,
+.page.rd .rm-btn.primary,
+.page.rd .rd-av-links a {
+  background: var(--rd-tang);
+  color: var(--rd-paper);
+}
+.page.rd .rd-hero-note,
+.page.rd .rd-mono {
+  color: var(--rd-ink-soft);
+}
+.page.rd .rd-portrait,
+.page.rd .rd-av-logo,
+.page.rd .rd-av-tag,
+.page.rd .av-facts dt {
+  border-color: var(--rd-line);
+}
+.page.rd .rd-facts,
+.page.rd .rd-roles,
+.page.rd .rd-jobs li,
+.page.rd .rd-ach li,
+.page.rd .rm-verified-grid a,
+.page.rd .rm-caps {
+  border-color: var(--rd-line);
+}
+.page.rd .rd-facts dd {
+  font-weight: 600;
+}
+.page.rd .rd-hero-grid {
+  gap: 2.4rem;
+}
+.page.rd .rd-hero-copy .rd-lede {
+  font-size: clamp(1.1rem, 2.4vw, 1.65rem);
+  line-height: 1.45;
+}
+.page.rd .rd-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+}
+.page.rd .rd-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.7rem 1.2rem;
+  font-family: var(--font-grotesk), var(--font-micro), monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid var(--rd-text);
+  box-shadow: 3px 3px 0 var(--rd-text);
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  align-self: start;
+}
+.page.rd .rd-cta:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--rd-text);
+}
+.page.rd .rd-link {
+  font-family: var(--font-grotesk), var(--font-micro), monospace;
+  font-size: 0.78rem;
+  color: var(--rd-ink-soft);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rd-line);
+  padding: 0.3rem 0;
+}
+.page.rd .rd-link:hover {
+  color: var(--rd-accent);
+  border-color: var(--rd-accent);
+}
+
+/* ---------- Liquid Glass — ONLY on floating HUDs / controls ---------- */
+.lg-glass {
+  background: var(--glass);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--rd-line);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px -12px rgba(0, 0, 0, 0.35);
+}
+.lg-glass-raised {
+  background: var(--glass);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--rd-line);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04), 0 10px 30px -14px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- Reader theme HUD — floating control, glass only here ---------- */
+.rd-theme-hud {
+  position: fixed;
+  right: clamp(0.75rem, 2vw, 1.4rem);
+  top: clamp(0.75rem, 3vh, 1.4rem);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.55rem;
+  border-radius: 14px;
+  max-width: min(18rem, 28vw);
+  width: fit-content;
+}
+.rd-theme-group {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  background: transparent;
+}
+.rd-theme-btn {
+  appearance: none;
+  border: 1px solid var(--rd-line);
+  background: var(--glass);
+  color: var(--rd-text);
+  font-family: var(--font-grotesk), var(--font-micro), monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.32rem 0.62rem;
+  border-radius: 9px;
+  cursor: pointer;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  transition: transform 0.12s, background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.rd-theme-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--rd-accent);
+  color: var(--rd-accent);
+}
+.rd-theme-btn[aria-pressed="true"] {
+  background: var(--rd-accent);
+  color: var(--rd-paper);
+  border-color: var(--rd-accent);
+}
+.rd-theme-btn:focus-visible {
+  outline: 2px solid var(--rd-accent);
+  outline-offset: 2px;
+}
+.rd-theme-chip {
+  appearance: none;
+  border: 1px solid var(--rd-line);
+  background: transparent;
+  color: var(--rd-text-soft);
+  font-family: var(--font-grotesk), var(--font-micro), monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.32rem 0.62rem;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.rd-theme-chip:hover {
+  color: var(--rd-text);
+  border-color: var(--rd-accent);
+}
+.rd-theme-chip.on {
+  background: var(--rd-paper2);
+  color: var(--rd-ink);
+  border-color: var(--rd-accent);
+}
+.rd-theme-scale {
+  font-size: 0.7rem;
+  color: var(--rd-ink-soft);
+  padding: 0 0.2rem;
+  user-select: none;
+}
+
+/* ---------- Reader hero: masked line-by-line kinetic reveal ---------- */
+.rh {
+  position: relative;
+  overflow: hidden;
+}
+.rh-lines {
+  display: block;
+}
+.rh-fallback {
+  /* No-JS / noscript fallback: hidden while JS runs so the animated
+     .rh-lines block is the only visible headline. Revealed only when
+     scripting is unavailable, so the same words still read. */
+  display: block;
+  visibility: hidden;
+  position: absolute;
+}
+.rh-line {
+  display: inline;
+  will-change: clip-path, transform;
+  animation: rhClip var(--d, 0.7s) var(--i, 0s) both;
+  animation-name: rhClip;
+  animation-duration: 0.7s;
+  animation-fill-mode: backwards;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: left center;
+}
+.rh-line-in {
+  animation: rhClipDone 0.5s var(--d, 0.4s) both;
+  animation-name: rhClipDone;
+  animation-fill-mode: backwards;
+}
+@keyframes rhClip {
+  from {
+    clip-path: inset(0 100% 0 0);
+    transform: translateY(4%) scale(0.995);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes rhClipDone {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+.rh-sub {
+  margin-top: 1.1rem;
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  font-weight: 400;
+  color: var(--rd-ink-soft);
+  max-width: 46ch;
+  opacity: 0;
+  animation: rhFade 0.7s 0.45s both cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rh-by {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--rd-dusk);
+  opacity: 0;
+  animation: rhFade 0.6s 0.6s both cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rh-baseline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--rd-accent);
+  transform-origin: left;
+  transform: scaleX(0);
+  opacity: 0.5;
+  animation: rhBaseline 1.1s 0.15s both cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes rhFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes rhBaseline {
+  from { transform: scaleX(0); opacity: 0; }
+  20% { opacity: 0.5; }
+  to { transform: scaleX(1); opacity: 0; }
+}
+
+/* Reader marquee: palette follows the surface. */
+.page.rd[data-rd-theme="dark"] .rd-ticker {
+  background: rgba(12, 10, 22, 0.94);
+  color: #d8d4e6;
+  border-block-color: rgba(243, 236, 247, 0.12);
+}
+.page.rd[data-rd-theme="sepia"] .rd-ticker {
+  background: rgba(120, 100, 70, 0.92);
+  color: #f3e9d2;
+  border-block-color: rgba(58, 47, 34, 0.22);
+}
+.page.rd[data-rd-theme="light"] .rd-ticker {
+  background: rgba(255, 254, 250, 0.92);
+  color: #1e1633;
+  border-block-color: rgba(30, 22, 51, 0.16);
+}
+.page.rd[data-rd-theme="sepia"] .rd-ticker .rd-track b {
+  color: #f3e9d2;
+}
+.page.rd[data-rd-theme="light"] .rd-ticker .rd-track b {
+  color: #1e1633;
+}
+
+/* ---------- Responsive reader cosmetics ---------- */
+
+/* ---------- Reduced motion: kill every new motion, reveal everything ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .rh-line,
+  .rh-line-in {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .rh-fallback {
+    visibility: hidden;
+    position: absolute;
+  }
+  .rh-sub,
+  .rh-by,
+  .rh-baseline {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+  .rd-track {
+    animation: none;
+    transform: none;
+  }
+  .rd-ticker {
+    background: var(--rd-paper);
+    border-block-color: var(--rd-line);
+  }
+  .rd-theme-btn,
+  .rd-theme-chip {
+    transition: none;
+  }
+  .rd-theme-btn[aria-pressed="true"] {
+    transform: none;
+  }
+}
+
+@media (scripting: none) {
+  .rh-line,
+  .rh-line-in,
+  .rh-sub,
+  .rh-by,
+  .rh-baseline {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: none;
+    animation: none;
+  }
+  .rh-fallback {
+    visibility: visible;
+    position: static;
+  }
+}
+
+/* ---------- Reader hero / portrait block layout ---------- */
+.rd-hero-portrait {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.4rem;
+  padding: 2.4rem 0 1rem;
+  max-width: 76rem;
+  margin: 0 auto;
+}
+.rd-portrait {
+  border: 2px solid var(--rd-line);
+  box-shadow: 8px 8px 0 var(--rd-text);
+  overflow: hidden;
+  background: var(--rd-paper2);
+  max-width: 16rem;
+  align-self: start;
+}
+.rd-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.rd-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+@media (min-width: 56rem) {
+  .rd-hero-portrait {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 16rem);
+    gap: 2.6rem;
+    align-items: start;
+  }
+  .rd-portrait {
+    max-width: 18rem;
+  }
+}
+
+/* Keep the old desktop marquee calm so it never fights the reader ticker.
+   The desktop marquee is the homepage one; this only softens its contrast a bit. */
+.desk .marquee {
+  opacity: 0.96;
+}
+.desk .marquee .track b {
+  opacity: 0.9;
+}
+
+/* ---------- Responsive reader cosmetics ---------- */
+@media (max-width: 48rem) {
+  .rd-theme-hud {
+    right: 0.6rem;
+    top: 0.6rem;
+    padding: 0.4rem;
+    border-radius: 12px;
+    max-width: 100%;
+  }
+  .rd-theme-btn,
+  .rd-theme-chip {
+    font-size: 0.68rem;
+    padding: 0.28rem 0.5rem;
+  }
+  .rd-theme-hud .rd-theme-group:last-child {
+    flex-wrap: wrap;
+  }
+}
+
+/* ---------- Desktop motion polish (only on the desktop surface) ---------- */
+.desk .wall {
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.desk .win {
+  animation: winIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.desk .win.out,
+.desk .win.min {
+  animation: winOut 0.14s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes winIn {
+  from { opacity: 0; transform: scale(0.965) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes winOut {
+  to { opacity: 0; transform: scale(0.955) translateY(6px); }
+}
+
+/* Zero horizontal overflow guards — only tighten where it can slip */
+html,
+body,
+.desk,
+.desk .icons,
+.desk .task,
+.topbar,
+.icons {
+  overflow-x: hidden;
+}
+.desk .icons {
+  scrollbar-gutter: stable;
+}
+@media (max-width: 700px) {
+  .desk .icons {
+    overscroll-behavior: contain;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .desk .wall {
+    transition: none;
+  }
+  .desk .win {
+    animation: none;
+  }
+}

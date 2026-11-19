@@ -3,6 +3,10 @@ import CopyButton from "../../components/CopyButton";
 import Nav from "../../components/Nav";
 import Reveal from "../../components/Reveal";
 import PixelImg from "../../components/PixelImg";
+import ReaderHero from "../../components/ReaderHero";
+import ReaderTheme from "../../components/ReaderTheme";
+import ReaderTicker from "../../components/ReaderTicker";
+import "../v2-reader.css";
 import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, avanteMail, sensitivity, sensitivityNote, gear, valorant } from "../data";
 
 export const metadata = {
@@ -62,51 +66,32 @@ export default function Profile() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Nav />
 
-      <header className="rd-hero">
-        <div className="rd-hero-bar">
-          <span className="rd-status"><i aria-hidden="true" />{profile.status}</span>
-          <span className="rd-mono">{lookingFor.place}</span>
-          <span className="rd-mono">{lookingFor.start}</span>
-        </div>
+      <ReaderHero
+        headline="operations,<br />production,<br />content<span style='font-size:0.5em;opacity:0.45;margin-left:0.1em;'>*</span>"
+        subtitle="I run esports teams and tournaments, produce the broadcast around them, and have spent
+                 nine years leading customer-facing teams in the corporate world. Currently founding
+                 Avante Esports."
+        byline={`Gamer tag ${profile.tag} · usually replies within a day, Philippine time`}
+      />
 
-        <h1 className="rd-h1">
-          operations,<br />production,<br />content<span className="rd-star">*</span>
-        </h1>
+      <ReaderTheme />
 
-        <div className="rd-hero-grid">
-          <div className="rd-hero-copy">
-            <p className="rd-lede">
-              I run esports teams and tournaments, produce the broadcast around them, and have spent
-              nine years leading customer-facing teams in the corporate world. Currently founding
-              Avante Esports.
-            </p>
-            <div className="rd-actions">
-              <a className="rd-cta" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>
-                Email me <span aria-hidden="true">↗</span>
-              </a>
-              <a className="rd-link" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
-              <a className="rd-link" href="/links">Links</a>
-              <Link className="rd-link" href="/">Desktop</Link>
-            </div>
-            <p className="rd-mono rd-hero-note">Gamer tag {profile.tag} · usually replies within a day, Philippine time</p>
-          </div>
-
-          <figure className="rd-portrait">
-            <img src="/photos/studio.jpg" alt="shycodelix, studio portrait in a black jacket" width="900" height="1160" />
-            <figcaption className="rd-mono">shycodelix · Cebu, PH</figcaption>
-          </figure>
-        </div>
-      </header>
-
-      <div className="rd-ticker" aria-hidden="true">
-        <div className="rd-track">
-          {[0, 1].map((k) => (
-            <span key={k}>
-              {ticker.map((t) => <b key={t + k}>{t}</b>)}
-            </span>
-          ))}
+      <div className="rd-hero-portrait">
+        <figure className="rd-portrait">
+          <img src="/photos/studio.jpg" alt="shycodelix, studio portrait in a black jacket" width="900" height="1160" />
+          <figcaption className="rd-mono">shycodelix · Cebu, PH</figcaption>
+        </figure>
+        <div className="rd-hero-actions">
+          <a className="rd-cta" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>
+            Email me <span aria-hidden="true">↗</span>
+          </a>
+          <a className="rd-link" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
+          <a className="rd-link" href="/links">Links</a>
+          <Link className="rd-link" href="/">Desktop</Link>
         </div>
       </div>
+
+      <ReaderTicker />
 
       <section id="summary" className="rd-sec">
         <h2><em>(01)</em>Profile</h2>

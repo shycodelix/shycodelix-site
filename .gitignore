@@ -25,3 +25,13 @@ artifacts
 # agent tooling installed locally, not part of the site
 .claude/
 skills-lock.json
+
+# abandoned Rust workspace (rejected rewrite) — not part of this Next.js site
+crates/
+Cargo.toml
+api.rs
+markdown.rs
+content.rs
+
+# local dev server log
+dev.log
