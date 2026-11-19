@@ -136,7 +136,7 @@ export default function ReaderTheme({ indexSections }) {
     try {
       const lenis = document.querySelector(".lenis")?.lenis;
       if (lenis && typeof lenis.scrollTo === "function") {
-        lenis.scrollTo({ target: el, behavior: "smooth" });
+        lenis.scrollTo("#" + id, { duration: 700 });
       } else {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
