@@ -36,6 +36,3 @@ content.rs
 # local dev server log
 dev.log
 
-# Next.js build output — never ship
-.next/
-out/
