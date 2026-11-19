@@ -209,6 +209,7 @@ export default function Profile() {
             {avante.facts.slice(0, 4).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
           </dl>
           <p className="rd-av-motto">{avante.motto}</p>
+          <p className="rd-av-credit">{avante.credit.note}</p>
           <div className="rd-av-links">
             <a href={avanteMail}>Work with Avante</a>
             {avante.links.map((l) => <a key={l.href} href={l.href} target="_blank" rel="noreferrer">{l.label === "Discord" ? "Discord" : l.label}</a>)}
