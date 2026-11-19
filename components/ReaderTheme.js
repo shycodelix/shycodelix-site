@@ -70,7 +70,7 @@ const THEMES = {
 export default function ReaderTheme({ indexSections }) {
   const [theme, setTheme] = useState("dark");
   const [size, setSize] = useState("default");
-  const [showIndex, setShowIndex] = useState(true);
+  const [showIndex, setShowIndex] = useState(false); // closed by default; each reader's choice is persisted
   const [indexOpen, setIndexOpen] = useState(false);
   const hudRef = useRef(null);
   const indexRef = useRef(null);
@@ -131,15 +131,18 @@ export default function ReaderTheme({ indexSections }) {
   const goTo = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
-    // Try Lenis first (the page's smooth scroll driver), fall back to native.
+    // Lenis is the page's smooth-scroll driver; fall back to native scroll.
+    // Close the index popover whenever a section is chosen (both paths).
     try {
       const lenis = document.querySelector(".lenis")?.lenis;
       if (lenis && typeof lenis.scrollTo === "function") {
         lenis.scrollTo({ target: el, behavior: "smooth" });
-        return;
+      } else {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
-    } catch {}
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
     setIndexOpen(false);
   };
 
