@@ -5,7 +5,7 @@ import Parallax from "./Parallax";
 export default function ReaderInterlude({ src, alt, caption }) {
   return (
     <div className="rd-inter">
-      <Parallax speed={0.07} className="rd-inter-in">
+      <Parallax speed={0.07} max={48} className="rd-inter-in">
         <img src={src} alt={alt} loading="lazy" decoding="async" />
       </Parallax>
       <p className="rd-inter-cap rd-mono">{caption}</p>

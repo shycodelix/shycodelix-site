@@ -1167,17 +1167,26 @@ body,
 
 /* ---------- Interludes: one image, one line, between sections ---------- */
 .rd-inter {
+  --rd-inter-h: clamp(13rem, 32vw, 21rem);
+  --rd-inter-bleed: 3rem;
   position: relative;
   overflow: hidden;
+  height: var(--rd-inter-h);
   margin: clamp(2.5rem, 6vw, 5rem) 0;
   background: var(--rd-paper2);
   border-block: 2px solid var(--rd-line);
 }
-.rd-inter-in { will-change: transform; }
+/* Taller than the clip box by twice the bleed, and never travels further than
+   that bleed (see max in ReaderInterlude), so the parallax cannot expose an edge. */
+.rd-inter-in {
+  position: absolute;
+  inset: calc(var(--rd-inter-bleed) * -1) 0;
+  will-change: transform;
+}
 .rd-inter-in img {
   display: block;
   width: 100%;
-  height: clamp(13rem, 32vw, 21rem);
+  height: 100%;
   object-fit: cover;
 }
 .rd-inter-cap {
@@ -1194,7 +1203,7 @@ body,
   text-transform: uppercase;
 }
 @media (max-width: 48rem) {
-  .rd-inter-in img { height: clamp(9rem, 34vw, 14rem); }
+  .rd-inter { --rd-inter-h: clamp(9rem, 34vw, 14rem); }
   .rd-inter-cap { padding: 1.8rem 1rem 0.6rem; font-size: 0.64rem; }
 }
 @media (prefers-reduced-motion: reduce) {

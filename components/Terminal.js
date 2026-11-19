@@ -6,7 +6,7 @@ const HELP = [
   "ask <question>  asks the on-board model (or start with ?)",
   "whoami          who you're looking at",
   "ls              files on this desktop",
-  "open <thing>    opens a window (about, work, wins, avante, photos, setup, mines, drive, notepad)",
+  "open <thing>    opens a window (kit, clips, schedule, about, work, setup, mines)",
   "notepad         opens notepad.exe",
   "neofetch        system info, obviously",
   "ping avante     brand latency",
@@ -18,19 +18,19 @@ const HELP = [
 ];
 
 const FILES = [
-  "about_me.txt   Work.exe       GG.exe        Avante.exe",
-  "definitely_not_homework/       it_was_lag.mp4",
-  "Setup.ini      Stream.cal     resume_FINAL_v3.pdf",
+  "about_me.txt   stream_kit.exe  it_was_lag.mp4  Stream.cal",
+  "definitely_not_homework/       Setup.ini",
+  "Work.exe       GG.exe          Links.exe       resume_FINAL_v3.pdf",
   "recycle_bin/   Do not open.exe",
 ];
 
-const WINDOWS = ["about", "work", "wins", "avante", "photos", "clips", "setup", "schedule", "mines", "drive", "term", "notepad"];
+const WINDOWS = ["kit", "clips", "schedule", "about", "work", "wins", "avante", "photos", "setup", "mines", "drive", "term", "notepad"];
 
 const NEO = [
   "        .-\"\"\"-.        shycodelix@OS",
   "       /  .-.  \\       ---------------",
   "      |  ( o )  |      OS: shycodelix OS 6.1",
-  "       \\  '-'  /       Role: esports ops / content / support",
+  "       \\  '-'  /       Role: streamer / editor / founder",
   "        '-...-'        Region: Philippines",
   "                       Uptime: since 2014, no reinstall",
   "                       Shell: cmd.exe (affectionate)",
@@ -114,7 +114,7 @@ export default function Terminal({ open, close, say }) {
         open("notepad");
         break;
       case "whoami":
-        push(["shycodelix — esports operations, content, and the support tickets nobody else wanted."]);
+        push(["shycodelix — streams on four platforms, cuts the clips after, and runs the org that makes both possible."]);
         break;
       case "ls":
       case "dir":

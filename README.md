@@ -1,6 +1,6 @@
 # shycodelix
 
-The reader is the front door: `/` is the editorial version of the same person. `/os` is the retro desktop, a lab you go to on purpose. `/links` is the link-in-bio page.
+The reader is the front door: `/` is the editorial, hiring-first version of the same person. `/os` is the retro desktop and the creator side of the site — the streaming rig, the overlay pack, the clips. `/links` is the link-in-bio page.
 
 Live: [shycodelix.vercel.app](https://shycodelix.vercel.app)
 
@@ -9,14 +9,14 @@ Live: [shycodelix.vercel.app](https://shycodelix.vercel.app)
 | Route | What it is |
 | --- | --- |
 | `/` | **Reader mode.** The serious CV: summary card, verified profiles, selected work, experience, capabilities, Avante, career strip, setup, contact. Three reading surfaces (dark/sepia/light), A-/A+ text size, section dock, interludes, print-friendly. |
-| `/os` | **The lab.** The Windows XP desktop: draggable windows, wallpaper with day/night palette, taskbar, Start menu. Opens clean — no windows forced on you. |
+| `/os` | **The lab.** The Windows XP desktop, built around the stream: draggable windows, wallpaper with day/night palette, taskbar, Start menu. Opens on the wallpaper, with a welcome note the first time per session. |
 | `/links` | **Links page.** Streams (Twitch / TikTok / Kick / YouTube), socials, Avante, tips, verified profiles. Built to be pasted in a bio. |
 | `/profile` | 308 redirect to `/`, so older résumé links keep working. |
 | `/not-found` | The 404, as an XP error dialog. |
 
 ## Windows on the desktop (`/os`)
 
-`about_me.txt` · `Work.exe` · `Avante.exe` · `definitely_not_homework` (photos, split into **Me** and **Team**) · `Media Player` · `Links.exe` on the desktop. The rest — `GG.exe`, `it_was_lag.mp4`, `Setup.ini`, `Stream.cal`, `cmd.exe`, Minesweeper, `(C:)`, `Do not open.exe`, Recycle Bin — live in the Start menu.
+`about_me.txt` · `stream_kit.exe` (OBS scenes, chat box, PNGTuber model) · `it_was_lag.mp4` · `Media Player` · `Stream.cal` · `definitely_not_homework` (photos, split into **Me** and **Team**) · `Avante.exe` · `Links.exe` on the desktop. The rest — `Work.exe`, `GG.exe`, `Setup.ini`, `cmd.exe`, Notepad, Minesweeper, `(C:)`, `Do not open.exe`, Recycle Bin — live in the Start menu.
 
 - **Avante.exe** — the organisation, what it does, how it works, and where it's going.
 - **Media Player** — 63 clips from the edits archive, grouped by month, played through Drive's preview embed. Nothing is bundled into the repo.

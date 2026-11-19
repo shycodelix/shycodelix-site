@@ -55,7 +55,7 @@ function AboutBody() {
     <div className="about">
       <div className="about-img"><PixelImg src="/photos/main.jpg" alt="Portrait of shycodelix" ar={0.8} /></div>
       <div>
-        <p>Hi, I&rsquo;m <b>shycodelix</b>. I run esports operations, edit content and lead customer-facing teams. A jack of all trades in the corporate world.</p>
+        <p>Hi, I&rsquo;m <b>shycodelix</b>. I stream on four platforms, cut the clips afterwards, and build the overlays and the org that pay for the hardware. Nine years of day jobs in between, mostly leading customer-facing teams.</p>
         <p className="chips"><span>{profile.status}</span><span>{profile.country}</span><span>{avante.role}, Avante Esports</span></p>
         <p className="note">Hover the photo to un-pixelate me. Psst: the Konami code works here, <b>cmd.exe</b> is a real terminal with a model behind it, and <b>notepad</b> actually saves.</p>
       </div>
@@ -182,16 +182,18 @@ function WelcomeBody({ open, close }) {
     <div className="stack">
       <p className="greet">Welcome to shycodelix OS.</p>
       <p>
-        I run esports teams and tournaments, edit video for a living, and just rebooted Avante Esports.
-        Everything on this desktop opens, including a working terminal and notepad.
+        This is the streaming half of the site: the overlay pack I run every show on, the model I talk
+        through, the clips that come out the other end, and the desk it all sits on. Everything on this
+        desktop opens, including a real terminal.
       </p>
       <ul className="plain tight">
-        <li>Work.exe — the full history, in order</li>
-        <li>Reader mode — the short version, for hiring managers</li>
+        <li>stream_kit.exe — the OBS scenes, chat box and PNGTuber model</li>
+        <li>it_was_lag.mp4 — where the clips actually live</li>
+        <li>Work.exe — the day-job history, quietly in the Start menu</li>
         <li>cmd.exe — type <b>help</b>, then <b>ask</b> it something</li>
       </ul>
       <div className="row2">
-        <button type="button" className="btn primary" onClick={() => { close(); open("work"); }}>Open Work.exe</button>
+        <button type="button" className="btn primary" onClick={() => { close(); open("kit"); }}>Open stream_kit.exe</button>
         <a className="btn" href="/">Reader mode</a>
       </div>
       <button type="button" className="btn" onClick={close}>Just looking around</button>
@@ -224,18 +226,19 @@ const DEFS = {
   bin: { title: "Recycle Bin", icon: "bin", w: 380, body: BinBody },
   error: { title: "Error", icon: "danger", w: 360, body: ErrorBody },
 };
-// Six primaries on the desktop; everything else lives in the Start menu.
-const ICON_IDS = ["about", "work", "avante", "photos", "player", "kit", "links", "notepad"];
-const START_ONLY = ["wins", "clips", "setup", "schedule", "term", "mines", "drive", "dont", "bin"];
+// The rig first: what I stream with, and what comes out of it.
+const ICON_IDS = ["about", "kit", "clips", "player", "schedule", "photos", "avante", "links"];
+const START_ONLY = ["work", "wins", "setup", "term", "notepad", "mines", "drive", "dont", "bin"];
 
 const BOOT_LINES = [
   "Reticulating splines…",
-  "Installing aim (1 of 47)…",
+  "Rebuilding the overlay, again…",
+  "Syncing chat (47 unread)…",
   "Buffering like it's 2012…",
   "Skill issue not found.",
-  "Registering 47 unused overlays…",
+  "Loading 47 unused overlays…",
   "Loading personality.dll…",
-  "Defragmenting ego…",
+  "Rendering the clip nobody asked for…",
   "Searching for a fifth teammate…",
   "Unmuting the microphone…",
 ];
@@ -567,7 +570,7 @@ export default function Desktop() {
       onClick={(e) => { if (!e.target.closest(".start,.startbtn")) setStartOpen(false); }}
     >
       <Wallpaper night={night} innerRef={wall} />
-      <h1 className="sr-only">shycodelix — esports operations, production and content</h1>
+      <h1 className="sr-only">shycodelix — streamer, editor and content creator</h1>
 
       {[[8, 5, 90, 0], [22, 3, 130, -40], [40, 6, 160, -90], [62, 4, 110, -20], [76, 3, 140, -60]].map(([t, s, d, dl], i) => (
         <div key={i} className="cloud" style={{ top: `${t}%`, animationDuration: `${d}s`, animationDelay: `${dl}s` }}><Sprite art={cloud} size={s * 26} /></div>
