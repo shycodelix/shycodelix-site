@@ -53,6 +53,17 @@ function Job({ j }) {
   );
 }
 
+const INDEX_SECTIONS = [
+  { id: "summary", label: "Profile" },
+  { id: "work", label: "Selected work" },
+  { id: "verified", label: "Verified record" },
+  { id: "experience", label: "Experience" },
+  { id: "skills", label: "What I do" },
+  { id: "avante", label: "Avante Esports" },
+  { id: "career", label: "Career in frames" },
+  { id: "setup", label: "Setup" },
+  { id: "contact", label: "Contact" },
+];
 
 export default function Profile() {
   const games = [...roles.map((g) => g.game), "Dota 2"];
@@ -93,10 +104,11 @@ export default function Profile() {
             <a className="rd-link" href="/links">Links</a>
             <Link className="rd-link" href="/">Desktop</Link>
           </div>
+          <div className="rd-hero-accent" aria-hidden="true" />
         </div>
       </div>
 
-      <ReaderTheme />
+      <ReaderTheme indexSections={INDEX_SECTIONS} />
 
       <ReaderTicker />
 

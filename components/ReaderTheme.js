@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const THEMES = {
   dark: {
@@ -67,10 +67,13 @@ const THEMES = {
   },
 };
 
-export default function ReaderTheme({ onIndexToggle }) {
+export default function ReaderTheme({ indexSections }) {
   const [theme, setTheme] = useState("dark");
   const [size, setSize] = useState("default");
   const [showIndex, setShowIndex] = useState(true);
+  const [indexOpen, setIndexOpen] = useState(false);
+  const hudRef = useRef(null);
+  const indexRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -110,14 +113,89 @@ export default function ReaderTheme({ onIndexToggle }) {
     } catch {}
   }, [theme, size, showIndex]);
 
+  // Open the section index popover whenever the reader wants the index shown
+  // and it isn't already open; close it when the index is turned off.
+  useEffect(() => {
+    if (indexSections && showIndex && !indexOpen) {
+      setIndexOpen(true);
+    } else if (indexSections && !showIndex && indexOpen) {
+      setIndexOpen(false);
+    }
+  }, [showIndex, indexSections]);
+
   const t = THEMES[theme];
 
   // Liquid glass tint for floating HUD controls only.
   const glass = `${t.glass}; backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%)`;
 
+  const goTo = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    // Try Lenis first (the page's smooth scroll driver), fall back to native.
+    try {
+      const lenis = document.querySelector(".lenis")?.lenis;
+      if (lenis && typeof lenis.scrollTo === "function") {
+        lenis.scrollTo({ target: el, behavior: "smooth" });
+        return;
+      }
+    } catch {}
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setIndexOpen(false);
+  };
+
+  // Close the index popover on Escape or outside click (but not when the user
+  // is operating inside the popover itself).
+  useEffect(() => {
+    if (!indexOpen) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setIndexOpen(false);
+    };
+    const onClick = (e) => {
+      if (!indexOpen) return;
+      const inside =
+        (hudRef.current && hudRef.current.contains(e.target)) ||
+        (indexRef.current && indexRef.current.contains(e.target));
+      if (!inside) setIndexOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onClick);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onClick);
+    };
+  }, [indexOpen]);
+
   return (
     <>
+      {/* Section index popover — only when the parent supplies the section list
+          AND wants the index shown. Anchored just left of the HUD so it reads
+          as part of the reader chrome, not a separate widget. */}
+      {indexSections && indexOpen && (
+        <div
+          ref={indexRef}
+          className="rd-index"
+          role="navigation"
+          aria-label="Section index"
+        >
+          <div className="rd-index-head">Section index</div>
+          <ol className="rd-index-list">
+            {indexSections.map((s) => (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  className="rd-index-item"
+                  onClick={() => goTo(s.id)}
+                >
+                  <span className="rd-index-goto">{s.label}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+
       <div
+        ref={hudRef}
         className="rd-theme-hud"
         role="toolbar"
         aria-label="Reader controls"
@@ -174,15 +252,15 @@ export default function ReaderTheme({ onIndexToggle }) {
           ))}
         </div>
 
-        {/* Index toggle — only when the parent supplies it. */}
-        {onIndexToggle && (
+        {/* Section index toggle — always available on /profile. */}
+        {indexSections && (
           <div className="rd-theme-group" role="group" aria-label="Section index">
             <button
               type="button"
               className="rd-theme-btn"
               aria-label={showIndex ? "Hide section index" : "Show section index"}
               title={showIndex ? "Hide section index" : "Show section index"}
-              onClick={() => onIndexToggle(!showIndex)}
+              onClick={() => setShowIndex((v) => !v)}
               aria-pressed={showIndex}
             >
               {showIndex ? "Index" : "Index off"}

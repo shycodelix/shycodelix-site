@@ -773,6 +773,9 @@ body { -webkit-tap-highlight-color: rgba(255, 122, 26, 0.22); }
 
 /* sections */
 .rd-sec { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(1.4rem, 4vw, 3.5rem); padding: clamp(2.6rem, 6vw, 5.2rem) clamp(1.1rem, 4vw, 3.2rem); border-top: 1px solid rgba(0, 0, 0, 0.14); }
+/* First section lands right under the hero's accent band, so drop the border
+   there and let the band be the separator. Keeps the cadence clean, one drop. */
+.rd-hero + .rd-theme-hud + .rd-ticker + .rd-sec { border-top: 0; padding-top: clamp(2.2rem, 5vw, 4.2rem); }
 .rd-sec > h2 { position: sticky; top: 1.4rem; align-self: start; font-size: clamp(1.9rem, 3.4vw, 3.2rem); }
 .rd-sec h2 em, .rd-frames-head h2 em { display: block; font-family: var(--font-micro), monospace; font-style: normal; font-size: 0.66rem; letter-spacing: 0.06em; color: var(--tang); margin-bottom: 0.7rem; }
 .rd-col { display: grid; gap: 1.6rem; align-content: start; }

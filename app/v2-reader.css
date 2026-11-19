@@ -415,6 +415,68 @@
 
 /* ---------- Responsive reader cosmetics ---------- */
 
+/* ---------- Section index popover (reader chrome, near the HUD) ---------- */
+.rd-index {
+  position: fixed;
+  z-index: 55;
+  top: clamp(0.75rem, 3vh, 1.4rem);
+  right: clamp(8.2rem, 20vw, 16rem);
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.55rem 0.7rem 0.5rem;
+  background: var(--rd-paper2);
+  border: 1px solid var(--rd-line);
+  border-radius: 12px;
+  min-width: 11rem;
+  max-width: min(16rem, 30vw);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  animation: rdIndexIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.rd-index-head {
+  font-family: var(--font-grotesk), var(--font-micro), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rd-dusk);
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--rd-line);
+  margin-bottom: 0.1rem;
+}
+.rd-index-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.15rem;
+}
+.rd-index-item {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  padding: 0.35rem 0.55rem;
+  border-radius: 6px;
+  font-family: var(--font-grotesk), var(--font-micro), monospace;
+  font-size: 0.74rem;
+  color: var(--rd-text-soft);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.rd-index-item:hover,
+.rd-index-item:focus-visible {
+  background: var(--rd-line);
+  color: var(--rd-text);
+}
+.rd-index-item:focus-visible {
+  outline: 2px solid var(--rd-accent);
+  outline-offset: 1px;
+}
+@keyframes rdIndexIn {
+  from { opacity: 0; transform: translateY(-3px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
 /* ---------- Reduced motion: kill every new motion, reveal everything ---------- */
 @media (prefers-reduced-motion: reduce) {
   .rh-line,
@@ -507,6 +569,23 @@
   .rd-portrait {
     max-width: 18rem;
   }
+}
+
+/* Signature gesture — a single full-bleed accent band, only in the hero.
+   YanXin-style: one vivid mark, not a busy pattern. Sits at the bottom of
+   the portrait block (where the eye lands after the CTA stack), renders per
+   surface via --rd-accent, and never appears behind body copy anywhere else.
+   One accent, one gesture, one place. */
+.rd-hero-accent {
+  grid-column: 1 / -1;
+  height: clamp(0.5rem, 1.1vw, 0.9rem);
+  background: var(--rd-accent);
+  margin-top: 0.2rem;
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 1px 0 var(--rd-paper2);
+}
+@media (max-width: 48rem) {
+  .rd-hero-accent { height: 0.55rem; }
 }
 
 /* Keep the old desktop marquee calm so it never fights the reader ticker.
