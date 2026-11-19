@@ -61,6 +61,7 @@ export default function Profile() {
     <div className="page rd">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Nav />
+      <ReaderTheme />
       <h1 className="sr-only">shycodelix — operations, production, content</h1>
 
       <div className="rd-hero">
@@ -100,8 +101,6 @@ export default function Profile() {
           <div className="rd-hero-accent" aria-hidden="true" />
         </div>
       </div>
-
-      <ReaderTheme />
 
       <ReaderTicker />
 
