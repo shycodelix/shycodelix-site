@@ -66,30 +66,37 @@ export default function Profile() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Nav />
 
-      <ReaderHero
-        headline="operations,<br />production,<br />content<span style='font-size:0.5em;opacity:0.45;margin-left:0.1em;'>*</span>"
-        subtitle="I run esports teams and tournaments, produce the broadcast around them, and have spent
-                 nine years leading customer-facing teams in the corporate world. Currently founding
-                 Avante Esports."
-        byline={`Gamer tag ${profile.tag} · usually replies within a day, Philippine time`}
-      />
+      <div className="rd-hero">
+        <div className="rd-hero-bar">
+          <span className="rd-status"><i aria-hidden="true" />Open to work</span>
+          <span className="rd-mono">shycodelix · reader mode</span>
+        </div>
 
-      <ReaderTheme />
+        <ReaderHero
+          headline="operations,<br />production,<br />content<span style='font-size:0.5em;opacity:0.45;margin-left:0.1em;'>*</span>"
+          subtitle="I run esports teams and tournaments, produce the broadcast around them, and have spent
+                   nine years leading customer-facing teams in the corporate world. Currently founding
+                   Avante Esports."
+          byline={`Gamer tag ${profile.tag} · usually replies within a day, Philippine time`}
+        />
 
-      <div className="rd-hero-portrait">
-        <figure className="rd-portrait">
-          <img src="/photos/studio.jpg" alt="shycodelix, studio portrait in a black jacket" width="900" height="1160" />
-          <figcaption className="rd-mono">shycodelix · Cebu, PH</figcaption>
-        </figure>
-        <div className="rd-hero-actions">
-          <a className="rd-cta" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>
-            Email me <span aria-hidden="true">↗</span>
-          </a>
-          <a className="rd-link" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
-          <a className="rd-link" href="/links">Links</a>
-          <Link className="rd-link" href="/">Desktop</Link>
+        <div className="rd-hero-portrait">
+          <figure className="rd-portrait">
+            <img src="/photos/studio.jpg" alt="shycodelix, studio portrait in a black jacket" width="900" height="1160" />
+            <figcaption className="rd-mono">shycodelix · Cebu, PH</figcaption>
+          </figure>
+          <div className="rd-hero-actions">
+            <a className="rd-cta" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>
+              Email me <span aria-hidden="true">↗</span>
+            </a>
+            <a className="rd-link" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
+            <a className="rd-link" href="/links">Links</a>
+            <Link className="rd-link" href="/">Desktop</Link>
+          </div>
         </div>
       </div>
+
+      <ReaderTheme />
 
       <ReaderTicker />
 
