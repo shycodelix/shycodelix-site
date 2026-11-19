@@ -192,7 +192,7 @@ function WelcomeBody({ open, close }) {
       </ul>
       <div className="row2">
         <button type="button" className="btn primary" onClick={() => { close(); open("work"); }}>Open Work.exe</button>
-        <a className="btn" href="/profile">Reader mode</a>
+        <a className="btn" href="/">Reader mode</a>
       </div>
       <button type="button" className="btn" onClick={close}>Just looking around</button>
     </div>
@@ -577,7 +577,7 @@ export default function Desktop() {
         <span className="brand">shycodelix OS</span>
         <span className="topbar-links">
           <Link href="/links">Links</Link>
-          <Link href="/profile">Reader mode &rarr;</Link>
+          <Link href="/">Reader mode &rarr;</Link>
         </span>
       </header>
 
@@ -639,7 +639,7 @@ export default function Desktop() {
           {avante.links.map((l) => <a key={l.href} href={l.href} {...ext}>{l.label}</a>)}
           <p className="lab">Elsewhere</p>
           <Link href="/links">Links page</Link>
-          <Link href="/profile">Reader mode</Link>
+          <Link href="/">Reader mode</Link>
           <button type="button" onClick={() => open("error")}>Shut Down&hellip;</button>
         </div>
       )}

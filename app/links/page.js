@@ -78,8 +78,8 @@ export default function Links() {
         </div>
 
         <div className="lb-foot">
-          <Link href="/">Desktop &rarr;</Link>
-          <Link href="/profile">Reader mode &rarr;</Link>
+          <Link href="/os">The lab &rarr;</Link>
+          <Link href="/">Reader mode &rarr;</Link>
           <a href={mail}>{profile.email}</a>
         </div>
 

@@ -1,6 +1,6 @@
 # shycodelix
 
-A retro desktop portfolio. `/` boots straight into a Windows-XP-style desktop; `/profile` is the serious reader-mode version of the same person; `/links` is the link-in-bio page.
+The reader is the front door: `/` is the editorial version of the same person. `/os` is the retro desktop, a lab you go to on purpose. `/links` is the link-in-bio page.
 
 Live: [shycodelix.vercel.app](https://shycodelix.vercel.app)
 
@@ -8,12 +8,13 @@ Live: [shycodelix.vercel.app](https://shycodelix.vercel.app)
 
 | Route | What it is |
 | --- | --- |
-| `/` | **Desktop.** Draggable windows, wallpaper with day/night palette, taskbar, Start menu. Opens clean — no windows forced on you. |
-| `/profile` | **Reader mode.** The serious CV: summary card, verified profiles, selected work, experience, capabilities, Avante, career strip, setup, contact. Print-friendly. |
+| `/` | **Reader mode.** The serious CV: summary card, verified profiles, selected work, experience, capabilities, Avante, career strip, setup, contact. Three reading surfaces (dark/sepia/light), A-/A+ text size, section dock, interludes, print-friendly. |
+| `/os` | **The lab.** The Windows XP desktop: draggable windows, wallpaper with day/night palette, taskbar, Start menu. Opens clean — no windows forced on you. |
 | `/links` | **Links page.** Streams (Twitch / TikTok / Kick / YouTube), socials, Avante, tips, verified profiles. Built to be pasted in a bio. |
+| `/profile` | 308 redirect to `/`, so older résumé links keep working. |
 | `/not-found` | The 404, as an XP error dialog. |
 
-## Windows on the desktop
+## Windows on the desktop (`/os`)
 
 `about_me.txt` · `Work.exe` · `Avante.exe` · `definitely_not_homework` (photos, split into **Me** and **Team**) · `Media Player` · `Links.exe` on the desktop. The rest — `GG.exe`, `it_was_lag.mp4`, `Setup.ini`, `Stream.cal`, `cmd.exe`, Minesweeper, `(C:)`, `Do not open.exe`, Recycle Bin — live in the Start menu.
 
@@ -25,14 +26,16 @@ Live: [shycodelix.vercel.app](https://shycodelix.vercel.app)
 
 Everything hangs off `app/data.js`:
 
-- `profile` — name, status, email, and `links`. Groups are `stream`, `social`, `support`, `other`, `verified` (VLR.gg, Liquipedia, Konect). The desktop, links page and reader mode all read the same arrays.
-- `lookingFor` — the four fields in the reader-mode summary card.
+- `profile` — name, status, email, and `links`. Groups are `stream`, `social`, `support`, `other`, `verified` (VLR.gg, Liquipedia, Konect). The desktop, links page and reader all read the same arrays, so `profile.status` is the single source for "Open to work".
+- `lookingFor` — the four fields in the reader summary card.
 - `achievements` / `experience` / `capabilities` — the record.
-- `photos` — the reader-mode career strip. `archive` — the photo folder, in two tabs: `me` and `team`. Add a file to `public/photos/archive/` and an entry here.
+- `photos` — the reader career strip. `archive` — the photo folder, in two tabs: `me` and `team`. Add a file to `public/photos/archive/` and an entry here.
 - `avante` — the org page: intro, `what`, `how`, `roadmap`, `facts`, socials.
 - `gear` / `sensitivity` / `valorant` — setup windows.
 
 Clips live in `app/videos.js` (generated from the Drive edits archive: `{ month, title, id }`).
+
+Reader-only structure lives in `app/reader.js` (the page body), `components/ReaderHero.js`, `ReaderTheme.js` (floating HUD), `ReaderTicker.js` and `ReaderInterlude.js`. All reader styling is `app/v2-reader.css`, imported only by the reader.
 
 ## Dev
 
@@ -42,4 +45,4 @@ npm run dev     # http://localhost:3000
 npm run build
 ```
 
-Next.js 15 (App Router). Fonts: Press Start 2P, Silkscreen, Archivo, DM Sans. No UI dependencies, no CSS framework — one `app/globals.css`.
+Next.js 15 (App Router). Fonts: Press Start 2P, Silkscreen, Archivo, DM Sans, Outfit. No UI dependencies, no CSS framework — one global stylesheet plus the route-scoped reader one. Lenis is mounted only on the reader.

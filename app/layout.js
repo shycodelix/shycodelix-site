@@ -1,7 +1,6 @@
 import { Archivo, DM_Sans, Press_Start_2P, Silkscreen } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import SmoothScroll from "../components/SmoothScroll";
 import Cursor from "../components/Cursor";
 
 const display = Archivo({ subsets: ["latin"], weight: ["800", "900"], variable: "--font-display", display: "swap" });
@@ -35,7 +34,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${display.variable} ${body.variable} ${grotesk.variable} ${pixel.variable} ${micro.variable}`}>
       <body>
         <Cursor />
-        <SmoothScroll>{children}</SmoothScroll>
+        {children}
       </body>
     </html>
   );

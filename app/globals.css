@@ -45,7 +45,7 @@ html.has-cursor, html.has-cursor a, html.has-cursor button, html.has-cursor summ
 .cur-ring.big i { transform: scale(1.8); background: rgba(255, 122, 26, 0.16); }
 
 /* ==========================================================================
-   READER MODE — the plain, printable version of the brand (/profile)
+   READER MODE — the plain, printable version of the brand (/)
    ========================================================================== */
 .page { counter-reset: s; background: var(--paper); }
 .page .sec { counter-increment: s; max-width: 76rem; margin: 0 auto; padding: clamp(3.5rem, 7vw, 6.5rem) clamp(1.25rem, 5vw, 2rem); scroll-margin-top: 1rem; }

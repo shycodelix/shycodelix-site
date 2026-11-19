@@ -33,7 +33,7 @@ export default function Nav() {
     <>
       <div className="progress" ref={bar} aria-hidden="true" />
       <nav className="dock" aria-label="Sections">
-        <Link href="/">Desktop</Link>
+        <Link href="/os">The lab</Link>
         <Link href="/links">Links</Link>
         {items.map(([id, label]) => (
           <a key={id} href={`#${id}`} onClick={(e) => go(e, id)} aria-current={active === id ? "true" : undefined}>{label}</a>

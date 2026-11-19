@@ -19,8 +19,8 @@ export default function NotFound() {
           </p>
           <p className="lost-code">ERROR 404 — FILE_NOT_FOUND</p>
           <div className="lost-actions">
-            <Link className="btn primary" href="/">Back to the desktop</Link>
-            <Link className="btn" href="/profile">Reader mode</Link>
+            <Link className="btn primary" href="/">Back to the reader</Link>
+            <Link className="btn" href="/os">The lab</Link>
           </div>
         </div>
       </div>

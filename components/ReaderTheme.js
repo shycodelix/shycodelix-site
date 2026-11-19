@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 const THEMES = {
   dark: {
@@ -67,16 +67,11 @@ const THEMES = {
   },
 };
 
-export default function ReaderTheme({ indexSections }) {
+/** The floating HUD: reading surface, text size. Section navigation lives in
+ *  the dock, so it is not duplicated here. */
+export default function ReaderTheme() {
   const [theme, setTheme] = useState("dark");
   const [size, setSize] = useState("default");
-  // The index popover is a single open/closed toggle whose choice is persisted
-  // per reader. Default (no stored preference): closed.
-  const [indexOpen, setIndexOpen] = useState(() => {
-    try { return localStorage.getItem("rd-show-index") === "1"; } catch { return false; }
-  });
-  const hudRef = useRef(null);
-  const indexRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -106,163 +101,75 @@ export default function ReaderTheme({ indexSections }) {
     };
   }, [theme, size]);
 
-  // Persist the index open/closed choice for this reader.
   useEffect(() => {
     try {
       localStorage.setItem("rd-theme", theme);
       localStorage.setItem("rd-size", size);
-      localStorage.setItem("rd-show-index", indexOpen ? "1" : "0");
     } catch {}
-  }, [theme, size, indexOpen]);
+  }, [theme, size]);
 
   const t = THEMES[theme];
 
   // Liquid glass tint for floating HUD controls only.
   const glass = `${t.glass}; backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%)`;
 
-  const goTo = (id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    // Lenis is the page's smooth-scroll driver; fall back to native scroll.
-    // Close the index popover whenever a section is chosen (both paths).
-    try {
-      const lenis = document.querySelector(".lenis")?.lenis;
-      if (lenis && typeof lenis.scrollTo === "function") {
-        lenis.scrollTo("#" + id, { duration: 700 });
-      } else {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    } catch {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    setIndexOpen(false);
-  };
-
-  // Close the index popover on Escape or outside click (but not when the user
-  // is operating inside the popover itself).
-  useEffect(() => {
-    if (!indexOpen) return;
-    const onKey = (e) => {
-      if (e.key === "Escape") setIndexOpen(false);
-    };
-    const onClick = (e) => {
-      if (!indexOpen) return;
-      const inside =
-        (hudRef.current && hudRef.current.contains(e.target)) ||
-        (indexRef.current && indexRef.current.contains(e.target));
-      if (!inside) setIndexOpen(false);
-    };
-    document.addEventListener("keydown", onKey);
-    document.addEventListener("mousedown", onClick);
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.removeEventListener("mousedown", onClick);
-    };
-  }, [indexOpen]);
-
   return (
-    <>
-      {/* Section index popover — only when the parent supplies the section list
-          AND wants the index shown. Anchored just left of the HUD so it reads
-          as part of the reader chrome, not a separate widget. */}
-      {indexSections && indexOpen && (
-        <div
-          ref={indexRef}
-          className="rd-index"
-          role="navigation"
-          aria-label="Section index"
+    <div
+      className="rd-theme-hud"
+      role="toolbar"
+      aria-label="Reader controls"
+      style={{
+        "--glass": glass,
+        "--accent": t.accent,
+        "--ink": t.ink,
+        "--ink-soft": t.inkSoft,
+        "--paper": t.paper2,
+        "--dusk": t.dusk,
+      }}
+    >
+      {/* Font-size scaler: A- / A+ (wired to data-size on .page.rd). */}
+      <div className="rd-theme-group" role="group" aria-label="Text size">
+        <button
+          type="button"
+          className="rd-theme-btn"
+          aria-label="Smaller text"
+          title="Smaller text (A-)"
+          onClick={() => setSize((v) => (v === "minus" ? "default" : "minus"))}
+          aria-pressed={size === "minus"}
         >
-          <div className="rd-index-head">Section index</div>
-          <ol className="rd-index-list">
-            {indexSections.map((s) => (
-              <li key={s.id}>
-                <button
-                  type="button"
-                  className="rd-index-item"
-                  onClick={() => goTo(s.id)}
-                >
-                  <span className="rd-index-goto">{s.label}</span>
-                </button>
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
-
-      <div
-        ref={hudRef}
-        className="rd-theme-hud"
-        role="toolbar"
-        aria-label="Reader controls"
-        style={{
-          "--glass": glass,
-          "--accent": t.accent,
-          "--ink": t.ink,
-          "--ink-soft": t.inkSoft,
-          "--paper": t.paper2,
-          "--dusk": t.dusk,
-        }}
-      >
-        {/* Font-size scaler: A- / A+ (wired to data-size on .page.rd). */}
-        <div className="rd-theme-group" role="group" aria-label="Text size">
-          <button
-            type="button"
-            className="rd-theme-btn"
-            aria-label="Smaller text"
-            title="Smaller text (A-)"
-            onClick={() => setSize((v) => (v === "minus" ? "default" : "minus"))}
-            aria-pressed={size === "minus"}
-          >
-            A-
-          </button>
-          <span className="rd-theme-scale mono" aria-hidden="true">
-            A
-          </span>
-          <button
-            type="button"
-            className="rd-theme-btn"
-            aria-label="Larger text"
-            title="Larger text (A+)"
-            onClick={() => setSize((v) => (v === "plus" ? "default" : "plus"))}
-            aria-pressed={size === "plus"}
-          >
-            A+
-          </button>
-        </div>
-
-        {/* Theme switcher — only three surfaces. */}
-        <div className="rd-theme-group" role="group" aria-label="Reading surface">
-          {Object.entries(THEMES).map(([key, th]) => (
-            <button
-              key={key}
-              type="button"
-              className={`rd-theme-chip ${theme === key ? "on" : ""}`}
-              aria-label={`${th.label} reading surface`}
-              title={`${th.label} surface`}
-              onClick={() => setTheme(key)}
-              aria-pressed={theme === key}
-            >
-              {th.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Section index toggle — always available on /profile. */}
-        {indexSections && (
-          <div className="rd-theme-group" role="group" aria-label="Section index">
-            <button
-              type="button"
-              className="rd-theme-btn"
-              aria-label={indexOpen ? "Hide section index" : "Show section index"}
-              title={indexOpen ? "Hide section index" : "Show section index"}
-              onClick={() => setIndexOpen((v) => !v)}
-              aria-pressed={indexOpen}
-            >
-              {indexOpen ? "Index" : "Index off"}
-            </button>
-          </div>
-        )}
+          A-
+        </button>
+        <span className="rd-theme-scale mono" aria-hidden="true">
+          A
+        </span>
+        <button
+          type="button"
+          className="rd-theme-btn"
+          aria-label="Larger text"
+          title="Larger text (A+)"
+          onClick={() => setSize((v) => (v === "plus" ? "default" : "plus"))}
+          aria-pressed={size === "plus"}
+        >
+          A+
+        </button>
       </div>
-    </>
+
+      {/* Theme switcher — only three surfaces. */}
+      <div className="rd-theme-group" role="group" aria-label="Reading surface">
+        {Object.entries(THEMES).map(([key, th]) => (
+          <button
+            key={key}
+            type="button"
+            className={`rd-theme-chip ${theme === key ? "on" : ""}`}
+            aria-label={`${th.label} reading surface`}
+            title={`${th.label} surface`}
+            onClick={() => setTheme(key)}
+            aria-pressed={theme === key}
+          >
+            {th.label}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }

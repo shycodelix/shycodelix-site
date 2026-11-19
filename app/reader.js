@@ -1,18 +1,16 @@
+import Image from "next/image";
 import Link from "next/link";
-import CopyButton from "../../components/CopyButton";
-import Nav from "../../components/Nav";
-import Reveal from "../../components/Reveal";
-import PixelImg from "../../components/PixelImg";
-import ReaderHero from "../../components/ReaderHero";
-import ReaderTheme from "../../components/ReaderTheme";
-import ReaderTicker from "../../components/ReaderTicker";
-import "../v2-reader.css";
-import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, avanteMail, sensitivity, sensitivityNote, gear, valorant } from "../data";
-
-export const metadata = {
-  title: "Reader mode",
-  description: "shycodelix, without the operating system: esports operations, production, content and customer-facing leadership. Verified career record and contact.",
-};
+import CopyButton from "../components/CopyButton";
+import Nav from "../components/Nav";
+import Reveal from "../components/Reveal";
+import PixelImg from "../components/PixelImg";
+import ReaderHero from "../components/ReaderHero";
+import ReaderTheme from "../components/ReaderTheme";
+import ReaderTicker from "../components/ReaderTicker";
+import ReaderInterlude from "../components/ReaderInterlude";
+import ScrollWords from "../components/ScrollWords";
+import "./v2-reader.css";
+import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, avanteMail, sensitivity, sensitivityNote, gear, valorant } from "./data";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -20,7 +18,7 @@ const jsonLd = {
   name: "shycodelix",
   jobTitle: "Esports operations, production and content",
   description: "Video editing, team management, events production, social media and marketing. Founder of Avante Esports. Philippines.",
-  url: "https://shycodelix.vercel.app/profile",
+  url: "https://shycodelix.vercel.app/",
   email: "mailto:shycodelix@gmail.com",
   address: { "@type": "PostalAddress", addressLocality: "Cebu City", addressCountry: "PH" },
   worksFor: { "@type": "Organization", name: "Avante Esports" },
@@ -53,47 +51,42 @@ function Job({ j }) {
   );
 }
 
-const INDEX_SECTIONS = [
-  { id: "summary", label: "Profile" },
-  { id: "work", label: "Selected work" },
-  { id: "verified", label: "Verified record" },
-  { id: "experience", label: "Experience" },
-  { id: "skills", label: "What I do" },
-  { id: "avante", label: "Avante Esports" },
-  { id: "career", label: "Career in frames" },
-  { id: "setup", label: "Setup" },
-  { id: "contact", label: "Contact" },
-];
-
 export default function Profile() {
   const games = [...roles.map((g) => g.game), "Dota 2"];
   const verified = profile.links.filter((l) => l.group === "verified");
   const stream = profile.links.filter((l) => l.group === "stream");
   const social = profile.links.filter((l) => l.group === "social");
-  const ticker = ["Esports operations", "Broadcast production", "Video editing", "Team management", "Social & community", "Events", "Customer experience"];
 
   return (
     <div className="page rd">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Nav />
+      <h1 className="sr-only">shycodelix — operations, production, content</h1>
 
       <div className="rd-hero">
         <div className="rd-hero-bar">
-          <span className="rd-status"><i aria-hidden="true" />Open to work</span>
+          <span className="rd-status"><i aria-hidden="true" />{profile.status}</span>
           <span className="rd-mono">shycodelix · reader mode</span>
         </div>
 
         <ReaderHero
-          headline="operations,<br />production,<br />content<span style='font-size:0.5em;opacity:0.45;margin-left:0.1em;'>*</span>"
+          headline="operations,<br />production,<br />content"
           subtitle="I run esports teams and tournaments, produce the broadcast around them, and have spent
                    nine years leading customer-facing teams in the corporate world. Currently founding
                    Avante Esports."
-          byline={`Gamer tag ${profile.tag} · usually replies within a day, Philippine time`}
+          byline="Usually replies within a day · Philippine time"
         />
 
         <div className="rd-hero-portrait">
           <figure className="rd-portrait">
-            <img src="/photos/studio.jpg" alt="shycodelix, studio portrait in a black jacket" width="900" height="1160" />
+            <Image
+              src="/photos/studio.jpg"
+              alt="shycodelix, studio portrait in a black jacket"
+              width={900}
+              height={1160}
+              priority
+              sizes="(min-width: 56rem) 18rem, 16rem"
+            />
             <figcaption className="rd-mono">shycodelix · Cebu, PH</figcaption>
           </figure>
           <div className="rd-hero-actions">
@@ -108,7 +101,7 @@ export default function Profile() {
         </div>
       </div>
 
-      <ReaderTheme indexSections={INDEX_SECTIONS} />
+      <ReaderTheme />
 
       <ReaderTicker />
 
@@ -145,7 +138,7 @@ export default function Profile() {
             </Reveal>
           ))}
         </ol>
-          <a className="rd-kit" href="/">
+          <a className="rd-kit" href="/os">
             <img src="/kit/scene-starting.webp" alt="Starting scene from the Pixels-3 stream overlay pack" width="1200" height="675" loading="lazy" />
             <span className="rd-kit-body">
               <em className="rd-mono">Stream kit</em>
@@ -155,6 +148,12 @@ export default function Profile() {
           </a>
         </div>
       </section>
+
+      <ReaderInterlude
+        src="/kit/scene-starting.webp"
+        alt="Pixels-3 stream overlay on a starting scene"
+        caption="Doors open before the players do."
+      />
 
       <section id="verified" className="rd-sec">
         <h2><em>(03)</em>Verified<br />record</h2>
@@ -188,6 +187,12 @@ export default function Profile() {
         </div>
       </section>
 
+      <ReaderInterlude
+        src="/photos/archive/team-boom-01.webp"
+        alt="The BOOM Esports Dota 2 squad together"
+        caption="BOOM Esports · The International 2022 · Singapore."
+      />
+
       <section id="skills" className="rd-sec">
         <h2><em>(05)</em>What<br />I do</h2>
         <div className="rd-caps">
@@ -200,10 +205,16 @@ export default function Profile() {
         </div>
       </section>
 
+      <ReaderInterlude
+        src="/kit/scene-brb.webp"
+        alt="Pixels-3 stream overlay on a be-right-back scene"
+        caption="Avante Esports — built out of a Discord server and a bad idea."
+      />
+
       <section id="avante" className="rd-avante">
         <div className="rd-avante-in">
           <img className="rd-av-logo" src="/avante/logo-white.svg" alt="Avante Esports" />
-          <p className="rd-av-tag">{avante.tagline}</p>
+          <ScrollWords className="rd-av-tag" text={avante.tagline} />
           <p className="rd-av-copy"><b>{profile.name}</b>, {avante.role}. {avante.about}</p>
           <dl className="rd-av-facts">
             {avante.facts.slice(0, 4).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
@@ -261,6 +272,12 @@ export default function Profile() {
         </div>
       </section>
 
+      <ReaderInterlude
+        src="/kit/scene-ending.webp"
+        alt="Pixels-3 stream overlay on an ending scene"
+        caption="That's the show. Here's the desk behind it."
+      />
+
       <section id="contact" className="rd-contact">
         <p className="rd-mono">(08) — Contact</p>
         <a className="rd-big-mail" href={`mailto:${profile.email}`}>{profile.email}</a>
@@ -274,7 +291,7 @@ export default function Profile() {
 
       <footer className="rd-foot">
         <p>Gamer tag: {profile.tag} · reader mode of shycodelix OS</p>
-        <p><Link href="/links">Links</Link> · <Link href="/">Desktop</Link> · <a href={profile.source} target="_blank" rel="noreferrer">Konect</a></p>
+        <p><Link href="/links">Links</Link> · <Link href="/os">The lab</Link> · <a href={profile.source} target="_blank" rel="noreferrer">Konect</a></p>
       </footer>
     </div>
   );

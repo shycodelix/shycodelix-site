@@ -1,7 +1,7 @@
 /* ==========================================================================
    V2.0 READER — calmer kinetic motion, three surfaces, liquid glass only on
    floating HUD controls, low-contrast marquee, and a more measured section
-   rhythm. Loaded only on /profile so it never touches the desktop surface.
+   rhythm. Loaded only by the reader so it never touches the desktop surface.
    ========================================================================== */
 
 /* ---------- Reading measure / hierarchy across the three surfaces ---------- */
@@ -1058,72 +1058,11 @@
   border-color: var(--rd-paper);
 }
 
-/* ---------- Section index popover (reader chrome, near the HUD) ---------- */
-.rd-index {
-  position: fixed;
-  z-index: 55;
-  top: clamp(0.75rem, 3vh, 1.4rem);
-  right: clamp(8.2rem, 20vw, 16rem);
-  display: grid;
-  gap: 0.4rem;
-  padding: 0.55rem 0.7rem 0.5rem;
-  background: var(--rd-paper2);
-  border: 1px solid var(--rd-line);
-  border-radius: 12px;
-  min-width: 11rem;
-  max-width: min(16rem, 30vw);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
-  animation: rdIndexIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
 @keyframes rdScroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
 .rd-track span { animation: rdScroll 56s linear infinite; }
-.rd-index-head {
-  font-family: var(--font-grotesk), var(--font-micro), monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--rd-dusk);
-  padding-bottom: 0.3rem;
-  border-bottom: 1px solid var(--rd-line);
-  margin-bottom: 0.1rem;
-}
-.rd-index-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.15rem;
-}
-.rd-index-item {
-  appearance: none;
-  border: 0;
-  background: transparent;
-  width: 100%;
-  text-align: left;
-  padding: 0.35rem 0.55rem;
-  border-radius: 6px;
-  font-family: var(--font-grotesk), var(--font-micro), monospace;
-  font-size: 0.74rem;
-  color: var(--rd-text-soft);
-  cursor: pointer;
-  transition: background 0.12s, color 0.12s;
-}
-.rd-index-item:hover,
-.rd-index-item:focus-visible {
-  background: var(--rd-line);
-  color: var(--rd-text);
-}
-.rd-index-item:focus-visible {
-  outline: 2px solid var(--rd-accent);
-  outline-offset: 1px;
-}
-@keyframes rdIndexIn {
-  from { opacity: 0; transform: translateY(-3px) scale(0.98); }
-  to { opacity: 1; transform: none; }
-}
 
 /* ---------- Reduced motion: kill every new motion, reveal everything ---------- */
 @media (prefers-reduced-motion: reduce) {
@@ -1189,12 +1128,6 @@
     padding: 0.28rem 0.5rem;
   }
   .rd-theme-hud .rd-theme-group:last-child { flex-wrap: wrap; }
-  .rd-index {
-    right: 0.6rem;
-    top: auto;
-    bottom: 0.6rem;
-    max-width: calc(100% - 1.2rem);
-  }
 }
 
 @media (min-width: 56rem) {
@@ -1230,4 +1163,40 @@ body,
 @media (prefers-reduced-motion: reduce) {
   .desk .wall { transition: none; }
   .desk .win { animation: none; }
+}
+
+/* ---------- Interludes: one image, one line, between sections ---------- */
+.rd-inter {
+  position: relative;
+  overflow: hidden;
+  margin: clamp(2.5rem, 6vw, 5rem) 0;
+  background: var(--rd-paper2);
+  border-block: 2px solid var(--rd-line);
+}
+.rd-inter-in { will-change: transform; }
+.rd-inter-in img {
+  display: block;
+  width: 100%;
+  height: clamp(13rem, 32vw, 21rem);
+  object-fit: cover;
+}
+.rd-inter-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 2.6rem clamp(1.25rem, 5vw, 3rem) 0.9rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.66));
+  color: #f6f3ea;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+@media (max-width: 48rem) {
+  .rd-inter-in img { height: clamp(9rem, 34vw, 14rem); }
+  .rd-inter-cap { padding: 1.8rem 1rem 0.6rem; font-size: 0.64rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rd-inter-in { will-change: auto; }
 }
