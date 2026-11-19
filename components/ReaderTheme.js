@@ -70,8 +70,11 @@ const THEMES = {
 export default function ReaderTheme({ indexSections }) {
   const [theme, setTheme] = useState("dark");
   const [size, setSize] = useState("default");
-  const [showIndex, setShowIndex] = useState(false); // closed by default; each reader's choice is persisted
-  const [indexOpen, setIndexOpen] = useState(false);
+  // The index popover is a single open/closed toggle whose choice is persisted
+  // per reader. Default (no stored preference): closed.
+  const [indexOpen, setIndexOpen] = useState(() => {
+    try { return localStorage.getItem("rd-show-index") === "1"; } catch { return false; }
+  });
   const hudRef = useRef(null);
   const indexRef = useRef(null);
 
@@ -83,8 +86,6 @@ export default function ReaderTheme({ indexSections }) {
       if (sizeStored === "minus" || sizeStored === "plus" || sizeStored === "default") {
         setSize(sizeStored);
       }
-      const idxStored = localStorage.getItem("rd-show-index");
-      if (idxStored !== null) setShowIndex(idxStored === "1");
     } catch {}
   }, []);
 
@@ -105,23 +106,14 @@ export default function ReaderTheme({ indexSections }) {
     };
   }, [theme, size]);
 
+  // Persist the index open/closed choice for this reader.
   useEffect(() => {
     try {
       localStorage.setItem("rd-theme", theme);
       localStorage.setItem("rd-size", size);
-      localStorage.setItem("rd-show-index", showIndex ? "1" : "0");
+      localStorage.setItem("rd-show-index", indexOpen ? "1" : "0");
     } catch {}
-  }, [theme, size, showIndex]);
-
-  // Open the section index popover whenever the reader wants the index shown
-  // and it isn't already open; close it when the index is turned off.
-  useEffect(() => {
-    if (indexSections && showIndex && !indexOpen) {
-      setIndexOpen(true);
-    } else if (indexSections && !showIndex && indexOpen) {
-      setIndexOpen(false);
-    }
-  }, [showIndex, indexSections]);
+  }, [theme, size, indexOpen]);
 
   const t = THEMES[theme];
 
@@ -261,12 +253,12 @@ export default function ReaderTheme({ indexSections }) {
             <button
               type="button"
               className="rd-theme-btn"
-              aria-label={showIndex ? "Hide section index" : "Show section index"}
-              title={showIndex ? "Hide section index" : "Show section index"}
-              onClick={() => setShowIndex((v) => !v)}
-              aria-pressed={showIndex}
+              aria-label={indexOpen ? "Hide section index" : "Show section index"}
+              title={indexOpen ? "Hide section index" : "Show section index"}
+              onClick={() => setIndexOpen((v) => !v)}
+              aria-pressed={indexOpen}
             >
-              {showIndex ? "Index" : "Index off"}
+              {indexOpen ? "Index" : "Index off"}
             </button>
           </div>
         )}
