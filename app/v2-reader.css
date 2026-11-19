@@ -78,6 +78,7 @@
   --rd-reader-bg: #15111f;
   --rd-text: #f3ecf7;
   --rd-text-soft: #c9c0da;
+  --rd-bar-ink: #1a1525;
 }
 .page.rd[data-rd-theme="sepia"] {
   --rd-paper: #f1e9d6;
@@ -91,6 +92,7 @@
   --rd-reader-bg: #ece3d2;
   --rd-text: #3a2f22;
   --rd-text-soft: #6b5d47;
+  --rd-bar-ink: #ffffff;
 }
 .page.rd[data-rd-theme="light"] {
   --rd-paper: #f6f3ea;
@@ -104,6 +106,7 @@
   --rd-reader-bg: #f6f3ea;
   --rd-text: #1e1633;
   --rd-text-soft: #4a4366;
+  --rd-bar-ink: #1e1633;
 }
 
 /* Reader chrome that should react to the surface, but only inside the reader. */
@@ -141,6 +144,18 @@
 .page.rd .rd-av-links a {
   background: var(--rd-tang);
   color: var(--rd-paper);
+}
+/* The accent band carries its own foreground per surface: the soft paper ink
+   used elsewhere fails on orange (2.35:1 on the light accent, 4.05:1 sepia). */
+.page.rd .rd-hero-bar {
+  color: var(--rd-bar-ink);
+}
+.page.rd .rd-hero-bar .rd-mono,
+.page.rd .rd-hero-bar .rd-status {
+  color: var(--rd-bar-ink);
+}
+.page.rd .rd-hero-bar .rd-status i {
+  background: var(--rd-bar-ink);
 }
 .page.rd .rd-hero-note,
 .page.rd .rd-mono {
@@ -393,6 +408,30 @@
 @keyframes rhBaseline {
   from { transform: scaleX(0); opacity: 0; }
   to { transform: scaleX(1); opacity: 0; }
+}
+
+/* ---------- Reader nav rides the active reading surface ---------- */
+/* The dock no longer stays hard white with black links on every surface; fill,
+   text and rules all come from the active [data-rd-theme] tokens. */
+.page.rd .dock {
+  background: var(--rd-paper);
+  border-bottom: 1px solid var(--rd-line);
+  color: var(--rd-text);
+}
+.page.rd .dock a {
+  color: var(--rd-text);
+  border-right: 1px solid var(--rd-line);
+}
+.page.rd .dock a:last-child {
+  border-right: 0;
+}
+.page.rd .dock a:hover {
+  background: var(--rd-paper2);
+  color: var(--rd-ink);
+}
+.page.rd .dock a[aria-current="true"] {
+  background: var(--rd-ink);
+  color: var(--rd-paper);
 }
 
 /* ---------- Reader marquee: low-contrast, palette follows the surface ---------- */
