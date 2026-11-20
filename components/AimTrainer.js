@@ -7,7 +7,7 @@ const CELLS = COLS * ROWS;
 const ROUND = 30;
 
 /** Thirty seconds, one crosshair. Click the lit cell; every miss costs the run. */
-export default function AimTrainer({ say, party, beep }) {
+export default function AimTrainer({ say }) {
   const [running, setRunning] = useState(false);
   const [left, setLeft] = useState(ROUND);
   const [target, setTarget] = useState(0);
@@ -42,8 +42,7 @@ export default function AimTrainer({ say, party, beep }) {
     setMisses(0);
     setDone(null);
     move(-1);
-    beep?.(660);
-  }, [beep, move]);
+  }, [move]);
 
   useEffect(() => {
     if (!running) return;
@@ -64,27 +63,24 @@ export default function AimTrainer({ say, party, beep }) {
       bestRef.current = score;
       setBest(score);
       try { localStorage.setItem("aim-best", String(score)); } catch {}
-      party?.();
       say?.(`New best: ${score}. The crosshair placement coach is crying.`);
     } else {
       say?.(`${hits} hits, ${misses} misses, ${acc}% accuracy.`);
     }
-  }, [left, running, hits, misses, party, say]);
+  }, [left, running, hits, misses, say]);
 
   const fire = useCallback((i) => {
     if (!running) return;
     if (i === targetRef.current) {
       setHits((v) => v + 1);
       setPulse("hit");
-      beep?.(920);
       move(i);
     } else {
       setMisses((v) => v + 1);
       setPulse("miss");
-      beep?.(240);
     }
     setTimeout(() => setPulse(""), 150);
-  }, [beep, move, running]);
+  }, [move, running]);
 
   return (
     <div className="aim">

@@ -147,7 +147,7 @@
 .win-fixture i:nth-child(6) { left: 85%; height: 44%; }
 
 /* poster */
-.prop-poster { left: 5%; top: 34%; width: 13%; height: 21%; transform: rotate(-1.6deg); }
+.prop-poster { left: 5%; top: 40%; width: 13%; height: 18%; transform: rotate(-1.6deg); }
 .poster-art {
   display: grid; place-content: center; text-align: center;
   background: linear-gradient(160deg, #ff8a35, #b8531a 72%);
@@ -278,18 +278,21 @@
 
 .prop-mic { left: 1%; bottom: 26.5%; width: 5.5%; height: 15%; }
 .prop-mic .prop-tag { bottom: auto; top: -1.05rem; }
+/* A desk mic: capsule on top, stand straight down to the desk. */
 .mic-arm::before {
-  content: ""; position: absolute; left: 50%; top: 0; width: 3px; height: 56%;
-  background: #544c74; transform: translateX(-50%) rotate(16deg); transform-origin: top;
+  content: ""; position: absolute; left: 50%; top: 34%; bottom: 0; width: 3px;
+  background: #544c74; transform: translateX(-50%);
 }
 .mic-arm i {
-  position: absolute; left: 50%; bottom: 0; width: 54%; aspect-ratio: 1;
+  position: absolute; left: 50%; top: 0; width: 54%; aspect-ratio: 1;
   transform: translateX(-50%); border-radius: 50%;
   background: #2b2440; border: 2px solid #0b0912;
   box-shadow: inset 0 0 0 3px rgba(255, 122, 26, 0.45);
 }
 
 .prop-chair { left: 1%; bottom: 0; width: 13%; height: 26%; z-index: 4; }
+/* The chair sits on the stage floor, so its label goes above it. */
+.prop-chair .prop-tag { bottom: auto; top: -1.05rem; }
 .chair-back {
   position: relative;
   width: 62%; height: 62%; margin: 0 auto;
@@ -601,8 +604,6 @@
 }
 .room-panel p { margin: 0; font-size: 0.82rem; line-height: 1.55; color: #d7d1e6; }
 .room-note { color: var(--room-dim) !important; font-size: 0.72rem !important; }
-.room-hints { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.3rem; font-size: 0.76rem; color: #d7d1e6; }
-.room-hints b { color: var(--room-bone); font-weight: 600; }
 .room-honest { margin: 0; padding-left: 1rem; display: grid; gap: 0.2rem; font-size: 0.78rem; color: #d7d1e6; }
 .room-wins { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.5rem; }
 .room-wins li { display: grid; gap: 0.1rem; font-size: 0.78rem; border-top: 1px solid var(--room-line); padding-top: 0.4rem; }
@@ -702,8 +703,9 @@
 
 @media (max-width: 40rem) {
   /* A narrow stage cannot hold the full wall, so it becomes the desk view:
-     monitor up top, the desk props below, decorations reachable from the list. */
-  .room-stage { aspect-ratio: 4 / 5; min-height: 21rem; }
+     monitor up top, the desk props below, and the two props that carry the
+     portfolio (poster, shelf) keep the wall strip above the monitor. */
+  .room-stage { aspect-ratio: 3 / 5; min-height: 28rem; }
   .room-desk { height: 30%; }
   .room-wall { inset: 0 0 30%; }
   .monitor-wrap { width: 94%; bottom: 31%; }
@@ -714,10 +716,10 @@
   .lm-boot-hint { font-size: 0.44rem; }
   .monitor-boot { bottom: -1.15rem; font-size: 0.44rem; }
   .prop-window,
-  .prop-poster,
-  .prop-shelf,
   .prop-plant,
   .prop-chair { display: none; }
+  .prop-poster { left: 3%; top: 2%; width: 17%; height: 13%; }
+  .prop-shelf { right: 3%; top: 1.5%; width: 27%; height: 16%; }
   .prop-deck { left: 5%; bottom: 21%; width: 15%; height: 5%; }
   .prop-mic { left: 24%; bottom: 19%; width: 10%; height: 11%; }
   .prop-rig { right: 4%; bottom: 4%; width: 15%; height: 19%; }

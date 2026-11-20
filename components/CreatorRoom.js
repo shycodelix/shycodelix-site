@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import LiveMonitor from "./LiveMonitor";
 import { achievements, gear, avante, profile } from "../app/data";
 
@@ -26,13 +26,10 @@ function Panel({ id, close }) {
           of things that actually happened. Every prop opens something real — the rig I run,
           the record behind the lower thirds, the deck that runs the scenes.
         </p>
-        <ul className="room-hints">
-          <li><b>Monitor</b> — the live stream package; click the screen to boot the old OS</li>
-          <li><b>Rig</b> — what is actually inside the case</li>
-          <li><b>Shelf</b> — the verified record, trophy by trophy</li>
-          <li><b>Poster</b> — Avante Esports, rebooted</li>
-        </ul>
-        <p className="room-note">Everything is a button. Nothing here is a render.</p>
+        <p className="room-note">
+          Monitor boots the old OS. The tower shows what is inside the case. Everything is a
+          button; nothing here is a render.
+        </p>
       </div>
     );
   }
@@ -165,7 +162,6 @@ function Panel({ id, close }) {
 export default function CreatorRoom() {
   const [pick, setPick] = useState(null);
   const [toast, setToast] = useState("");
-  const [time, setTime] = useState("");
   const router = useRouter();
 
   const say = useCallback((m) => {
@@ -174,43 +170,13 @@ export default function CreatorRoom() {
     say.t = setTimeout(() => setToast(""), 3200);
   }, []);
 
-  const beep = useCallback((f = 520) => {
-    try {
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if (!Ctx) return;
-      const ac = (beep.ac = beep.ac || new Ctx());
-      const o = ac.createOscillator();
-      const g = ac.createGain();
-      o.type = "square";
-      o.frequency.value = f;
-      g.gain.value = 0.02;
-      o.connect(g);
-      g.connect(ac.destination);
-      o.start();
-      o.stop(ac.currentTime + 0.05);
-    } catch {}
-  }, []);
-
-  const party = useCallback(() => say("High score. The crosshair placement coach is speechless."), [say]);
-
-  useEffect(() => {
-    const tick = () => setTime(new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }));
-    tick();
-    const t = setInterval(tick, 30000);
-    return () => clearInterval(t);
-  }, []);
-
   const open = (id, quip) => {
     setPick(id);
-    beep(id === "plant" ? 300 : 560);
     if (quip) say(quip);
   };
 
   // The monitor boots the classic desktop; the tower shows the hardware.
-  const boot = () => {
-    beep(320);
-    router.push("/os/desktop");
-  };
+  const boot = () => router.push("/os/desktop");
 
   const props = [
     ["monitor", "Monitor", "The live stream, the character rig and the mini-game."],
@@ -268,7 +234,7 @@ export default function CreatorRoom() {
           </button>
 
           <div className="monitor-wrap">
-            <LiveMonitor say={say} party={party} beep={beep} onBoot={boot} />
+            <LiveMonitor say={say} onBoot={boot} />
             <Link className="monitor-boot" href="/os/desktop">Boot shycodelix OS</Link>
             <span className="monitor-neck" aria-hidden="true" />
           </div>
@@ -308,7 +274,7 @@ export default function CreatorRoom() {
 
       <footer className="room-foot">
         <span>{profile.name} · {profile.base}</span>
-        <span>{time} local · <Link href="/">back to reading</Link></span>
+        <span><Link href="/">back to reading</Link></span>
       </footer>
 
       {toast && <div className="room-toast" role="status">{toast}</div>}

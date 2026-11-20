@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import AimTrainer from "./AimTrainer";
 import { achievements } from "../app/data";
 
@@ -30,7 +30,7 @@ const CHAT = [
   ["gg_no_re", "aim trainer high score attempt"],
 ];
 
-export default function LiveMonitor({ say, party, beep, onBoot }) {
+export default function LiveMonitor({ say, onBoot }) {
   const [scene, setScene] = useState(0);
   const [frame, setFrame] = useState(0);
   const [chat, setChat] = useState(CHAT.slice(0, 4));
@@ -38,7 +38,6 @@ export default function LiveMonitor({ say, party, beep, onBoot }) {
   const [lower, setLower] = useState(0);
   const [game, setGame] = useState(false);
   const [reduce, setReduce] = useState(false);
-  const box = useRef(null);
 
   useEffect(() => {
     setReduce(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -78,7 +77,7 @@ export default function LiveMonitor({ say, party, beep, onBoot }) {
   const a = achievements[lower];
 
   return (
-    <div className="lm" ref={box}>
+    <div className="lm">
       <div
         className="lm-screen"
         style={{ backgroundImage: `url(${SCENES[scene].src})` }}
@@ -125,13 +124,13 @@ export default function LiveMonitor({ say, party, beep, onBoot }) {
               key={s.id}
               type="button"
               aria-pressed={i === scene}
-              onClick={() => { setScene(i); beep?.(620); }}
+              onClick={() => setScene(i)}
             >
               {s.label}
             </button>
           ))}
         </div>
-        <button type="button" className="btn primary lm-play" onClick={() => { setGame(true); beep?.(760); }}>
+        <button type="button" className="btn primary lm-play" onClick={() => setGame(true)}>
           Play aim_trainer.exe
         </button>
       </div>
@@ -142,7 +141,7 @@ export default function LiveMonitor({ say, party, beep, onBoot }) {
             <span>aim_trainer.exe</span>
             <button type="button" aria-label="Close aim trainer" onClick={() => setGame(false)}>×</button>
           </div>
-          <AimTrainer say={say} party={party} beep={beep} />
+          <AimTrainer say={say} />
         </div>
       )}
     </div>
