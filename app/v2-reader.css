@@ -420,7 +420,14 @@
   background: var(--rd-paper);
   border-bottom: 1px solid var(--rd-line);
   color: var(--rd-text);
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* Soft right fade when the section list is wider than the viewport, so
+     trailing chips read as scrollable rather than clipped. */
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 3rem), transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 3rem), transparent 100%);
 }
+.page.rd .dock::-webkit-scrollbar { display: none; }
 .page.rd .dock a {
   color: var(--rd-text);
   border-right: 1px solid var(--rd-line);
@@ -468,7 +475,21 @@
 }
 .rd-hero .rh { max-width: 100%; }
 .rd-hero .rd-hero-copy { max-width: 60ch; }
+
+/* The ambient rider lives behind the hero so the reader has one gentle,
+   always-on abstract object that drifts with Lenis velocity and guides the
+   cursor a little. It sits behind the copy stack (below) so it never touches
+   the headline, the actions, or the portrait caption. */
+.rd-rider-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
 .rd-hero-bar {
+  position: relative;
+  z-index: 3;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -492,6 +513,8 @@
   opacity: 0.9;
 }
 .rd-hero-portrait {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.4rem;
@@ -528,6 +551,8 @@
   text-transform: uppercase;
 }
 .rd-hero-actions {
+  position: relative;
+  z-index: 3;
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
@@ -579,6 +604,8 @@
    copy anywhere else. */
 .rd-hero-accent {
   grid-column: 1 / -1;
+  position: relative;
+  z-index: 2;
   height: clamp(0.5rem, 1.1vw, 0.9rem);
   background: var(--rd-accent);
   margin-top: 0.2rem;
@@ -1175,7 +1202,7 @@
   .page.rd .dock {
     position: sticky;
     top: 0;
-    z-index: 45;
+    z-index: 46;
     left: auto;
     right: auto;
     bottom: auto;
@@ -1192,13 +1219,17 @@
     box-shadow: none;
     background: var(--rd-paper);
     scrollbar-width: none;
-    /* Fade the trailing link so the row reads as scrollable, not clipped. */
-    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 28px), transparent 100%);
-    mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 28px), transparent 100%);
+    /* Fade both ends on mobile so the row reads as scrollable, not clipped,
+       and so it never collides with the top progress bar (z-index 45 stays
+       below the 46 here; the progress bar is painted last via its own paint
+       order). */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 10px, #000 calc(100% - 22px), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 10px, #000 calc(100% - 22px), transparent 100%);
   }
+  .page.rd .dock::-webkit-scrollbar { display: none; }
   /* The dock now sits on top of anchor targets: keep headings clear of it. */
   .page.rd [id] {
-    scroll-margin-top: 2.9rem;
+    scroll-margin-top: 3rem;
   }
   .page.rd .dock a {
     flex: 0 0 auto;

@@ -1,0 +1,126 @@
+/* ==========================================================================
+   READER AMBIENT — abstract ambient rider + inline header-loop micro-graphics
+
+   Route-scoped so it never leaks into the desktop / lab surfaces. Loaded only
+   by app/reader.js. The rider is one transformed SVG layer behind the hero and
+   the section column; the header loops and petals are tiny marks between a
+   section header and its copy — editorial punctuation, not decoration sheets.
+
+   Everything here respects [data-rd-theme] because it shares the reader
+   surfaces. The only "fixed" layer is the rider, and even that lives inside
+   the .page.rd context.
+   ========================================================================== */
+
+/* ---------- Ambient rider: one transformed SVG layer behind the reading ---------- */
+.rd-rider {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+  transition: opacity 0.6s ease;
+}
+
+/* On the hero the rider sits behind the portrait/action stack so it never
+   occludes the headline. On the reading column it lives behind the epigraph
+   only. We keep it fully behind text with a low alpha and a soft halo. */
+.rd-rider:not([hidden]) {
+  opacity: 0.85;
+  mix-blend-mode: multiply;
+}
+
+.page.rd[data-rd-theme="dark"] .rd-rider { mix-blend-mode: screen; }
+.page.rd[data-rd-theme="sepia"] .rd-rider { mix-blend-mode: multiply; }
+
+/* Keep the rider inside the hero frame so it never leaks to the section
+   column. The hero is the one place we want an "always-on" abstract object;
+   sections get the lighter header punctuation instead. */
+.rd-hero { position: relative; }
+
+/* ---------- Section header punctuation: inline loops ---------- */
+.rd-sec {
+  position: relative;
+}
+
+/* A small breathing rule that can sit between the eyebrow and the copy when
+   the section is long; only on wide screens. */
+.rd-sec h2 {
+  position: relative;
+}
+
+.rd-sec h2::after {
+  content: "";
+  display: block;
+  width: clamp(0.6em, 1.2vw, 1.4em);
+  height: 2px;
+  background: var(--rd-accent);
+  opacity: 0.35;
+  margin: 0.15em 0 0;
+}
+
+/* Inline loop placed in the gutter beside a header — tiny, lazy, reduced-motion
+   safe through the HeaderLoop <picture> source. */
+.rd-sec-head {
+  position: relative;
+}
+
+.rd-loop-badge {
+  position: absolute;
+  top: 0.2em;
+  right: 0;
+  height: auto;
+  display: block;
+  opacity: 0.9;
+  transform-origin: right center;
+  will-change: transform;
+}
+
+@media (max-width: 48rem) {
+  .rd-sec h2::after { width: 0.6em; }
+}
+
+/* ---------- Reduced motion: the rider freezes; header loops swap to stills ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .rd-rider {
+    opacity: 0.4;
+    transform: translate3d(0, 0, 0) !important;
+    will-change: auto;
+    mix-blend-mode: normal;
+  }
+  .rd-loop-badge {
+    transform: none !important;
+    will-change: auto;
+  }
+  .rd-loop-inline {
+    transform: none !important;
+    will-change: auto;
+  }
+  .rd-verified-loop,
+  .rd-av-tag-loop {
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
+/* Inline loops placed inside the content flow (between headers and blocks):
+   small, lazy, and deliberately separate from the copy so they read as marks,
+   not as clutter. */
+.rd-verified-loop {
+  display: flex;
+  justify-content: center;
+  margin: 0.2rem 0 0.8rem;
+}
+.rd-verified-loop .rd-loop-inline {
+  display: inline-block;
+  transform-origin: center;
+}
+
+.rd-av-tag-loop {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.6rem;
+  transform-origin: center;
+}

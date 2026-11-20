@@ -9,7 +9,16 @@ import ReaderTheme from "../components/ReaderTheme";
 import ReaderTicker from "../components/ReaderTicker";
 import ReaderInterlude from "../components/ReaderInterlude";
 import ScrollWords from "../components/ScrollWords";
+import ReaderAmbient from "../components/ReaderAmbient";
+import HeaderLoop from "../components/HeaderLoop";
+import ReaderMorph from "../components/ReaderMorph";
+import ReaderVelocityLayer from "../components/ReaderVelocityLayer";
+import ReaderLiveLoop from "../components/ReaderLiveLoop";
+import ReaderScrollChoreo from "../components/ReaderScrollChoreo";
 import "./v2-reader.css";
+import "./ReaderAmbient.css";
+import "./ReaderMorph.css";
+import "./ReaderChoreo.css";
 import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, avanteMail, sensitivity, sensitivityNote, gear, valorant } from "./data";
 
 const jsonLd = {
@@ -64,43 +73,49 @@ export default function Profile() {
       <ReaderTheme />
       <h1 className="sr-only">shycodelix — operations, production, content</h1>
 
-      <div className="rd-hero">
+      <ReaderVelocityLayer className="rd-hero">
+        <div className="rd-rider-container" aria-hidden="true">
+          <ReaderAmbient />
+        </div>
+
         <div className="rd-hero-bar">
           <span className="rd-status"><i aria-hidden="true" />{profile.status}</span>
           <span className="rd-mono">shycodelix · reader mode</span>
         </div>
 
-        <ReaderHero
-          headline="operations,<br />production,<br />content"
-          subtitle="I run esports teams and tournaments, produce the broadcast around them, and have spent
-                   nine years leading customer-facing teams in the corporate world. Currently founding
-                   Avante Esports."
-          byline="Usually replies within a day · Philippine time"
-        />
+        <ReaderScrollChoreo>
+          <ReaderHero
+            headline="operations,<br />production,<br />content"
+            subtitle="I run esports teams and tournaments, produce the broadcast around them, and have spent
+                     nine years leading customer-facing teams in the corporate world. Currently founding
+                     Avante Esports."
+            byline="Usually replies within a day · Philippine time"
+          />
 
-        <div className="rd-hero-portrait">
-          <figure className="rd-portrait">
-            <Image
-              src="/photos/studio.jpg"
-              alt="shycodelix, studio portrait in a black jacket"
-              width={900}
-              height={1160}
-              priority
-              sizes="(min-width: 56rem) 18rem, 16rem"
-            />
-            <figcaption className="rd-mono">shycodelix · Cebu, PH</figcaption>
-          </figure>
-          <div className="rd-hero-actions">
-            <a className="rd-cta" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>
-              Email me <span aria-hidden="true">↗</span>
-            </a>
-            <a className="rd-link" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
-            <a className="rd-link" href="/links">Links</a>
-            <Link className="rd-link" href="/os">Creator room</Link>
+          <div className="rd-hero-portrait">
+            <figure className="rd-portrait">
+              <Image
+                src="/photos/studio.jpg"
+                alt="shycodelix, studio portrait in a black jacket"
+                width={900}
+                height={1160}
+                priority
+                sizes="(min-width: 56rem) 18rem, 16rem"
+              />
+              <figcaption className="rd-mono">shycodelix · Cebu, PH</figcaption>
+            </figure>
+            <div className="rd-hero-actions">
+              <a className="rd-cta" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>
+                Email me <span aria-hidden="true">↗</span>
+              </a>
+              <a className="rd-link" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
+              <a className="rd-link" href="/links">Links</a>
+              <Link className="rd-link" href="/os">Creator room</Link>
+            </div>
+            <div className="rd-hero-accent" aria-hidden="true" />
           </div>
-          <div className="rd-hero-accent" aria-hidden="true" />
-        </div>
-      </div>
+        </ReaderScrollChoreo>
+      </ReaderVelocityLayer>
 
       <ReaderTicker />
 
@@ -123,7 +138,7 @@ export default function Profile() {
       </section>
 
       <section id="work" className="rd-sec">
-        <h2><em>(02)</em>Selected<br />work</h2>
+        <h2><em>(02)</em>Selected<br />work<ReaderLiveLoop><HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={120} height={34} className="rd-loop-badge" /></ReaderLiveLoop></h2>
         <div className="rd-col">
         <ol className="rd-ach">
           {achievements.map((a, i) => (
@@ -138,7 +153,7 @@ export default function Profile() {
           ))}
         </ol>
           <a className="rd-kit" href="/os">
-            <img src="/kit/scene-starting.webp" alt="Starting scene from the Pixels-3 stream overlay pack" width="1200" height="675" loading="lazy" />
+            <img src="/kit/scene-starting.webp" alt="Starting scene from the Pixels-3 stream overlay pack" width={1200} height={675} loading="lazy" />
             <span className="rd-kit-body">
               <em className="rd-mono">Stream kit</em>
               <b>Pixels-3 overlay pack, plus a PNGTuber model</b>
@@ -164,6 +179,9 @@ export default function Profile() {
       <section id="verified" className="rd-sec">
         <h2><em>(03)</em>Verified<br />record</h2>
         <div className="rd-col">
+          <div className="rd-verified-loop">
+            <HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={86} height={30} className="rd-loop-inline" />
+          </div>
           <p className="rd-note">
             Third-party records for the same person. Not self-reported: BOOM Esports assistant manager
             (Aug 2022 – Jan 2023) and Abaddon Abyss manager (Dec 2022 – Mar 2023).
@@ -200,17 +218,19 @@ export default function Profile() {
         sticker={{ src: "/kit/on-air.gif", still: "/kit/on-air.png", alt: "On air", w: 96, h: 34, badge: true }}
       />
 
-      <section id="skills" className="rd-sec">
-        <h2><em>(05)</em>What<br />I do</h2>
-        <div className="rd-caps">
-          {capabilities.map((c, i) => (
-            <Reveal key={c.k} delay={i * 60}>
-              <h3>{c.k}</h3>
-              <p>{c.v}</p>
-            </Reveal>
-          ))}
-        </div>
-      </section>
+      <ReaderScrollChoreo className="rd-sec">
+        <section id="skills" className="rd-sec">
+          <h2><em>(05)</em>What<br />I do<ReaderLiveLoop><HeaderLoop src="/kit/cam-loop.gif" still="/kit/idle.webp" alt="The PNGTuber model blinking and talking" width={120} height={42} className="rd-loop-badge" /></ReaderLiveLoop></h2>
+          <div className="rd-caps">
+            {capabilities.map((c, i) => (
+              <Reveal key={c.k} delay={i * 60}>
+                <h3>{c.k}</h3>
+                <p>{c.v}</p>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      </ReaderScrollChoreo>
 
       <ReaderInterlude
         src="/kit/scene-brb.webp"
@@ -219,8 +239,9 @@ export default function Profile() {
         sticker={{ src: "/kit/on-air.gif", still: "/kit/on-air.png", alt: "On air", w: 96, h: 34, badge: true }}
       />
 
-      <section id="avante" className="rd-avante">
+      <ReaderVelocityLayer className="rd-avante">
         <div className="rd-avante-in">
+          <ReaderMorph className="rd-morph-wrap" />
           <img className="rd-av-logo" src="/avante/logo-white.svg" alt="Avante Esports" />
           <ScrollWords className="rd-av-tag" text={avante.tagline} />
           <p className="rd-av-copy"><b>{profile.name}</b>, {avante.role}. {avante.about}</p>
@@ -234,7 +255,7 @@ export default function Profile() {
             {avante.links.map((l) => <a key={l.href} href={l.href} target="_blank" rel="noreferrer">{l.label === "Discord" ? "Discord" : l.label}</a>)}
           </div>
         </div>
-      </section>
+      </ReaderVelocityLayer>
 
       <section id="career" className="rd-frames">
         <div className="rd-frames-head">

@@ -1,0 +1,53 @@
+/* ReaderMorph — placed abstract mark: traveling-stroke draw cycle + drift */
+
+.rd-morph {
+  opacity: 0.9;
+  mix-blend-mode: multiply;
+}
+
+.page.rd[data-rd-theme="dark"] .rd-morph {
+  mix-blend-mode: screen;
+}
+
+/* Sit the morph in open negative space: full bleed of its parent, behind
+   everything else in that parent. The parent (e.g. .rd-avante) provides the
+   open field; the morph is the one placed object in it. */
+.rd-morph-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rd-morph path {
+  will-change: stroke-dashoffset, transform;
+  animation: rdMorphDraw 9s linear infinite;
+}
+
+@keyframes rdMorphDraw {
+  0% { stroke-dashoffset: 140; }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -140; }
+}
+
+/* A little extra life on hover, only where the field is wide enough. */
+@media (min-width: 56rem) {
+  .rd-morph-wrap:hover .rd-morph path {
+    opacity: 0.42;
+    animation-duration: 6s;
+  }
+}
+
+/* Reduced motion: freeze the draw cycle and the tiny marks; keep the mark
+   present but still (the calm editorial fallback). */
+@media (prefers-reduced-motion: reduce) {
+  .rd-morph {
+    opacity: 0.5;
+  }
+  .rd-morph path {
+    animation: none;
+    stroke-dashoffset: 0;
+    will-change: auto;
+  }
+}

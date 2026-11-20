@@ -1,0 +1,17 @@
+/* ReaderScrollChoreo — GSAP ScrollTrigger scroll-scrubbed header/accent/baseline */
+
+/* The choreo drives transforms on the header, the hero accent band and the
+   hero baseline via GSAP. Nothing here overrides those; this file just scopes
+   them to the reader and provides the reduced-motion floor. */
+
+/* Reduce motion: the choreo is disabled under reduced motion, so ensure the
+   header/accent/baseline fall back to their calm editorial state (no leftover
+   scrub transforms). */
+@media (prefers-reduced-motion: reduce) {
+  .rd-sec h2,
+  .rd-hero .rh,
+  .rd-hero-accent,
+  .rh-baseline {
+    transform: none !important;
+  }
+}

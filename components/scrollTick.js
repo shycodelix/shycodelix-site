@@ -32,3 +32,26 @@ export function onScrollTick(fn) {
     subs.delete(fn);
   };
 }
+
+/** When the reader mounts Lenis, publish the last measured velocity on every
+ *  scroll frame so consumer motion (the ambient rider) can lean on the scroll
+ *  velocity in addition to the pointer. Kept deliberately cheap: only called
+ *  from inside the shared rAF flush, never from its own listener. */
+export function publishLenisVelocityOnScrollTick(getVelocity) {
+  if (typeof window === "undefined" || !getVelocity) return () => {};
+  let last = [0, 0];
+  const set = () => {
+    try {
+      const v = getVelocity();
+      if (Array.isArray(v) && v.length >= 2) last = [v[0] ?? 0, v[1] ?? 0];
+    } catch {}
+    window.__lenisVelocity = last;
+  };
+  subs.add(set);
+  bind();
+  schedule();
+  return () => {
+    subs.delete(set);
+  };
+}
+

@@ -9,9 +9,13 @@ export default function Cursor() {
       !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!ok) return;
     document.documentElement.classList.add("has-cursor");
+    window.__pointerX = -100;
+    window.__pointerY = -100;
     let x = -100, y = -100, rx = -100, ry = -100, raf;
     const move = (e) => {
       x = e.clientX; y = e.clientY;
+      window.__pointerX = x;
+      window.__pointerY = y;
       dot.current.style.transform = `translate(${x}px,${y}px)`;
       ring.current.classList.toggle("big", !!e.target.closest?.("a,button,summary,[data-cursor]"));
     };
@@ -26,6 +30,8 @@ export default function Cursor() {
       window.removeEventListener("mousemove", move);
       cancelAnimationFrame(raf);
       document.documentElement.classList.remove("has-cursor");
+      window.__pointerX = -100;
+      window.__pointerY = -100;
     };
   }, []);
   return (

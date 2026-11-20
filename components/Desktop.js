@@ -269,6 +269,16 @@ function Boot({ onDone }) {
 
 export default function Desktop() {
   const [phase, setPhase] = useState("check");
+  const deskRef = useRef(null);
+  const [entering, setEntering] = useState(false);
+
+  useEffect(() => {
+    // Brief screen-wide enter so the jump from the creator room reads as
+    // booting the OS rather than a hard cut between two surfaces.
+    setEntering(true);
+    const t = setTimeout(() => setEntering(false), 520);
+    return () => clearTimeout(t);
+  }, []);
   const [wins, setWins] = useState([]);
   const [startOpen, setStartOpen] = useState(false);
   const [sound, setSound] = useState(false);
@@ -564,10 +574,11 @@ export default function Desktop() {
 
   return (
     <div
-      className="desk"
+      className={`desk ${entering ? "entering" : ""}`}
       data-lenis-prevent
       onPointerMove={parallax}
       onClick={(e) => { if (!e.target.closest(".start,.startbtn")) setStartOpen(false); }}
+      ref={deskRef}
     >
       <Wallpaper night={night} innerRef={wall} />
       <h1 className="sr-only">shycodelix — streamer, editor and content creator</h1>

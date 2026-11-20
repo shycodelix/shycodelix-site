@@ -36,3 +36,28 @@ content.rs
 # local dev server log
 dev.log
 
+# Freebuff Sites deploy attempt artifacts (local, rebuildable - not part of the site)
+dist-freebuff/
+freebuff-deploy/
+freebuff-deploy2/
+freebuff-manifest.json
+wrangler-build.jsonc
+check-worker.py
+build-phase3-*.log
+install-gsap.log
+build2.log
+build3.log
+build-fix.log
+build-final.log
+build-final2.log
+dev-phase3.log
+dev-phase3b.log
+dev-phase3c.log
+dev2.log
+dev3.log
+dev-final.log
+dev-fix.log
+
+/freebuff-sites-build/
+/.open-next/
+/.wrangler/
