@@ -38,14 +38,29 @@ export default function ReaderAmbient({ className = "" }) {
 
     s.addEventListener("pointermove", onMove, { passive: true });
 
+    let sx = 0; // smoothed scroll-velocity drift (px), signed
+    let sy = 0;
+
     const tick = () => {
-      // Ease back toward center when the pointer leaves, so the rider settles
-      // instead of hanging off-screen.
+      // A little scroll-velocity drift, read off the shared Lenis bus the Nav
+      // publishes. Keep the amplitude tiny so the rider never looks driven by
+      // scrolling — it reads as a mark that lives in the same world as the
+      // page, not as a scroll progress indicator.
+      const v = (typeof window !== "undefined" && window.__lenisVelocity) || [0, 0];
+      sx += (v[0] * 0.6 - sx) * 0.12;
+      sy += (v[1] * 0.35 - sy) * 0.12;
+
+      // Cursor settles toward the pointer; scroll drift eases back toward rest
+      // when scrolling stops.
       if (mx || my) {
         mx *= 0.88;
         my *= 0.88;
       }
-      s.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+      if (sx || sy) {
+        sx *= 0.9;
+        sy *= 0.9;
+      }
+      s.style.transform = `translate3d(${mx + sx}px, ${my + sy}px, 0)`;
       raf = requestAnimationFrame(tick);
     };
 

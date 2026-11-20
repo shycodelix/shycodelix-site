@@ -94,4 +94,33 @@
     transform: none !important;
     will-change: auto;
   }
+  .rd-loop-inline {
+    transform: none !important;
+    will-change: auto;
+  }
+  .rd-verified-loop,
+  .rd-av-tag-loop {
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
+/* Inline loops placed inside the content flow (between headers and blocks):
+   small, lazy, and deliberately separate from the copy so they read as marks,
+   not as clutter. */
+.rd-verified-loop {
+  display: flex;
+  justify-content: center;
+  margin: 0.2rem 0 0.8rem;
+}
+.rd-verified-loop .rd-loop-inline {
+  display: inline-block;
+  transform-origin: center;
+}
+
+.rd-av-tag-loop {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.6rem;
+  transform-origin: center;
 }

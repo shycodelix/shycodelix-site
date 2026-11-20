@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useLenis } from "lenis/react";
 import { useEffect, useRef, useState } from "react";
+import { publishLenisVelocityOnScrollTick } from "./scrollTick";
 
 // Labels match the headings they jump to, so the active chip never names a
 // section the reader cannot see.
@@ -11,6 +12,19 @@ export default function Nav() {
   const [active, setActive] = useState("");
   const bar = useRef(null);
   const lenis = useLenis();
+
+  // Let the ambient rider drift with scroll velocity as well as the pointer.
+  // No-op when Lenis isn't mounted (reduced motion, non-reader surface).
+  useEffect(() => {
+    if (lenis && typeof window !== "undefined") {
+      publishLenisVelocityOnScrollTick(
+        () =>
+          typeof lenis.getCurrentVelocity === "function"
+            ? lenis.getCurrentVelocity()
+            : null
+      );
+    }
+  }, [lenis]);
 
   function go(e, id) {
     if (!lenis) return;
