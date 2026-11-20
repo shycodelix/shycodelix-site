@@ -3,7 +3,9 @@ import Link from "next/link";
 import { useLenis } from "lenis/react";
 import { useEffect, useRef, useState } from "react";
 
-const items = [["summary", "Summary"], ["verified", "Verified"], ["work", "Work"], ["experience", "Experience"], ["skills", "Skills"], ["avante", "Avante"], ["career", "Frames"], ["setup", "Setup"], ["contact", "Contact"]];
+// Labels match the headings they jump to, so the active chip never names a
+// section the reader cannot see.
+const items = [["summary", "Profile"], ["verified", "Verified"], ["work", "Work"], ["experience", "Experience"], ["skills", "What I do"], ["avante", "Avante"], ["career", "Frames"], ["setup", "Setup"], ["contact", "Contact"]];
 
 export default function Nav() {
   const [active, setActive] = useState("");

@@ -580,6 +580,7 @@ export default function Desktop() {
         <span className="brand">shycodelix OS</span>
         <span className="topbar-links">
           <Link href="/links">Links</Link>
+          <Link href="/os">Creator room</Link>
           <Link href="/">Reader mode &rarr;</Link>
         </span>
       </header>

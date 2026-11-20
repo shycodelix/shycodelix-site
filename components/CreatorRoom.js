@@ -1,0 +1,317 @@
+"use client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import LiveMonitor from "./LiveMonitor";
+import { achievements, gear, avante, profile } from "../app/data";
+
+const mail = `mailto:${profile.email}?subject=Let%27s%20work%20together`;
+
+function Rows({ rows }) {
+  return (
+    <dl className="room-rows">
+      {rows.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
+    </dl>
+  );
+}
+
+function Panel({ id, close }) {
+  if (!id) {
+    return (
+      <div className="room-panel-in">
+        <p className="room-kicker">The setup</p>
+        <h2>Click the room.</h2>
+        <p>
+          This is where the streams happen: a desk, one monitor doing the show, and a shelf
+          of things that actually happened. Every prop opens something real — the rig I run,
+          the record behind the lower thirds, the deck that runs the scenes.
+        </p>
+        <ul className="room-hints">
+          <li><b>Monitor</b> — the live stream package; click the screen to boot the old OS</li>
+          <li><b>Rig</b> — what is actually inside the case</li>
+          <li><b>Shelf</b> — the verified record, trophy by trophy</li>
+          <li><b>Poster</b> — Avante Esports, rebooted</li>
+        </ul>
+        <p className="room-note">Everything is a button. Nothing here is a render.</p>
+      </div>
+    );
+  }
+
+  if (id === "rig") {
+    return (
+      <div className="room-panel-in">
+        <p className="room-kicker">Gaming rig</p>
+        <h2>Fractal Meshify C</h2>
+        <p>A 5600X and a 2060 that has survived four years of 3am edits. It renders the overlays and the clips on the same machine that runs the stream.</p>
+        <Rows rows={gear.PC} />
+        <Link className="room-cta" href="/os/desktop">Boot the old OS &rarr;</Link>
+      </div>
+    );
+  }
+
+  if (id === "deck") {
+    return (
+      <div className="room-panel-in">
+        <p className="room-kicker">Stream deck</p>
+        <h2>Three scenes, one thumb</h2>
+        <p>
+          Starting, BRB, ending — the same three scenes on the monitor, plus the chat box,
+          transitions and a Stream Deck profile. It is the Pixels-3 overlay pack, and it is
+          the thing clients ask about most.
+        </p>
+        <ul className="room-honest">
+          <li>Five OBS scenes in the pack</li>
+          <li>Chat box and transition stings</li>
+          <li>A PNGTuber model I talk through</li>
+        </ul>
+        <a className="room-cta" href={mail}>Ask about the kit &rarr;</a>
+      </div>
+    );
+  }
+
+  if (id === "shelf") {
+    return (
+      <div className="room-panel-in">
+        <p className="room-kicker">Shelf</p>
+        <h2>The record</h2>
+        <p>Four results that are on somebody else&rsquo;s website, not just mine.</p>
+        <ul className="room-wins">
+          {achievements.map((w) => (
+            <li key={w.event}>
+              <b>{w.place}</b>
+              <a href={w.href} target="_blank" rel="noreferrer">{w.event}</a>
+              <small>{w.team} · {w.role} · {w.date}</small>
+            </li>
+          ))}
+        </ul>
+        <Link className="room-cta" href="/#verified">Reader mode: verified record &rarr;</Link>
+      </div>
+    );
+  }
+
+  if (id === "mic") {
+    return (
+      <div className="room-panel-in">
+        <p className="room-kicker">Microphone</p>
+        <h2>Hot mic</h2>
+        <p>
+          QuadCast S, mute button that I do not always press. Nine years of customer-facing
+          work means I can talk to a floor of people and to a camera with the same voice.
+        </p>
+        <p className="room-note">Available for full-time or contract work. Replies within a day, Philippine time.</p>
+        <a className="room-cta" href={mail}>Email me &rarr;</a>
+      </div>
+    );
+  }
+
+  if (id === "poster") {
+    return (
+      <div className="room-panel-in">
+        <p className="room-kicker">Poster</p>
+        <h2>{avante.name}</h2>
+        <p>{avante.intro}</p>
+        <p className="room-note">{avante.motto}</p>
+        <a className="room-cta" href={`mailto:${avante.cta.email}?cc=${avante.cta.cc}&subject=${encodeURIComponent(avante.cta.subject)}`}>Work with Avante &rarr;</a>
+      </div>
+    );
+  }
+
+  if (id === "window") {
+    return (
+      <div className="room-panel-in">
+        <p className="room-kicker">Window</p>
+        <h2>Cebu, 1am</h2>
+        <p>
+          The city is still up, the stream is still up, and the render bar is at 62%. This is
+          the usual view when an edit is due in the morning.
+        </p>
+        <p className="room-note">Philippine time · UTC+8. Remote-friendly.</p>
+        <button type="button" className="room-cta" onClick={close}>Back to the room</button>
+      </div>
+    );
+  }
+
+  if (id === "plant") {
+    return (
+      <div className="room-panel-in">
+        <p className="room-kicker">Plant</p>
+        <h2>Survived the reboot</h2>
+        <p>
+          Watered twice this year. It has outlasted two overlays, one org merger and a
+          mechanical keyboard.
+        </p>
+        <p className="room-note">No maintenance schedule posted, same as the stream.</p>
+      </div>
+    );
+  }
+
+  if (id === "chair") {
+    return (
+      <div className="room-panel-in">
+        <p className="room-kicker">Chair</p>
+        <h2>Ergonomics, allegedly</h2>
+        <p>
+          Where the ten-hour edit sessions happen. Posture is a work in progress; the
+          deliverable is not.
+        </p>
+        <a className="room-cta" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF) &rarr;</a>
+      </div>
+    );
+  }
+
+  return null;
+}
+
+export default function CreatorRoom() {
+  const [pick, setPick] = useState(null);
+  const [toast, setToast] = useState("");
+  const [time, setTime] = useState("");
+  const router = useRouter();
+
+  const say = useCallback((m) => {
+    setToast(m);
+    clearTimeout(say.t);
+    say.t = setTimeout(() => setToast(""), 3200);
+  }, []);
+
+  const beep = useCallback((f = 520) => {
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      const ac = (beep.ac = beep.ac || new Ctx());
+      const o = ac.createOscillator();
+      const g = ac.createGain();
+      o.type = "square";
+      o.frequency.value = f;
+      g.gain.value = 0.02;
+      o.connect(g);
+      g.connect(ac.destination);
+      o.start();
+      o.stop(ac.currentTime + 0.05);
+    } catch {}
+  }, []);
+
+  const party = useCallback(() => say("High score. The crosshair placement coach is speechless."), [say]);
+
+  useEffect(() => {
+    const tick = () => setTime(new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }));
+    tick();
+    const t = setInterval(tick, 30000);
+    return () => clearInterval(t);
+  }, []);
+
+  const open = (id, quip) => {
+    setPick(id);
+    beep(id === "plant" ? 300 : 560);
+    if (quip) say(quip);
+  };
+
+  // The monitor boots the classic desktop; the tower shows the hardware.
+  const boot = () => {
+    beep(320);
+    router.push("/os/desktop");
+  };
+
+  const props = [
+    ["monitor", "Monitor", "The live stream, the character rig and the mini-game."],
+    ["rig", "Rig specs", "AMD 5600X · RTX 2060 · 16 GB."],
+    ["deck", "Stream deck", "Three scenes, one thumb."],
+    ["shelf", "Shelf", "Four verified results."],
+    ["poster", "Poster", "Avante Esports, rebooted 2026."],
+    ["mic", "Mic", "Hot mic, on purpose."],
+    ["window", "Window", "Cebu at 1am."],
+    ["chair", "Chair", "Where the edits happen."],
+    ["plant", "Plant", "Somehow still alive."],
+  ];
+
+  return (
+    <div className="room">
+      <header className="room-top">
+        <span className="room-brand">
+          <i aria-hidden="true" />
+          shycodelix · creator room
+        </span>
+        <nav aria-label="Modes">
+          <Link href="/">Reader mode</Link>
+          <Link href="/links">Links</Link>
+          <Link href="/os/desktop">Old desktop</Link>
+        </nav>
+      </header>
+
+      <div className="room-main">
+        <section className="room-stage" aria-label="Creator room">
+          <div className="room-wall" aria-hidden="true" />
+          <button type="button" className="prop prop-window" onClick={() => open("window", "It is always 1am in Cebu.")}>
+            <span className="win-fixture" aria-hidden="true"><i /><i /><i /><i /><i /><i /></span>
+            <span className="prop-tag">Window</span>
+          </button>
+
+          <button type="button" className="prop prop-poster" onClick={() => open("poster")}>
+            <span className="poster-art" aria-hidden="true">AVANTE<br /><small>EST. 2020</small></span>
+            <span className="prop-tag">Poster</span>
+          </button>
+
+          <button type="button" className="prop prop-shelf" onClick={() => open("shelf")}>
+            <span className="shelf-row" aria-hidden="true"><i /><i /><i /><i /></span>
+            <span className="shelf-plank" aria-hidden="true" />
+            <span className="prop-tag">Shelf</span>
+          </button>
+
+          <button type="button" className="prop prop-plant" onClick={() => open("plant", "The plant has seen things.")}>
+            <span className="plant-pot" aria-hidden="true"><i /><i /><i /></span>
+            <span className="prop-tag">Plant</span>
+          </button>
+
+          <button type="button" className="prop prop-rig" onClick={() => open("rig")}>
+            <span className="rig-case" aria-hidden="true"><i /><i /><b /></span>
+            <span className="prop-tag">Rig specs</span>
+          </button>
+
+          <div className="monitor-wrap">
+            <LiveMonitor say={say} party={party} beep={beep} onBoot={boot} />
+            <Link className="monitor-boot" href="/os/desktop">Boot shycodelix OS</Link>
+            <span className="monitor-neck" aria-hidden="true" />
+          </div>
+
+          <button type="button" className="prop prop-deck" onClick={() => open("deck")}>
+            <span className="deck-keys" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <i key={i} />)}</span>
+            <span className="prop-tag">Deck</span>
+          </button>
+          <button type="button" className="prop prop-mic" onClick={() => open("mic", "Mic is live. It is always live.")}>
+            <span className="mic-arm" aria-hidden="true"><i /></span>
+            <span className="prop-tag">Mic</span>
+          </button>
+          <button type="button" className="prop prop-chair" onClick={() => open("chair")}>
+            <span className="chair-back" aria-hidden="true" />
+            <span className="prop-tag">Chair</span>
+          </button>
+          <span className="room-mug" aria-hidden="true" />
+          <span className="room-mat" aria-hidden="true" />
+          <span className="room-keyboard" aria-hidden="true" />
+          <span className="room-mouse" aria-hidden="true" />
+          <div className="room-desk" aria-hidden="true" />
+        </section>
+
+        <aside className="room-panel" aria-live="polite">
+          <Panel id={pick} close={() => setPick(null)} />
+        </aside>
+      </div>
+
+      <div className="room-picks" role="group" aria-label="Room props">
+        {props.map(([id, label, hint]) => (
+          <button key={id} type="button" aria-pressed={pick === id} onClick={() => open(id)}>
+            <b>{label}</b>
+            <span>{hint}</span>
+          </button>
+        ))}
+      </div>
+
+      <footer className="room-foot">
+        <span>{profile.name} · {profile.base}</span>
+        <span>{time} local · <Link href="/">back to reading</Link></span>
+      </footer>
+
+      {toast && <div className="room-toast" role="status">{toast}</div>}
+    </div>
+  );
+}

@@ -1291,9 +1291,34 @@ body,
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
+/* A small living object in the corner: the PNGTuber loop or the ON AIR tally.
+   The GIF is a still in motion, a few dozen KB, and swaps to a static frame
+   under reduced motion (<picture> source), so the photo stays a cheap still. */
+.rd-inter-sticker {
+  position: absolute;
+  top: clamp(0.8rem, 2.4vw, 1.5rem);
+  right: clamp(0.9rem, 4vw, 2.8rem);
+  z-index: 2;
+  display: block;
+  width: clamp(5.5rem, 12vw, 8.5rem);
+  border: 2px solid var(--rd-text);
+  box-shadow: 5px 5px 0 var(--rd-text);
+  background: var(--rd-ink);
+}
+.rd-inter-sticker.is-badge { width: clamp(5rem, 10vw, 7rem); }
+.rd-inter-sticker img { display: block; width: 100%; height: auto; }
 @media (max-width: 48rem) {
   .rd-inter { --rd-inter-h: clamp(9rem, 34vw, 14rem); }
   .rd-inter-cap { padding: 1.8rem 1rem 0.6rem; font-size: 0.64rem; }
+  /* The band is only ~150px tall on a phone: a portrait card would be clipped
+     and would sit on the caption, so only the small tally badge stays. */
+  .rd-inter-sticker:not(.is-badge) { display: none; }
+  .rd-inter-sticker.is-badge {
+    width: clamp(3.4rem, 15vw, 4.4rem);
+    top: 0.5rem;
+    right: 0.7rem;
+    box-shadow: 3px 3px 0 var(--rd-text);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .rd-inter-in { will-change: auto; }

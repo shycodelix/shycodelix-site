@@ -96,7 +96,7 @@ export default function Profile() {
             </a>
             <a className="rd-link" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
             <a className="rd-link" href="/links">Links</a>
-            <Link className="rd-link" href="/">Desktop</Link>
+            <Link className="rd-link" href="/os">Creator room</Link>
           </div>
           <div className="rd-hero-accent" aria-hidden="true" />
         </div>
@@ -142,7 +142,7 @@ export default function Profile() {
             <span className="rd-kit-body">
               <em className="rd-mono">Stream kit</em>
               <b>Pixels-3 overlay pack, plus a PNGTuber model</b>
-              <span>Five OBS scenes, chat box, transitions, a Stream Deck profile and a model I can talk through. Open stream_kit.exe on the desktop for the walkthrough.</span>
+              <span>Five OBS scenes, a chat box, transitions, a Stream Deck profile and a model I can talk through — all running on the monitor in the creator room.</span>
             </span>
           </a>
         </div>
@@ -152,6 +152,13 @@ export default function Profile() {
         src="/kit/scene-starting.webp"
         alt="Pixels-3 stream overlay on a starting scene"
         caption="Doors open before the players do."
+        sticker={{
+          src: "/kit/cam-loop.gif",
+          still: "/kit/idle.webp",
+          alt: "The PNGTuber model blinking and talking",
+          w: 232,
+          h: 265,
+        }}
       />
 
       <section id="verified" className="rd-sec">
@@ -190,6 +197,7 @@ export default function Profile() {
         src="/photos/archive/team-boom-01.webp"
         alt="The BOOM Esports Dota 2 squad together"
         caption="BOOM Esports · The International 2022 · Singapore."
+        sticker={{ src: "/kit/on-air.gif", still: "/kit/on-air.png", alt: "On air", w: 96, h: 34, badge: true }}
       />
 
       <section id="skills" className="rd-sec">
@@ -208,6 +216,7 @@ export default function Profile() {
         src="/kit/scene-brb.webp"
         alt="Pixels-3 stream overlay on a be-right-back scene"
         caption="Avante Esports — built out of a Discord server and a bad idea."
+        sticker={{ src: "/kit/on-air.gif", still: "/kit/on-air.png", alt: "On air", w: 96, h: 34, badge: true }}
       />
 
       <section id="avante" className="rd-avante">
@@ -275,6 +284,13 @@ export default function Profile() {
         src="/kit/scene-ending.webp"
         alt="Pixels-3 stream overlay on an ending scene"
         caption="That's the show. Here's the desk behind it."
+        sticker={{
+          src: "/kit/cam-loop.gif",
+          still: "/kit/idle.webp",
+          alt: "The PNGTuber model blinking and talking",
+          w: 232,
+          h: 265,
+        }}
       />
 
       <section id="contact" className="rd-contact">

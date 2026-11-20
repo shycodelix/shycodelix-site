@@ -1,11 +1,12 @@
-import Desktop from "../../components/Desktop";
+import CreatorRoom from "../../components/CreatorRoom";
+import "../creator-room.css";
 
 export const metadata = {
-  title: "The lab",
+  title: "Creator room",
   description:
-    "shycodelix OS: a streamer's desktop with the overlay pack and PNGTuber model, the clips archive, the desk setup, a schedule and a working terminal.",
+    "shycodelix's creator room: a desk, a live monitor running the Pixels-3 stream package with the PNGTuber model, a chat rail, lower thirds from the verified record, and a playable aim trainer.",
 };
 
 export default function Lab() {
-  return <Desktop />;
+  return <CreatorRoom />;
 }
