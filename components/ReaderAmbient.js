@@ -162,7 +162,6 @@ export default function ReaderAmbient({ className = "" }) {
         height: "100%",
         pointerEvents: "none",
         willChange: "transform",
-        "animation-play-state": "running",
       }}
     >
       <defs>
