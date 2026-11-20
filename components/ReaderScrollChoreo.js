@@ -10,8 +10,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
    - The section H2 skews and translates slightly with scroll progress through
      the section, so the header breathes with the scroll instead of only popping
      in once on intersect.
-   - Optionally drives a supplied accent/baseline element with the same scrub
-     (e.g. the hero accent band + baseline can react to scroll through the hero).
 
    It is opt-in per section (not every section gets it — keep it sparse and bold,
    yanxinzhang-style), and it is fully disabled under reduced motion so the page
