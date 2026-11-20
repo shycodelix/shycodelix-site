@@ -20,32 +20,14 @@ const MARK =
 export default function ReaderMorph({ className = "", strength = 1 }) {
   const svg = useRef(null);
   const reduce = useRef(false);
-  const raf = useRef(0);
-  const vx = useRef(0);
-  const vy = useRef(0);
-
-  useEffect(() => {
-    reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce.current) return;
-    if (!svg.current) return;
-
-    // read scroll velocity off the shared bus the Nav publishes
-    const onTick = () => {
-      const v =
-        (typeof window !== "undefined" && window.__lenisVelocity) || [0, 0];
-      vx.current = vx.current * 0.85 + (v[0] || 0) * 0.15;
-      vy.current = vy.current * 0.85 + (v[1] || 0) * 0.15;
-      raf.current = requestAnimationFrame(onTick);
-    };
-    raf.current = requestAnimationFrame(onTick);
-    return () => cancelAnimationFrame(raf.current);
-  }, []);
 
   useEffect(() => {
     if (!svg.current || reduce.current) return;
 
     let mx = 0;
     let my = 0;
+    let vx = 0;
+    let vy = 0;
     let rafId = 0;
 
     const onMove = (e) => {
@@ -57,8 +39,11 @@ export default function ReaderMorph({ className = "", strength = 1 }) {
     svg.current.addEventListener("pointermove", onMove, { passive: true });
 
     const tick = () => {
-      const sx = vx.current * 0.6 * strength;
-      const sy = vy.current * 0.35 * strength;
+      const v =
+        (typeof window !== "undefined" && window.__lenisVelocity) || [0, 0];
+      vx += (v[0] * 0.6 * strength - vx) * 0.15;
+      vy += (v[1] * 0.35 * strength - vy) * 0.15;
+
       if (mx || my) {
         mx *= 0.88;
         my *= 0.88;
@@ -66,7 +51,7 @@ export default function ReaderMorph({ className = "", strength = 1 }) {
         mx = 0;
         my = 0;
       }
-      svg.current.style.transform = `translate3d(${mx + sx}px, ${my + sy}px, 0)`;
+      svg.current.style.transform = `translate3d(${mx + vx}px, ${my + vy}px, 0)`;
       rafId = requestAnimationFrame(tick);
     };
 

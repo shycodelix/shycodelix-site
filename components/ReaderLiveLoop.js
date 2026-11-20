@@ -37,8 +37,8 @@ export default function ReaderLiveLoop({
     const tick = () => {
       // distance from the element center to the global cursor
       const r = ref.current.getBoundingClientRect();
-      const cx = (typeof window !== "undefined" && window.__pointerX) || r.left + r.width / 2;
-      const cy = (typeof window !== "undefined" && window.__pointerY) || r.top + r.height / 2;
+      const cx = (typeof window !== "undefined" && window.__pointerX) ?? r.left + r.width / 2;
+      const cy = (typeof window !== "undefined" && window.__pointerY) ?? r.top + r.height / 2;
       const dx = cx - (r.left + r.width / 2);
       const dy = cy - (r.top + r.height / 2);
       const d = Math.hypot(dx, dy) || 1;

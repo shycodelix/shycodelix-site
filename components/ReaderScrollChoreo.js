@@ -23,13 +23,9 @@ export default function ReaderScrollChoreo({
   children,
   className = "",
   headerRef,
-  accentRef,
-  baselineRef,
   scrub = 1.2,
   headerSkew = 0.04,
   headerY = 8,
-  accentFrom = 0,
-  accentTo = 1,
   ...rest
 }) {
   const wrapper = useRef(null);
@@ -48,8 +44,6 @@ export default function ReaderScrollChoreo({
 
     const w = wrapper.current;
     const h = headerRef?.current || w.querySelector("h2");
-    const a = accentRef?.current || w.querySelector(".rd-hero-accent");
-    const b = baselineRef?.current || w.querySelector(".rh-baseline");
 
     // Pin the section's choreography scroll range to the section itself.
     ScrollTrigger.create({
@@ -66,19 +60,13 @@ export default function ReaderScrollChoreo({
             overwrite: "auto",
           });
         }
-        if (a) {
-          gsap.set(a, { scaleX: accentFrom + (accentTo - accentFrom) * p, overwrite: "auto" });
-        }
-        if (b) {
-          gsap.set(b, { scaleX: p, opacity: 0.2 + 0.5 * p, overwrite: "auto" });
-        }
       },
     });
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, [scrub, headerSkew, headerY, accentFrom, accentTo]);
+  }, [scrub, headerSkew, headerY]);
 
   return (
     <div ref={wrapper} className={className} style={{ willChange: "transform" }} {...rest}>
