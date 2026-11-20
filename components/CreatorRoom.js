@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import LiveMonitor from "./LiveMonitor";
 import { achievements, gear, avante, profile } from "../app/data";
 
@@ -162,7 +162,16 @@ function Panel({ id, close }) {
 export default function CreatorRoom() {
   const [pick, setPick] = useState(null);
   const [toast, setToast] = useState("");
+  const [entering, setEntering] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    // Give the room a short screen-wide enter so the jump from the reader reads
+    // as turning the page into a room, not a hard cut. One shot per visit.
+    setEntering(true);
+    const t = setTimeout(() => setEntering(false), 620);
+    return () => clearTimeout(t);
+  }, []);
 
   const say = useCallback((m) => {
     setToast(m);
@@ -191,8 +200,8 @@ export default function CreatorRoom() {
   ];
 
   return (
-    <div className="room">
-      <header className="room-top">
+          <div className={`room ${entering ? "entering" : ""}`}>
+      <header className={`room-top ${entering ? "entering" : ""}`}>
         <span className="room-brand">
           <i aria-hidden="true" />
           shycodelix · creator room

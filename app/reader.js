@@ -9,7 +9,10 @@ import ReaderTheme from "../components/ReaderTheme";
 import ReaderTicker from "../components/ReaderTicker";
 import ReaderInterlude from "../components/ReaderInterlude";
 import ScrollWords from "../components/ScrollWords";
+import ReaderAmbient from "../components/ReaderAmbient";
+import HeaderLoop from "../components/HeaderLoop";
 import "./v2-reader.css";
+import "./ReaderAmbient.css";
 import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, avanteMail, sensitivity, sensitivityNote, gear, valorant } from "./data";
 
 const jsonLd = {
@@ -65,6 +68,10 @@ export default function Profile() {
       <h1 className="sr-only">shycodelix — operations, production, content</h1>
 
       <div className="rd-hero">
+        <div className="rd-rider-container" aria-hidden="true">
+          <ReaderAmbient />
+        </div>
+
         <div className="rd-hero-bar">
           <span className="rd-status"><i aria-hidden="true" />{profile.status}</span>
           <span className="rd-mono">shycodelix · reader mode</span>
@@ -123,7 +130,7 @@ export default function Profile() {
       </section>
 
       <section id="work" className="rd-sec">
-        <h2><em>(02)</em>Selected<br />work</h2>
+        <h2><em>(02)</em>Selected<br />work<HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={120} height={34} className="rd-loop-badge" /></h2>
         <div className="rd-col">
         <ol className="rd-ach">
           {achievements.map((a, i) => (
@@ -138,7 +145,7 @@ export default function Profile() {
           ))}
         </ol>
           <a className="rd-kit" href="/os">
-            <img src="/kit/scene-starting.webp" alt="Starting scene from the Pixels-3 stream overlay pack" width="1200" height="675" loading="lazy" />
+            <img src="/kit/scene-starting.webp" alt="Starting scene from the Pixels-3 stream overlay pack" width={1200} height={675} loading="lazy" />
             <span className="rd-kit-body">
               <em className="rd-mono">Stream kit</em>
               <b>Pixels-3 overlay pack, plus a PNGTuber model</b>
@@ -201,7 +208,7 @@ export default function Profile() {
       />
 
       <section id="skills" className="rd-sec">
-        <h2><em>(05)</em>What<br />I do</h2>
+        <h2><em>(05)</em>What<br />I do<HeaderLoop src="/kit/cam-loop.gif" still="/kit/idle.webp" alt="The PNGTuber model blinking and talking" width={120} height={42} className="rd-loop-badge" /></h2>
         <div className="rd-caps">
           {capabilities.map((c, i) => (
             <Reveal key={c.k} delay={i * 60}>

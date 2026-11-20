@@ -69,6 +69,11 @@
     linear-gradient(180deg, var(--room-wall-2) 0%, var(--room-wall) 58%, #120e1d 100%);
   isolation: isolate;
   user-select: none;
+  box-shadow: 0 0 0 1px rgba(246, 243, 234, 0.06), 0 30px 80px rgba(0, 0, 0, 0.55);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.room-stage:has(.monitor-wrap:hover) {
+  transform: scale(1.012);
 }
 .room-wall {
   position: absolute; inset: 0 0 26%;
@@ -319,13 +324,17 @@
   left: 50%;
   bottom: 26%;
   transform: translateX(-50%);
-  width: min(56%, 40rem);
+  width: min(62%, 44rem);
   z-index: 2;
   padding: 0.55rem 0.55rem 0.5rem;
   background: linear-gradient(180deg, #312a4a, #171122);
   border: 2px solid #0b0912;
   border-radius: 8px 8px 4px 4px;
   box-shadow: 0 22px 42px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(246, 243, 234, 0.08);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.room-stage:hover .monitor-wrap {
+  transform: translateX(-50%) translateY(-2px);
 }
 .monitor-boot {
   position: absolute;
@@ -365,6 +374,10 @@
   background: #0a0812 center/cover no-repeat;
   border: 2px solid #05040a;
   box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lm-screen:has(.lm-hit:hover) {
+  transform: scale(1.008);
 }
 .lm-screen::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -671,7 +684,8 @@
 
 .room-toast {
   position: fixed;
-  left: 50%; bottom: 1.2rem;
+  left: 50%;
+  bottom: 1.2rem;
   transform: translateX(-50%);
   z-index: 60;
   max-width: min(28rem, 90vw);
@@ -686,12 +700,31 @@
   letter-spacing: 0.04em;
   animation: roomToast 0.22s ease both;
 }
+/* Small handoff cue: when the room first opens, pulse the live dot once so the
+   jump from the reader reads as the room turning on rather than a hard cut. */
+.room-top.entering .room-brand i {
+  animation: roomBoot 1.1s ease both;
+}
+@keyframes roomBoot {
+  0% { opacity: 0.25; transform: scale(0.8); }
+  55% { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
 
 @keyframes roomLive { 50% { opacity: 0.35; } }
 @keyframes roomAir { 50% { opacity: 0.55; } }
 @keyframes roomFan { to { transform: rotate(360deg); } }
 @keyframes roomChat { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
 @keyframes roomToast { from { opacity: 0; transform: translate(-50%, 6px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* ---------- Room enter transition (reader -> room handoff) ---------- */
+.room {
+  animation: roomEnter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes roomEnter {
+  from { opacity: 0; transform: translateY(8px) scale(0.995); }
+  to { opacity: 1; transform: none; }
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 64rem) {
