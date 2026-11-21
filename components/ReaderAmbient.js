@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { onGsapTick, prefersReducedMotion } from "./gsapTick";
 
 /* ---------------------------------------------------------------------------
    Ambient reader rider — a single small SVG "rider" behind the reader that
@@ -14,29 +15,27 @@ import { useEffect, useRef } from "react";
 
 export default function ReaderAmbient({ className = "" }) {
   const svg = useRef(null);
-  const reduce = useRef(false);
 
   useEffect(() => {
-    reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  }, []);
-
-  useEffect(() => {
-    if (!svg.current || reduce.current) return;
     const s = svg.current;
+    if (!s || prefersReducedMotion()) return;
+
     let mx = 0;
     let my = 0;
-    let raf = 0;
 
+    // The rider is pointer-events:none, so the pointer is tracked on the window
+    // and measured against its container (the rider's own box moves with the
+    // drift transform). Clamped, so a cursor across the page is a lean, not a
+    // swing. Keep it gentle so the drift reads as editorial, not a magnet.
+    const reach = 18;
+    const clamp = (n) => Math.max(-reach, Math.min(reach, n));
     const onMove = (e) => {
-      // Displace relative to the SVG's own offset so the rider reacts to the
-      // pointer inside its own frame, not the whole viewport. Keep it gentle
-      // so the drift reads as editorial, not a cursor magnet.
-      const rect = s.getBoundingClientRect();
-      mx = (e.clientX - rect.left - rect.width / 2) * 0.10;
-      my = (e.clientY - rect.top - rect.height / 2) * 0.10;
+      const box = (s.parentElement || s).getBoundingClientRect();
+      mx = clamp((e.clientX - box.left - box.width / 2) * 0.10);
+      my = clamp((e.clientY - box.top - box.height / 2) * 0.10);
     };
 
-    s.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointermove", onMove, { passive: true });
 
     let sx = 0; // smoothed scroll-velocity drift (px), signed
     let sy = 0;
@@ -46,28 +45,26 @@ export default function ReaderAmbient({ className = "" }) {
       // publishes. Keep the amplitude tiny so the rider never looks driven by
       // scrolling — it reads as a mark that lives in the same world as the
       // page, not as a scroll progress indicator.
-      const v = (typeof window !== "undefined" && window.__lenisVelocity) || [0, 0];
+      const v = window.__lenisVelocity || [0, 0];
       sx += (v[0] * 0.6 - sx) * 0.12;
       sy += (v[1] * 0.35 - sy) * 0.12;
 
       // Cursor settles toward the pointer; scroll drift eases back toward rest
       // when scrolling stops.
-      if (mx || my) {
-        mx *= 0.88;
-        my *= 0.88;
-      }
+      mx *= 0.88;
+      my *= 0.88;
       if (sx || sy) {
         sx *= 0.9;
         sy *= 0.9;
       }
       s.style.transform = `translate3d(${mx + sx}px, ${my + sy}px, 0)`;
-      raf = requestAnimationFrame(tick);
     };
 
-    raf = requestAnimationFrame(tick);
+    const stop = onGsapTick(tick);
     return () => {
-      s.removeEventListener("pointermove", onMove);
-      cancelAnimationFrame(raf);
+      window.removeEventListener("pointermove", onMove);
+      stop();
+      s.style.transform = "";
     };
   }, []);
 

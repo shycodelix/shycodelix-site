@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { onGsapTick, prefersReducedMotion } from "./gsapTick";
 
 /* ---------------------------------------------------------------------------
    ReaderLiveLoop — a thin wrapper that adds a very gentle cursor-reactive
@@ -20,25 +21,18 @@ export default function ReaderLiveLoop({
   ...rest
 }) {
   const ref = useRef(null);
-  const reduce = useRef(false);
-  const raf = useRef(0);
-  const s = useRef(1);
 
   useEffect(() => {
-    reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  }, []);
-
-  useEffect(() => {
-    if (!ref.current || reduce.current) return;
+    const el = ref.current;
+    if (!el || prefersReducedMotion()) return;
 
     let rx = 1;
-    let rafId = 0;
 
     const tick = () => {
       // distance from the element center to the global cursor
-      const r = ref.current.getBoundingClientRect();
-      const cx = (typeof window !== "undefined" && window.__pointerX) ?? r.left + r.width / 2;
-      const cy = (typeof window !== "undefined" && window.__pointerY) ?? r.top + r.height / 2;
+      const r = el.getBoundingClientRect();
+      const cx = window.__pointerX ?? r.left + r.width / 2;
+      const cy = window.__pointerY ?? r.top + r.height / 2;
       const dx = cx - (r.left + r.width / 2);
       const dy = cy - (r.top + r.height / 2);
       const d = Math.hypot(dx, dy) || 1;
@@ -46,12 +40,14 @@ export default function ReaderLiveLoop({
       const target = 1 + pull * (maxScale - 1) * strength;
 
       rx += (target - rx) * 0.12;
-      ref.current.style.transform = `scale(${rx})`;
-      rafId = requestAnimationFrame(tick);
+      el.style.transform = `scale(${rx})`;
     };
 
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
+    const stop = onGsapTick(tick);
+    return () => {
+      stop();
+      el.style.transform = "";
+    };
   }, [maxScale, strength]);
 
   return (

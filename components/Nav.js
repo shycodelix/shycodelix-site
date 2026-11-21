@@ -13,17 +13,13 @@ export default function Nav() {
   const bar = useRef(null);
   const lenis = useLenis();
 
-  // Let the ambient rider drift with scroll velocity as well as the pointer.
-  // No-op when Lenis isn't mounted (reduced motion, non-reader surface).
+  // Let the ambient rider and the velocity layer lean on the scroll velocity as
+  // well as the pointer. No-op when Lenis isn't mounted (reduced motion,
+  // non-reader surface). `lenis.velocity` is a single number in px per frame
+  // and the reader scrolls vertically, so the bus carries [0, velocity].
   useEffect(() => {
-    if (lenis && typeof window !== "undefined") {
-      publishLenisVelocityOnScrollTick(
-        () =>
-          typeof lenis.getCurrentVelocity === "function"
-            ? lenis.getCurrentVelocity()
-            : null
-      );
-    }
+    if (!lenis || typeof window === "undefined") return;
+    return publishLenisVelocityOnScrollTick(() => [0, lenis.velocity]);
   }, [lenis]);
 
   function go(e, id) {

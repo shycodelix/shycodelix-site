@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { onGsapTick, prefersReducedMotion } from "./gsapTick";
 
 /* ---------------------------------------------------------------------------
    ReaderVelocityLayer — wraps a reader section (hero or .rd-sec) and applies
@@ -22,26 +23,18 @@ export default function ReaderVelocityLayer({
   ...rest
 }) {
   const ref = useRef(null);
-  const reduce = useRef(false);
-  const raf = useRef(0);
-  const sx = useRef(0);
-  const sy = useRef(0);
 
   useEffect(() => {
-    reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  }, []);
-
-  useEffect(() => {
-    if (!ref.current || reduce.current) return;
-
     const el = ref.current;
+    if (!el || prefersReducedMotion()) return;
+
     let rx = 0;
     let ry = 0;
-    let rafId = 0;
 
+    // Runs on GSAP's ticker: Lenis has already stepped this frame, so the
+    // published velocity is the one the reader is scrolling at.
     const tick = () => {
-      const v =
-        (typeof window !== "undefined" && window.__lenisVelocity) || [0, 0];
+      const v = window.__lenisVelocity || [0, 0];
       // smooth toward current velocity
       rx += (v[0] * skewX - rx) * 0.12;
       ry += (v[1] * driftY - ry) * 0.12;
@@ -50,11 +43,13 @@ export default function ReaderVelocityLayer({
       const drift = Math.max(-maxDrift, Math.min(maxDrift, ry));
 
       el.style.transform = `translate3d(0,${drift}px,0) skewX(${skew}deg)`;
-      rafId = requestAnimationFrame(tick);
     };
 
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
+    const stop = onGsapTick(tick);
+    return () => {
+      stop();
+      el.style.transform = "";
+    };
   }, [skewX, driftY, maxSkew, maxDrift]);
 
   return (

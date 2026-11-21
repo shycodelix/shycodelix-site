@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { onGsapTick, prefersReducedMotion } from "./gsapTick";
 
 /* ---------------------------------------------------------------------------
    ReaderMorph — one placed abstract mark in open negative space (behind the
@@ -22,13 +23,12 @@ export default function ReaderMorph({ className = "", strength = 1 }) {
 
   useEffect(() => {
     const el = svg.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!el || prefersReducedMotion()) return;
 
     let mx = 0;
     let my = 0;
     let vx = 0;
     let vy = 0;
-    let rafId = 0;
 
     // The mark is pointer-events:none, so it never receives pointer events:
     // track the pointer on the window instead. Measure the parent box, because
@@ -52,13 +52,12 @@ export default function ReaderMorph({ className = "", strength = 1 }) {
       mx *= 0.88;
       my *= 0.88;
       el.style.transform = `translate3d(${mx + vx}px, ${my + vy}px, 0)`;
-      rafId = requestAnimationFrame(tick);
     };
 
-    rafId = requestAnimationFrame(tick);
+    const stop = onGsapTick(tick);
     return () => {
       window.removeEventListener("pointermove", onMove);
-      cancelAnimationFrame(rafId);
+      stop();
       el.style.transform = "";
     };
   }, [strength]);
