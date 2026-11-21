@@ -15,6 +15,7 @@ import ReaderMorph from "../components/ReaderMorph";
 import ReaderVelocityLayer from "../components/ReaderVelocityLayer";
 import ReaderLiveLoop from "../components/ReaderLiveLoop";
 import ReaderScrollChoreo from "../components/ReaderScrollChoreo";
+import ReaderSectionScrub from "../components/ReaderSectionScrub";
 import "./v2-reader.css";
 import "./ReaderAmbient.css";
 import "./ReaderMorph.css";
@@ -162,6 +163,7 @@ export default function Profile() {
           </a>
         </div>
       </section>
+      <ReaderSectionScrub target="work" />
 
       <ReaderInterlude
         src="/kit/scene-starting.webp"
@@ -271,6 +273,7 @@ export default function Profile() {
           ))}
         </div>
       </section>
+      <ReaderSectionScrub target="career" />
 
       <section id="setup" className="rd-sec">
         <h2><em>(07)</em>Setup</h2>
@@ -324,6 +327,8 @@ export default function Profile() {
           <a href="https://www.streamelements.com/shycodelix/tip" target="_blank" rel="noreferrer">Tip jar</a>
         </div>
       </section>
+
+      <ReaderSectionScrub target="contact" />
 
       <footer className="rd-foot">
         <p>Gamer tag: {profile.tag} · reader mode of shycodelix OS</p>
