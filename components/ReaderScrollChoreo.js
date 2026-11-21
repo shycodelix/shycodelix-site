@@ -27,24 +27,20 @@ export default function ReaderScrollChoreo({
   ...rest
 }) {
   const wrapper = useRef(null);
-  const reduce = useRef(false);
 
   useEffect(() => {
-    reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (typeof window !== "undefined" && !_pluginRegistered) {
+    const w = wrapper.current;
+    if (!w || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    if (!_pluginRegistered) {
       _pluginRegistered = true;
       gsap.registerPlugin(ScrollTrigger);
     }
-  }, []);
 
-  useEffect(() => {
-    if (!wrapper.current || reduce.current) return;
-
-    const w = wrapper.current;
     const h = headerRef?.current || w.querySelector("h2");
 
     // Pin the section's choreography scroll range to the section itself.
-    ScrollTrigger.create({
+    const trigger = ScrollTrigger.create({
       trigger: w,
       start: "top bottom-=60",
       end: "bottom top+=60",
@@ -61,9 +57,9 @@ export default function ReaderScrollChoreo({
       },
     });
 
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
+    // Kill only this section's trigger: a global kill would tear down every
+    // other section and component's ScrollTrigger on unmount.
+    return () => trigger.kill();
   }, [scrub, headerSkew, headerY]);
 
   return (

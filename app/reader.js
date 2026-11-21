@@ -218,7 +218,7 @@ export default function Profile() {
         sticker={{ src: "/kit/on-air.gif", still: "/kit/on-air.png", alt: "On air", w: 96, h: 34, badge: true }}
       />
 
-      <ReaderScrollChoreo className="rd-sec">
+      <ReaderScrollChoreo>
         <section id="skills" className="rd-sec">
           <h2><em>(05)</em>What<br />I do<ReaderLiveLoop><HeaderLoop src="/kit/cam-loop.gif" still="/kit/idle.webp" alt="The PNGTuber model blinking and talking" width={120} height={42} className="rd-loop-badge" /></ReaderLiveLoop></h2>
           <div className="rd-caps">

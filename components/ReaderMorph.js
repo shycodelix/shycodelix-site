@@ -19,10 +19,10 @@ const MARK =
 
 export default function ReaderMorph({ className = "", strength = 1 }) {
   const svg = useRef(null);
-  const reduce = useRef(false);
 
   useEffect(() => {
-    if (!svg.current || reduce.current) return;
+    const el = svg.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let mx = 0;
     let my = 0;
@@ -30,35 +30,36 @@ export default function ReaderMorph({ className = "", strength = 1 }) {
     let vy = 0;
     let rafId = 0;
 
+    // The mark is pointer-events:none, so it never receives pointer events:
+    // track the pointer on the window instead. Measure the parent box, because
+    // the mark's own box moves once the drift transform is applied.
+    // The pointer can now be anywhere in the viewport, so the offset is clamped
+    // to a small reach: the mark drifts, it does not swing across the page.
+    const reach = 20 * strength;
+    const clamp = (n) => Math.max(-reach, Math.min(reach, n));
     const onMove = (e) => {
-      const rect = svg.current.getBoundingClientRect();
-      mx = (e.clientX - rect.left - rect.width / 2) * 0.05 * strength;
-      my = (e.clientY - rect.top - rect.height / 2) * 0.05 * strength;
+      const box = (el.parentElement || el).getBoundingClientRect();
+      mx = clamp((e.clientX - box.left - box.width / 2) * 0.05 * strength);
+      my = clamp((e.clientY - box.top - box.height / 2) * 0.05 * strength);
     };
 
-    svg.current.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointermove", onMove, { passive: true });
 
     const tick = () => {
-      const v =
-        (typeof window !== "undefined" && window.__lenisVelocity) || [0, 0];
+      const v = window.__lenisVelocity || [0, 0];
       vx += (v[0] * 0.6 * strength - vx) * 0.15;
       vy += (v[1] * 0.35 * strength - vy) * 0.15;
-
-      if (mx || my) {
-        mx *= 0.88;
-        my *= 0.88;
-      } else {
-        mx = 0;
-        my = 0;
-      }
-      svg.current.style.transform = `translate3d(${mx + vx}px, ${my + vy}px, 0)`;
+      mx *= 0.88;
+      my *= 0.88;
+      el.style.transform = `translate3d(${mx + vx}px, ${my + vy}px, 0)`;
       rafId = requestAnimationFrame(tick);
     };
 
     rafId = requestAnimationFrame(tick);
     return () => {
-      svg.current.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointermove", onMove);
       cancelAnimationFrame(rafId);
+      el.style.transform = "";
     };
   }, [strength]);
 
