@@ -1,19 +1,20 @@
 // Serves the Next.js static export (out/) from the Freebuff Sites ASSETS binding,
 // plus the one dynamic route the export can't carry: POST /api/shell, cmd.exe's brain.
 //
-// app/api/shell/route.js can't exist in a static export, and the old POST
-// /openai lane is refused from Cloudflare's egress (402/503 "Classic API at its
-// limit"). The free text lane still answers, so the prompt and the system
-// instructions travel inline in one GET.
+// app/api/shell/route.js can't exist in a static export, so the same handler
+// lives here. A real key in OPENAI_API_KEY is used when it is set (an
+// OpenAI-compatible chat endpoint); the keyless Pollinations lane is the
+// fallback, and the facts answer covers everything else.
 
 const HTML_CACHE = "public, max-age=0, must-revalidate";
 const ASSET_CACHE = "public, max-age=86400, immutable";
 
-// Pollinations' classic lane refuses Cloudflare's shared egress (402/503 "at its
-// limit"), so the keyless lane at apiaifree answers first and Pollinations is the
-// fallback for anywhere it does respond.
-const PRIMARY = "https://api.apiaifree.com/v1/chat/completions";
-const PRIMARY_MODEL = "free-ai";
+// apiaifree refuses every request from Cloudflare's shared egress with a 403, so
+// it is gone. A keyed lane answers when a key is configured; otherwise the
+// keyless Pollinations lane tries, and it throttles to one reply every 45s per
+// shared address, so the facts answer is the real safety net.
+const KEY_ENDPOINT = "https://api.openai.com/v1/chat/completions";
+const KEY_MODEL = "gpt-4o-mini";
 const FALLBACK = "https://text.pollinations.ai/openai";
 const FALLBACK_MODEL = "openai-fast";
 const WINDOW_MS = 10 * 60 * 1000;
@@ -97,7 +98,38 @@ function limit(ip) {
   return true;
 }
 
-async function shell(request) {
+// The keyed lane is first when a key exists; the keyless lane is always last.
+// Only the keyless lane counts as "cooling down" — its 402/429 is a throttle,
+// not a reason to stop asking.
+function lanesFor(env, messages) {
+  const lanes = [];
+  const key = env?.OPENAI_API_KEY;
+  if (key) {
+    lanes.push({
+      endpoint: env.OPENAI_BASE_URL || KEY_ENDPOINT,
+      keyed: true,
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${key}`,
+      },
+      body: {
+        model: env.SHELL_MODEL || KEY_MODEL,
+        temperature: 0.6,
+        max_tokens: 400,
+        messages,
+      },
+    });
+  }
+  lanes.push({
+    endpoint: FALLBACK,
+    keyed: false,
+    headers: { "content-type": "application/json" },
+    body: { model: FALLBACK_MODEL, temperature: 0.6, max_tokens: 180, messages },
+  });
+  return lanes;
+}
+
+async function shell(request, env) {
   const ip =
     request.headers.get("cf-connecting-ip") ||
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -123,10 +155,7 @@ async function shell(request) {
     { role: "user", content: question.trim() },
   ];
 
-  const lanes = [
-    [PRIMARY, { model: PRIMARY_MODEL, temperature: 0.6, max_tokens: 400, messages }],
-    [FALLBACK, { model: FALLBACK_MODEL, temperature: 0.6, max_tokens: 180, messages }],
-  ];
+  const lanes = lanesFor(env, messages);
 
   const debug = request.headers.get("x-shell-debug") === "1";
   const trace = [];
@@ -140,20 +169,23 @@ async function shell(request) {
   for (let pass = 0; pass < 2; pass++) {
     if (pass > 0) await new Promise((r) => setTimeout(r, 2000));
 
-    for (const [endpoint, body] of lanes) {
+    for (const lane of lanes) {
+      const { endpoint } = lane;
       if (unreachable.has(endpoint)) continue;
 
       try {
         const res = await fetch(endpoint, {
           method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(body),
+          headers: lane.headers,
+          body: JSON.stringify(lane.body),
           signal: AbortSignal.timeout(18000),
         });
 
         if (!res.ok) {
-          if (res.status === 402 || res.status === 429) coolingDown = true;
-          unreachable.add(endpoint);
+          if (!lane.keyed && (res.status === 402 || res.status === 429)) coolingDown = true;
+          // A keyed lane's 429/5xx is worth one retry on the second pass; its
+          // 401/403 is not, and a free lane's refusal never is.
+          if (!lane.keyed || res.status === 401 || res.status === 403) unreachable.add(endpoint);
           if (debug) {
             let text = "";
             try { text = (await res.clone().text()).slice(0, 200); } catch {}
@@ -169,7 +201,10 @@ async function shell(request) {
           .trim()
           .slice(0, 700);
 
-        if (reply) return json({ reply });
+        if (reply) {
+          if (debug) trace.push(`${endpoint} ok`);
+          return json({ reply, ...(debug ? { trace } : {}) });
+        }
         if (debug) trace.push(`${endpoint} empty`);
       } catch (e) {
         unreachable.add(endpoint);
@@ -219,7 +254,7 @@ export default {
     const pathname = decodeURIComponent(url.pathname);
 
     if (pathname === "/api/shell") {
-      if (request.method === "POST") return shell(request);
+      if (request.method === "POST") return shell(request, env);
       return json({ error: "Method not allowed." }, 405, { allow: "POST" });
     }
 
