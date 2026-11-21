@@ -1,0 +1,11 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "shycodelix-site-static",
+  "main": "serve.js",
+  "compatibility_date": "2026-10-13",
+  "assets": {
+    "directory": "../out",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  }
+}

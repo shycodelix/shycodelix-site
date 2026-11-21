@@ -1,0 +1,8 @@
+{
+  "entrypoint": "sites-static/serve.js",
+  "compatibilityDate": "2026-10-13",
+  "modules": [
+    { "name": "sites-static/serve.js", "type": "esm", "path": "./sites-static/serve.js" }
+  ],
+  "assetsDirectory": "./out"
+}
