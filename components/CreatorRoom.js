@@ -159,11 +159,35 @@ function Panel({ id, close }) {
   return null;
 }
 
+// One card shape for both rooms: the desktop mirror has no inline panel to
+// expand, so it simply omits aria-expanded.
+function PropCard({ label, hint, pressed, expanded, onClick }) {
+  return (
+    <button type="button" aria-pressed={pressed} aria-expanded={expanded} onClick={onClick}>
+      <b>{label}</b>
+      <span>{hint}</span>
+    </button>
+  );
+}
+
 export default function CreatorRoom() {
   const [pick, setPick] = useState(null);
   const [toast, setToast] = useState("");
   const [entering, setEntering] = useState(false);
+  // Under 40rem the absolutely-positioned stage cannot hold a phone, so the room
+  // becomes a flat list of the same props with the panel inline beneath the
+  // card that opened it. matchMedia keeps the stage unmounted there instead of
+  // rendering a second, hidden LiveMonitor with its own timers.
+  const [flat, setFlat] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 40rem)");
+    const sync = () => setFlat(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
     // Give the room a short screen-wide enter so the jump from the reader reads
@@ -213,6 +237,7 @@ export default function CreatorRoom() {
         </nav>
       </header>
 
+      {!flat && (
       <div className="room-main">
         <section className="room-stage" aria-label="Creator room">
           <div className="room-wall" aria-hidden="true" />
@@ -271,15 +296,40 @@ export default function CreatorRoom() {
           <Panel id={pick} close={() => setPick(null)} />
         </aside>
       </div>
+      )}
 
-      <div className="room-picks" role="group" aria-label="Room props">
-        {props.map(([id, label, hint]) => (
-          <button key={id} type="button" aria-pressed={pick === id} onClick={() => open(id)}>
-            <b>{label}</b>
-            <span>{hint}</span>
-          </button>
-        ))}
-      </div>
+      {flat ? (
+        <div className="room-flat">
+          <div className="monitor-wrap room-flat-monitor">
+            <LiveMonitor say={say} onBoot={boot} />
+          </div>
+          <Link className="room-flat-boot" href="/os/desktop">Boot shycodelix OS</Link>
+          <div className="room-flat-list" role="group" aria-label="Room props">
+            {props.map(([id, label, hint]) => (
+              <div key={id} className="room-flat-item">
+                <PropCard
+                  label={label}
+                  hint={hint}
+                  pressed={pick === id}
+                  expanded={pick === id}
+                  onClick={() => (id === "monitor" ? boot() : setPick(pick === id ? null : id))}
+                />
+                {pick === id && (
+                  <div className="room-flat-panel">
+                    <Panel id={id} close={() => setPick(null)} />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="room-picks" role="group" aria-label="Room props">
+          {props.map(([id, label, hint]) => (
+            <PropCard key={id} label={label} hint={hint} pressed={pick === id} onClick={() => open(id)} />
+          ))}
+        </div>
+      )}
 
       <footer className="room-foot">
         <span>{profile.name} · {profile.base}</span>
