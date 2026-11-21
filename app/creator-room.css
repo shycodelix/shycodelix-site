@@ -75,6 +75,13 @@
 .room-stage:has(.monitor-wrap:hover) {
   transform: scale(1.012);
 }
+/* The stream backdrop, kept to a trace so it reads as the set behind the desk
+   without competing with the props. */
+.room-wall::before {
+  content: ""; position: absolute; inset: 0;
+  background: url("/kit/scene-backing.webp") center 42% / cover no-repeat;
+  opacity: 0.22;
+}
 .room-wall {
   position: absolute; inset: 0 0 26%;
   background-image:
