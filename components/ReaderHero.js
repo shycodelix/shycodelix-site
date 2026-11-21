@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const KIN = "cubic-bezier(0.16, 1, 0.3, 1)";
 
@@ -36,9 +36,24 @@ function parseHeadline(raw) {
   });
 }
 
+// Stand-in glyphs for the one-shot type shuffle. Each character settles at its
+// own 15ms mark; until then it shows one of these instead of itself.
+const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+=/<>";
+const STEP_MS = 15;
+
+function scramble(text, start, tick) {
+  let out = "";
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (tick >= (start + i) * STEP_MS || !/[A-Za-z0-9]/.test(ch)) out += ch;
+    else out += GLYPHS[(Math.floor(tick / 40) * 31 + (start + i) * 17) % GLYPHS.length];
+  }
+  return out;
+}
+
 /** Render one parsed segment: plain text as a span of text, an inline styled
  *  segment as a span carrying that style object. */
-function Segment({ seg }) {
+function Segment({ seg, start = 0, tick = null }) {
   if (seg.t === "inline" && seg.style) {
     return (
       <span
@@ -50,12 +65,19 @@ function Segment({ seg }) {
       </span>
     );
   }
-  return <span>{seg.v}</span>;
+  return <span>{tick == null ? seg.v : scramble(seg.v, start, tick)}</span>;
 }
 
 export default function ReaderHero({ headline, subtitle, byline }) {
   const ref = useRef(null);
   const [ready, setReady] = useState(false);
+  const [reduce, setReduce] = useState(false);
+  const [tick, setTick] = useState(null);
+  const segments = useMemo(() => parseHeadline(headline), [headline]);
+
+  useEffect(() => {
+    setReduce(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }, []);
 
   useEffect(() => {
     const ok =
@@ -80,10 +102,30 @@ export default function ReaderHero({ headline, subtitle, byline }) {
     return () => io.disconnect();
   }, []);
 
-  const segments = parseHeadline(headline);
+  // One shot: the headline types itself in, each glyph settling at its own mark
+  // while the lines wipe in behind it. Never runs under reduced motion.
+  useEffect(() => {
+    if (!ready || reduce) return;
+    const total = segments.flat().reduce((n, s) => n + (s.t === "inline" ? 0 : s.v.length), 0);
+    const end = total * STEP_MS;
+    const t0 = performance.now();
+    let raf;
+    const loop = (now) => {
+      const e = now - t0;
+      if (e >= end) {
+        setTick(null);
+        return;
+      }
+      setTick(e);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [ready, reduce, segments]);
 
   // One animated line per source line, staggered so the headline reveals
   // line-by-line. The first line anchors the reveal; later lines follow.
+  let cursor = 0;
   const lines = segments.map((line, li) => {
     const delay = 60 + li * 90;
     return (
@@ -96,9 +138,11 @@ export default function ReaderHero({ headline, subtitle, byline }) {
           animationDelay: `${delay}ms`,
         }}
       >
-        {line.map((seg, si) => (
-          <Segment key={si} seg={seg} />
-        ))}
+        {line.map((seg, si) => {
+          const start = cursor;
+          cursor += seg.v.length;
+          return <Segment key={si} seg={seg} start={start} tick={tick} />;
+        })}
       </span>
     );
   });

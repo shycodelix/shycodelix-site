@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import CopyButton from "../components/CopyButton";
 import Nav from "../components/Nav";
+import Numeral from "../components/Numeral";
 import Reveal from "../components/Reveal";
 import PixelImg from "../components/PixelImg";
 import ReaderHero from "../components/ReaderHero";
@@ -121,7 +122,7 @@ export default function Profile() {
       <ReaderTicker />
 
       <section id="summary" className="rd-sec">
-        <h2><em>(01)</em>Profile</h2>
+        <h2><Numeral>(01)</Numeral>Profile</h2>
         <div className="rd-col">
           <dl className="rd-facts">
             <div><dt>Looking for</dt><dd>{lookingFor.role}</dd></div>
@@ -139,7 +140,7 @@ export default function Profile() {
       </section>
 
       <section id="work" className="rd-sec">
-        <h2><em>(02)</em>Selected<br />work<ReaderLiveLoop><HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={120} height={34} className="rd-loop-badge" /></ReaderLiveLoop></h2>
+        <h2><Numeral>(02)</Numeral>Selected<br />work<ReaderLiveLoop><HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={120} height={34} className="rd-loop-badge" /></ReaderLiveLoop></h2>
         <div className="rd-col">
         <ol className="rd-ach">
           {achievements.map((a, i) => (
@@ -179,7 +180,7 @@ export default function Profile() {
       />
 
       <section id="verified" className="rd-sec">
-        <h2><em>(03)</em>Verified<br />record</h2>
+        <h2><Numeral>(03)</Numeral>Verified<br />record</h2>
         <div className="rd-col">
           <div className="rd-verified-loop">
             <HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={86} height={30} className="rd-loop-inline" />
@@ -203,7 +204,7 @@ export default function Profile() {
       </section>
 
       <section id="experience" className="rd-sec">
-        <h2><em>(04)</em>Experience</h2>
+        <h2><Numeral>(04)</Numeral>Experience</h2>
         <div className="rd-col">
           <ul className="rd-jobs">{experience.slice(0, 5).map((j) => <Job key={j.org + j.period} j={j} />)}</ul>
           <details className="rd-more">
@@ -222,7 +223,7 @@ export default function Profile() {
 
       <ReaderScrollChoreo>
         <section id="skills" className="rd-sec">
-          <h2><em>(05)</em>What<br />I do<ReaderLiveLoop><HeaderLoop src="/kit/cam-loop.gif" still="/kit/idle.webp" alt="The PNGTuber model blinking and talking" width={120} height={42} className="rd-loop-badge" /></ReaderLiveLoop></h2>
+          <h2><Numeral>(05)</Numeral>What<br />I do<ReaderLiveLoop><HeaderLoop src="/kit/cam-loop.gif" still="/kit/idle.webp" alt="The PNGTuber model blinking and talking" width={120} height={42} className="rd-loop-badge" /></ReaderLiveLoop></h2>
           <div className="rd-caps">
             {capabilities.map((c, i) => (
               <Reveal key={c.k} delay={i * 60}>
@@ -261,7 +262,7 @@ export default function Profile() {
 
       <section id="career" className="rd-frames">
         <div className="rd-frames-head">
-          <h2><em>(06)</em>Career<br />in frames</h2>
+          <h2><Numeral>(06)</Numeral>Career<br />in frames</h2>
           <p className="rd-mono">Lionne → BOOM → Abaddon → Avante · drag or scroll sideways</p>
         </div>
         <div className="rd-frames-strip">
@@ -276,7 +277,7 @@ export default function Profile() {
       <ReaderSectionScrub target="career" />
 
       <section id="setup" className="rd-sec">
-        <h2><em>(07)</em>Setup</h2>
+        <h2><Numeral>(07)</Numeral>Setup</h2>
         <div className="rd-col">
           <div className="rd-setup">
             {Object.entries(gear).map(([t, rows]) => <div key={t}><h3>{t}</h3><Rows rows={rows} /></div>)}
