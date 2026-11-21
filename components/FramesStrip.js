@@ -28,15 +28,19 @@ function centreOf(el, node) {
 export default function FramesStrip({ children }) {
   const strip = useRef(null);
   const drag = useRef(null);
-  const timer = useRef(0);
-  const unlock = useRef(null);
+  const landing = useRef(null); // the pending snap restore of a throw in flight
 
-  useEffect(() => () => clearTimeout(timer.current), []);
+  useEffect(() => () => landing.current && clearTimeout(landing.current.timer), []);
 
-  function openSnap(el) {
-    clearTimeout(timer.current);
-    if (unlock.current) el.removeEventListener("scrollend", unlock.current);
-    unlock.current = null;
+  // Snap comes back once the throw has landed: on scrollend, or on a timer for
+  // browsers that never fire it. Grabbing again calls this first.
+  function restoreSnap(el) {
+    const pending = landing.current;
+    landing.current = null;
+    if (pending) {
+      clearTimeout(pending.timer);
+      el.removeEventListener("scrollend", pending.end);
+    }
     el.classList.remove("is-drag");
   }
 
@@ -44,15 +48,9 @@ export default function FramesStrip({ children }) {
     const el = strip.current;
     if (!el || e.pointerType === "touch" || e.button !== 0) return;
     if (el.scrollWidth <= el.clientWidth + 1) return;
-    openSnap(el); // a fresh grab cancels a landing still in flight
+    restoreSnap(el);
     el.setPointerCapture(e.pointerId);
-    drag.current = {
-      id: e.pointerId,
-      x: e.clientX,
-      left: el.scrollLeft,
-      moved: 0,
-      samples: [[performance.now(), el.scrollLeft]],
-    };
+    drag.current = { id: e.pointerId, x: e.clientX, left: el.scrollLeft, moved: 0, samples: [[performance.now(), el.scrollLeft]] };
     el.classList.add("is-drag");
   }
 
@@ -68,6 +66,11 @@ export default function FramesStrip({ children }) {
     while (d.samples.length > 1 && now - d.samples[0][0] > SAMPLE_MS) d.samples.shift();
   }
 
+  function onPointerCancel() {
+    drag.current = null;
+    if (strip.current) restoreSnap(strip.current);
+  }
+
   function onPointerUp(e) {
     const el = strip.current;
     const d = drag.current;
@@ -77,20 +80,18 @@ export default function FramesStrip({ children }) {
 
     // A click, not a drag: leave the strip where it is.
     if (d.moved <= SLOP) {
-      openSnap(el);
+      restoreSnap(el);
       return;
     }
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // The samples cover the last SAMPLE_MS only, so a pause before release leaves nothing to coast on.
+    const [first] = d.samples;
     const last = d.samples[d.samples.length - 1];
-    const first = d.samples.find(([t]) => performance.now() - t <= SAMPLE_MS + 40);
-    // A pause before release leaves no velocity: the strip just settles.
-    const throwPx =
-      reduce || !first || !last || last[0] - first[0] < 8
-        ? 0
-        : clamp(((last[1] - first[1]) / (last[0] - first[0])) * COAST_MS, -MAX_COAST, MAX_COAST);
+    const dt = last[0] - first[0];
+    const coast = reduce || dt < 8 ? 0 : clamp(((last[1] - first[1]) / dt) * COAST_MS, -MAX_COAST, MAX_COAST);
 
-    const wanted = el.scrollLeft + throwPx;
+    const wanted = el.scrollLeft + coast;
     let target = wanted;
     let nearest = Infinity;
     el.querySelectorAll(".rd-shot").forEach((shot) => {
@@ -102,17 +103,14 @@ export default function FramesStrip({ children }) {
       }
     });
 
-    const max = el.scrollWidth - el.clientWidth;
-    el.scrollTo({ left: clamp(target, 0, max), behavior: reduce ? "auto" : "smooth" });
-
+    el.scrollTo({ left: clamp(target, 0, el.scrollWidth - el.clientWidth), behavior: reduce ? "auto" : "smooth" });
     if (reduce) {
-      openSnap(el);
+      restoreSnap(el);
       return;
     }
-    unlock.current = () => openSnap(el);
-    el.addEventListener("scrollend", unlock.current, { once: true });
-    // scrollend is still missing in older Safari: never leave the snap off.
-    timer.current = setTimeout(() => openSnap(el), 900);
+    const end = () => restoreSnap(el);
+    landing.current = { end, timer: setTimeout(end, 900) };
+    el.addEventListener("scrollend", end, { once: true });
   }
 
   return (
@@ -122,7 +120,7 @@ export default function FramesStrip({ children }) {
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
+      onPointerCancel={onPointerCancel}
       onDragStart={(e) => e.preventDefault()}
     >
       {children}

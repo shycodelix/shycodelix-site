@@ -230,6 +230,35 @@ const DEFS = {
 const ICON_IDS = ["about", "kit", "clips", "player", "schedule", "photos", "avante", "links"];
 const START_ONLY = ["work", "wins", "setup", "term", "notepad", "mines", "drive", "dont", "bin"];
 
+// A returning visitor's desktop is where they left it: the same windows in the
+// same spots, in the same stacking order. A saved position can be off-screen on
+// a smaller monitor, so it is clamped back into the viewport on the way in.
+const LAYOUT_KEY = "shycodelix.desktop";
+const SKIP_RESTORE = new Set(["error"]); // a "task failed successfully" pop-up is not decor
+
+function loadLayout() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(LAYOUT_KEY));
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const wins = (Array.isArray(raw && raw.wins) ? raw.wins : [])
+      .filter((w) => DEFS[w.id] && !SKIP_RESTORE.has(w.id))
+      .map((w, i) => ({
+        id: w.id,
+        x: Math.max(0, Math.min(vw - 96, Number(w.x) || 0)),
+        y: Math.max(0, Math.min(vh - 120, Number(w.y) || 0)),
+        z: i + 1,
+        max: !!w.max,
+        snap: w.snap === "l" || w.snap === "r" ? w.snap : null,
+        hid: !!w.hid,
+        min: false,
+        out: false,
+      }));
+    return wins.length ? wins : null;
+  } catch {
+    return null;
+  }
+}
+
 const BOOT_LINES = [
   "Reticulating splines…",
   "Rebuilding the overlay, again…",
@@ -309,6 +338,28 @@ export default function Desktop() {
     const el = winRefs.current[id];
     if (el) el.focus({ preventScroll: true });
   }, [wins]);
+
+  // Restore before the welcome note decides whether to appear.
+  useEffect(() => {
+    const saved = loadLayout();
+    if (!saved) return;
+    z.current = saved.length;
+    setWins(saved);
+    try { sessionStorage.setItem("welcomed", "1"); } catch {}
+  }, []);
+
+  // Write the layout back on every change, after the drag or focus churn settles.
+  useEffect(() => {
+    if (phase !== "ready") return;
+    const t = setTimeout(() => {
+      try {
+        localStorage.setItem(LAYOUT_KEY, JSON.stringify({
+          wins: [...wins].sort((a, b) => a.z - b.z).map(({ id, x, y, max, snap, hid }) => ({ id, x, y, max, snap, hid })),
+        }));
+      } catch {}
+    }, 250);
+    return () => clearTimeout(t);
+  }, [phase, wins]);
 
   const beep = useCallback((f = 520) => {
     if (!sound) return;
