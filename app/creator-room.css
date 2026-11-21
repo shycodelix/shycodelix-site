@@ -205,29 +205,25 @@
 .plant-pot i:nth-child(2) { transform: translateX(-50%) rotate(2deg); height: 52%; }
 .plant-pot i:nth-child(3) { transform: translateX(-50%) rotate(28deg); }
 
-/* rig */
-.prop-rig { right: 11.5%; bottom: 27%; width: 8%; height: 21%; }
-.rig-case {
-  display: flex; flex-direction: column; gap: 7%; align-items: center; justify-content: center;
-  background:
-    linear-gradient(115deg, rgba(255, 255, 255, 0.10) 0 22%, transparent 22% 100%),
-    linear-gradient(180deg, #2a2240, #14101f);
-  border: 2px solid #0b0912;
-  box-shadow: inset 0 0 0 2px rgba(207, 224, 247, 0.12), 0 0 26px rgba(255, 122, 26, 0.22);
+/* rig: exploded diagram, tall enough for three labelled parts */
+.prop-rig { right: 11.5%; bottom: 26%; width: 8.5%; height: 26%; }
+.rig-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 14px rgba(255, 122, 26, 0.18));
 }
-.rig-case i {
-  width: 62%; aspect-ratio: 1; border-radius: 50%;
-  border: 2px solid #0b0912;
-  background: radial-gradient(circle, #ffb070 0 24%, #ff7a1a 26% 40%, rgba(255, 122, 26, 0.22) 42% 100%);
-  box-shadow: 0 0 12px rgba(255, 122, 26, 0.65);
-  animation: roomFan 2.6s linear infinite;
+.rig-svg text {
+  font-family: var(--font-micro), monospace;
+  /* In viewBox units: 15 of 120 lands near 9px on a 74px prop, the smallest
+     that still reads. */
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  fill: rgba(246, 243, 234, 0.72);
 }
-.rig-case i:nth-child(2) {
-  background: radial-gradient(circle, #eef5ff 0 24%, #cfe0f7 26% 40%, rgba(207, 224, 247, 0.22) 42% 100%);
-  box-shadow: 0 0 12px rgba(207, 224, 247, 0.6);
-  animation-direction: reverse;
-}
-.rig-case b { width: 66%; height: 5px; background: #ff7a1a; opacity: 0.7; box-shadow: 0 0 8px rgba(255, 122, 26, 0.7); }
+.rig-fan { transform-box: fill-box; transform-origin: center; animation: roomFan 2.6s linear infinite; }
 
 /* desk surface */
 .room-desk {
@@ -829,7 +825,7 @@
 @media (prefers-reduced-motion: reduce) {
   .room-brand i,
   .lm-air,
-  .rig-case i,
+  .rig-fan,
   .lm-chat li { animation: none; }
   .room-toast { animation: none; }
 }

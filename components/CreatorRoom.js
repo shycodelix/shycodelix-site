@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import LiveMonitor from "./LiveMonitor";
+import RigExploded from "./RigExploded";
 import { achievements, gear, avante, profile } from "../app/data";
 
 const mail = `mailto:${profile.email}?subject=Let%27s%20work%20together`;
@@ -268,7 +269,7 @@ export default function CreatorRoom() {
           </button>
 
           <button type="button" className="prop prop-rig" onClick={() => open("rig")}>
-            <span className="rig-case" aria-hidden="true"><i /><i /><b /></span>
+            <RigExploded />
             <span className="prop-tag">Rig specs</span>
           </button>
 
