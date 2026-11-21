@@ -203,13 +203,18 @@ export default function CreatorRoom() {
     say.t = setTimeout(() => setToast(""), 3200);
   }, []);
 
+  // The monitor boots the classic desktop; the tower shows the hardware.
+  const boot = () => router.push("/os/desktop");
+
   const open = (id, quip) => {
+    // "monitor" has no panel of its own: it is the door to the old OS.
+    if (id === "monitor") {
+      boot();
+      return;
+    }
     setPick(id);
     if (quip) say(quip);
   };
-
-  // The monitor boots the classic desktop; the tower shows the hardware.
-  const boot = () => router.push("/os/desktop");
 
   const props = [
     ["monitor", "Monitor", "The live stream, the character rig and the mini-game."],
@@ -312,7 +317,7 @@ export default function CreatorRoom() {
                   hint={hint}
                   pressed={pick === id}
                   expanded={pick === id}
-                  onClick={() => (id === "monitor" ? boot() : setPick(pick === id ? null : id))}
+                  onClick={() => (pick === id ? setPick(null) : open(id))}
                 />
                 {pick === id && (
                   <div className="room-flat-panel">
