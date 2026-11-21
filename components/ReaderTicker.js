@@ -1,6 +1,3 @@
-"use client";
-import { useEffect, useRef } from "react";
-
 const ITEMS = [
   "Esports operations",
   "Broadcast production",
@@ -14,26 +11,13 @@ const ITEMS = [
   "Community events",
 ];
 
+// The marquee's only moving part is CSS. Pausing it used to be done here with
+// inline animation-play-state on the wrapper, but the animation lives on the
+// track and its two spans, so the wrapper never paused anything; the
+// prefers-reduced-motion block in v2-reader.css now stops all three.
 export default function ReaderTicker() {
-  const ref = useRef(null);
-  const mq = useRef(null);
-
-  useEffect(() => {
-    mq.current = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.current.matches) {
-      if (ref.current) ref.current.style.animationPlayState = "paused";
-    }
-    const onChange = () => {
-      if (ref.current) {
-        ref.current.style.animationPlayState = mq.current.matches ? "paused" : "running";
-      }
-    };
-    mq.current.addEventListener?.("change", onChange);
-    return () => mq.current.removeEventListener?.("change", onChange);
-  }, []);
-
   return (
-    <div className="rd-ticker" aria-hidden="true" ref={ref}>
+    <div className="rd-ticker" aria-hidden="true">
       <div className="rd-track">
         {[0, 1].map((k) => (
           <span key={k}>

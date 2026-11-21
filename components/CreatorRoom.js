@@ -330,7 +330,7 @@ export default function CreatorRoom() {
         <nav aria-label="Modes">
           <Link href="/">Reader mode</Link>
           <Link href="/links">Links</Link>
-          <Link href="/os/desktop">Old desktop</Link>
+          <Link href="/os/desktop">Desktop</Link>
         </nav>
       </header>
 

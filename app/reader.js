@@ -3,6 +3,7 @@ import Link from "next/link";
 import CopyButton from "../components/CopyButton";
 import Nav from "../components/Nav";
 import Numeral from "../components/Numeral";
+import FramesStrip from "../components/FramesStrip";
 import Reveal from "../components/Reveal";
 import PixelImg from "../components/PixelImg";
 import ReaderHero from "../components/ReaderHero";
@@ -265,14 +266,14 @@ export default function Profile() {
           <h2><Numeral>(06)</Numeral>Career<br />in frames</h2>
           <p className="rd-mono">Lionne → BOOM → Abaddon → Avante · drag or scroll sideways</p>
         </div>
-        <div className="rd-frames-strip">
+        <FramesStrip>
           {photos.map((p) => (
             <figure key={p.src} className="rd-shot" style={{ "--ar": p.ar }}>
               <PixelImg src={p.src} alt={p.alt} ar={p.ar} fill plain />
               <figcaption><b>{p.team}</b><span>{p.note}</span></figcaption>
             </figure>
           ))}
-        </div>
+        </FramesStrip>
       </section>
       <ReaderSectionScrub target="career" />
 
@@ -333,7 +334,7 @@ export default function Profile() {
 
       <footer className="rd-foot">
         <p>Gamer tag: {profile.tag} · reader mode of shycodelix OS</p>
-        <p><Link href="/links">Links</Link> · <Link href="/os">The lab</Link> · <a href={profile.source} target="_blank" rel="noreferrer">Konect</a></p>
+        <p><Link href="/links">Links</Link> · <Link href="/os">My room</Link> · <a href={profile.source} target="_blank" rel="noreferrer">Konect</a></p>
       </footer>
     </div>
   );

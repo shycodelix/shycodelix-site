@@ -987,7 +987,22 @@
   padding: 0.75rem 0.5rem 1.5rem;
   scrollbar-width: thin;
   align-items: center;
+  /* Grab-and-throw on a mouse; touch, wheel and trackpad keep their own
+     scrolling, which is why the pointer handler ignores touch pointers. */
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  overscroll-behavior-x: contain;
 }
+/* The snap comes off only while a drag is live: a mandatory snap retargets the
+   strip under the pointer. FramesStrip puts it back after the landing. */
+.rd-frames-strip.is-drag {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  scrollbar-width: none;
+}
+.rd-frames-strip.is-drag::-webkit-scrollbar { display: none; }
+.rd-frames-strip img { -webkit-user-drag: none; }
 .rd-shot {
   flex: none;
   height: min(58vh, 38rem);
@@ -1176,7 +1191,8 @@
     animation: none;
     transform: none;
   }
-  .rd-track { animation: none; transform: none; }
+  .rd-track,
+  .rd-track span { animation: none; transform: none; }
   .rd-ticker {
     background: var(--rd-paper);
     border-block-color: var(--rd-line);

@@ -134,7 +134,7 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
               type="button"
               className="lm-hit"
               onClick={onBoot}
-              aria-label="Boot shycodelix OS — opens the old desktop"
+              aria-label="Boot shycodelix OS — opens the desktop"
             />
             <span className="lm-boot-hint" aria-hidden="true">Click to boot shycodelix OS</span>
           </>
