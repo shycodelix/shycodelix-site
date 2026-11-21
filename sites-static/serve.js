@@ -20,14 +20,21 @@ const WINDOW_MS = 10 * 60 * 1000;
 const MAX_CALLS = 8;
 const hits = new Map();
 
+// The single source of truth for what the assistant may claim. SYSTEM renders
+// these into the prompt and offlineAnswer() answers from the same entries, so
+// the model's facts and the fallback's facts can't drift apart.
+const FACTS = [
+  "Based in Cebu, Philippines. Open to full-time or contract work.",
+  "Skills: video editing, team management, events production, social media management, marketing, esports operations.",
+  "Founder and CEO of Avante Esports (founded 2020, absorbed into The Lootbox Agency 2022-2023, rebooted August 2026).",
+  "Was assistant manager of BOOM Esports' Dota 2 team through The International 2022, and Operations Director at Abaddon Esports.",
+  "Contact: shycodelix@gmail.com.",
+];
+
 const SYSTEM = `You are the assistant built into "shycodelix OS", a retro desktop portfolio for a Filipino esports operations manager and video editor who goes by shycodelix.
 
 Facts you may use:
-- Based in Cebu, Philippines. Open to full-time or contract work.
-- Skills: video editing, team management, events production, social media management, marketing, esports operations.
-- Founder & CEO of Avante Esports (founded 2020, absorbed into The Lootbox Agency 2022-2023, rebooted August 2026).
-- Was assistant manager of BOOM Esports' Dota 2 team through The International 2022, and Operations Director at Abaddon Esports.
-- Contact: shycodelix@gmail.com.
+${FACTS.map((f) => "- " + f).join("\n")}
 
 Rules:
 - Never state a legal or full name. The person is only ever "shycodelix".
@@ -44,21 +51,24 @@ function offlineAnswer(question) {
   const has = (...words) => words.some((w) => t.includes(w));
 
   if (has("avante")) {
-    return "Avante Esports: founded 2020, absorbed into The Lootbox Agency 2022-2023, rebooted August 2026. shycodelix is founder and CEO.";
+    return FACTS[2];
   }
   if (has("boom", "dota", "international")) {
-    return "Assistant manager of BOOM Esports' Dota 2 team through The International 2022. Also Operations Director at Abaddon Esports.";
+    return FACTS[3];
   }
   if (has("contact", "email", "reach", "hire", "available", "availability")) {
     return "shycodelix@gmail.com. Open to full-time or contract work; sudo hire-me opens the mail client.";
   }
   if (has("where", "based", "location", "city", "country", "cebu")) {
-    return "Cebu, Philippines. Open to full-time or contract work.";
+    return FACTS[0];
   }
   if (has("skill", "do", "work", "job", "role", "edit", "manage", "service")) {
-    return "Video editing, team management, events production, social media management, marketing and esports operations.";
+    return FACTS[1].replace("Skills: ", "");
   }
-  return "The model is offline right now. On record: Cebu, Philippines; esports operations, video editing and events. Email shycodelix@gmail.com.";
+  return "The model is offline right now. On record: " +
+    FACTS[0].split(".")[0] + "; " +
+    FACTS[1].replace("Skills: ", "").split(",").slice(0, 2).join(",") +
+    " and events. Email " + FACTS[4].split(": ")[1] + ".";
 }
 
 function json(body, status = 200, headers = {}) {
@@ -122,12 +132,17 @@ async function shell(request) {
   const trace = [];
   let coolingDown = false;
 
-  // Both free lanes answer and then go briefly unavailable under load, so a
-  // second pass a moment later is worth more than a single hard failure.
+  // The free lanes answer and then briefly cool down under load. Try each
+  // lane once; if a lane is unreachable (non-200 or throws), don't retry the
+  // same faulting fetch on a second pass during an egress block — fall through
+  // to the offline facts answer, which needs no outbound request.
+  const unreachable = new Set();
   for (let pass = 0; pass < 2; pass++) {
     if (pass > 0) await new Promise((r) => setTimeout(r, 2000));
 
     for (const [endpoint, body] of lanes) {
+      if (unreachable.has(endpoint)) continue;
+
       try {
         const res = await fetch(endpoint, {
           method: "POST",
@@ -138,11 +153,17 @@ async function shell(request) {
 
         if (!res.ok) {
           if (res.status === 402 || res.status === 429) coolingDown = true;
-          if (debug) trace.push(`${endpoint} ${res.status} ${(await res.text()).slice(0, 200)}`);
+          unreachable.add(endpoint);
+          if (debug) {
+            let text = "";
+            try { text = (await res.clone().text()).slice(0, 200); } catch {}
+            trace.push(`${endpoint} ${res.status} ${text}`);
+          }
           continue;
         }
 
-        const data = await res.json();
+        let data;
+        try { data = await res.json(); } catch { data = {}; }
         const reply = String(data?.choices?.[0]?.message?.content || "")
           .replace(/```/g, "")
           .trim()
@@ -151,6 +172,7 @@ async function shell(request) {
         if (reply) return json({ reply });
         if (debug) trace.push(`${endpoint} empty`);
       } catch (e) {
+        unreachable.add(endpoint);
         if (debug) trace.push(`${endpoint} threw ${e?.name}: ${e?.message}`);
       }
     }
