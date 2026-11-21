@@ -32,7 +32,30 @@ export default function LenisGsap() {
     gsap.ticker.lagSmoothing(0);
     const offScroll = lenis.on("scroll", ScrollTrigger.update);
 
+    // Triggers measured before the webfonts land, or before the frames strip
+    // has its photos, end their ranges in the wrong place. Refresh once both
+    // settle. The frames photos are lazy, so a bounded fallback keeps the first
+    // refresh from waiting on images that only load when scrolled to.
+    let cancelled = false;
+    const refresh = () => {
+      if (!cancelled) ScrollTrigger.refresh();
+    };
+    const fonts = document.fonts?.ready ?? Promise.resolve();
+    const frameImages = Array.from(document.querySelectorAll("#career img")).map(
+      (img) =>
+        img.complete
+          ? Promise.resolve()
+          : new Promise((resolve) => {
+              img.addEventListener("load", resolve, { once: true });
+              img.addEventListener("error", resolve, { once: true });
+            })
+    );
+    Promise.all([fonts, ...frameImages]).then(refresh);
+    const fallback = setTimeout(refresh, 4000);
+
     return () => {
+      cancelled = true;
+      clearTimeout(fallback);
       offScroll();
       gsap.ticker.remove(tick);
       gsap.ticker.lagSmoothing(500, 33);
