@@ -16,7 +16,7 @@ import { onGsapTick, prefersReducedMotion } from "./gsapTick";
 export default function ReaderVelocityLayer({
   children,
   className = "",
-  skewX = 0.00018,     // per-unit horizontal velocity -> skew
+  skewX = 0.00018,     // per-unit vertical velocity -> skew
   driftY = 0.18,        // per-unit vertical velocity -> translate (px)
   maxSkew = 2.4,        // degrees clamp
   maxDrift = 7,         // px clamp
@@ -35,8 +35,9 @@ export default function ReaderVelocityLayer({
     // published velocity is the one the reader is scrolling at.
     const tick = () => {
       const v = window.__lenisVelocity || [0, 0];
-      // smooth toward current velocity
-      rx += (v[0] * skewX - rx) * 0.12;
+      // The page scrolls vertically, so the horizontal component is always 0:
+      // the skew has to lean on the vertical velocity or it never fires.
+      rx += (v[1] * skewX - rx) * 0.12;
       ry += (v[1] * driftY - ry) * 0.12;
 
       const skew = Math.max(-maxSkew, Math.min(maxSkew, rx * 120));
