@@ -241,8 +241,13 @@
 }
 .room-mug {
   position: absolute; z-index: 2; right: 21%; bottom: 28.5%; width: 2.2%; aspect-ratio: 1;
+  appearance: none; padding: 0; margin: 0; overflow: visible; cursor: pointer;
   background: #cfe0f7; border: 2px solid #0b0912; border-radius: 0 0 40% 40%;
 }
+/* The cup is ~19px wide on the stage; the pad around it keeps it clickable. */
+.room-mug::before { content: ""; position: absolute; inset: -80%; }
+.room-mug:hover { background: #e8f1ff; }
+.room-mug:focus-visible { outline: 2px solid var(--tang); outline-offset: 3px; }
 .room-mug::after {
   content: ""; position: absolute; left: -36%; top: 16%; width: 36%; height: 48%;
   border: 2px solid #0b0912; border-right: 0; border-radius: 40% 0 0 40%;

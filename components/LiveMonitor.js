@@ -41,6 +41,8 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
   const [game, setGame] = useState(false);
   const [reduce, setReduce] = useState(false);
   const moodTimer = useRef(0);
+  const holdUntil = useRef(0);
+  const pendingLaugh = useRef(false);
 
   useEffect(() => {
     setReduce(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -49,15 +51,25 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
   // One reaction at a time: hold the mood for its beat, then fall back to idle.
   // A single timer means a scene cut mid-laugh does not leave the laugh running.
   const react = useCallback((next, ms) => {
+    // A laugh holds the frame: the chat rail must not cut it in half.
+    if (next === "talk" && Date.now() < holdUntil.current) return;
+    if (next === "laugh") holdUntil.current = Date.now() + ms;
     setMood(next);
     clearTimeout(moodTimer.current);
     moodTimer.current = setTimeout(() => setMood("idle"), ms);
   }, []);
   useEffect(() => () => clearTimeout(moodTimer.current), []);
 
-  // The record in the aim trainer is the one thing worth a laugh.
+  // The trainer window covers the rig, so a record is queued and played when the
+  // window closes — a laugh nobody can see is not a reaction.
   const onAimResult = useCallback((r) => {
-    if (r.record) react("laugh", 3200);
+    if (r.record) pendingLaugh.current = true;
+  }, []);
+  const closeGame = useCallback(() => {
+    setGame(false);
+    if (!pendingLaugh.current) return;
+    pendingLaugh.current = false;
+    react("laugh", 3200);
   }, [react]);
 
   // Idle life: a blink between events. Everything else is a reaction.
@@ -174,7 +186,7 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
         <div className="lm-game" role="dialog" aria-label="aim_trainer.exe">
           <div className="lm-game-bar">
             <span>aim_trainer.exe</span>
-            <button type="button" aria-label="Close aim trainer" onClick={() => setGame(false)}>×</button>
+            <button type="button" aria-label="Close aim trainer" onClick={closeGame}>×</button>
           </div>
           <AimTrainer say={say} onResult={onAimResult} />
         </div>

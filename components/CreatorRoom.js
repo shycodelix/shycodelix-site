@@ -8,6 +8,25 @@ import { achievements, gear, avante, profile } from "../app/data";
 
 const mail = `mailto:${profile.email}?subject=Let%27s%20work%20together`;
 
+// Cebu is UTC+8 and the visitor's clock is the only clock we have, so convert.
+function cebuNow(now) {
+  return new Date(now.getTime() + (now.getTimezoneOffset() + 480) * 60000);
+}
+
+const WINDOW_NIGHT =
+  "The city is still up, the stream is still up, and the render bar is at 62%. This is the usual view when an edit is due in the morning.";
+
+// The window does not say 1am all day: its copy follows the clock.
+function windowCopy(now) {
+  if (!now) return { title: "Cebu, small hours", body: WINDOW_NIGHT };
+  const h = now.getHours();
+  const title = `Cebu, ${String(h).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+  if (h >= 22 || h < 5) return { title, body: WINDOW_NIGHT };
+  if (h < 12) return { title, body: "Morning light on the wall and the first render of the day already running. The city is awake before the stream is." };
+  if (h < 18) return { title, body: "Mid-afternoon sun through the blinds, fan on the desk, an edit half-done. This is the quiet shift." };
+  return { title, body: "Evening: dinner at the desk, the export running, the stream waiting on it. The city is loud and this room is not." };
+}
+
 function Rows({ rows }) {
   return (
     <dl className="room-rows">
@@ -16,7 +35,7 @@ function Rows({ rows }) {
   );
 }
 
-function Panel({ id, close, award }) {
+function Panel({ id, close, award, eggs }) {
   if (!id) {
     return (
       <div className="room-panel-in">
@@ -116,16 +135,32 @@ function Panel({ id, close, award }) {
   }
 
   if (id === "window") {
+    const w = windowCopy(eggs.clock);
     return (
       <div className="room-panel-in">
         <p className="room-kicker">Window</p>
-        <h2>Cebu, 1am</h2>
-        <p>
-          The city is still up, the stream is still up, and the render bar is at 62%. This is
-          the usual view when an edit is due in the morning.
-        </p>
-        <p className="room-note">Philippine time · UTC+8. Remote-friendly.</p>
+        <h2>{w.title}</h2>
+        <p>{w.body}</p>
+        <p className="room-note">Your clock, read as Cebu time · UTC+8. Remote-friendly.</p>
         <button type="button" className="room-cta" onClick={close}>Back to the room</button>
+      </div>
+    );
+  }
+
+  if (id === "mug") {
+    const n = eggs.coffee;
+    return (
+      <div className="room-panel-in">
+        <p className="room-kicker">Mug</p>
+        <h2>Cup {n}</h2>
+        <p>
+          {n === 1
+            ? "First one of the session. Enough to open the timeline, not enough to fix the audio."
+            : n < 4
+              ? `${n} cups in. The render bar has not moved. The stream is 40 minutes long and the edit is 12.`
+              : `${n} cups in. At this point the mug belongs on the hardware list.`}
+        </p>
+        <p className="room-note">Counted for this session only — it starts over when the tab closes.</p>
       </div>
     );
   }
@@ -153,6 +188,11 @@ function Panel({ id, close, award }) {
           Where the ten-hour edit sessions happen. Posture is a work in progress; the
           deliverable is not.
         </p>
+        {eggs.sat && (
+          <p className="room-note">
+            Ninety seconds in this chair without moving. Stand up, roll your shoulders, then come back to it.
+          </p>
+        )}
         <a className="room-cta" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF) &rarr;</a>
       </div>
     );
@@ -176,6 +216,10 @@ export default function CreatorRoom() {
   const [pick, setPick] = useState(null);
   // Which shelf row the monitor's lower third pointed at, if any.
   const [award, setAward] = useState(null);
+  // Easter eggs: coffees this session, the 90-second posture nudge, the clock.
+  const [coffee, setCoffee] = useState(0);
+  const [sat, setSat] = useState(false);
+  const [clock, setClock] = useState(null);
   const [toast, setToast] = useState("");
   const [entering, setEntering] = useState(false);
   // Under 40rem the absolutely-positioned stage cannot hold a phone, so the room
@@ -209,6 +253,27 @@ export default function CreatorRoom() {
     say.t = setTimeout(() => setToast(""), 3200);
   }, []);
 
+  // The coffee count lives for the tab, the posture note lands after ninety
+  // seconds, and the window reads the visitor's clock rather than a fixed hour.
+  useEffect(() => {
+    try {
+      const n = Number(sessionStorage.getItem("room-coffee") || 0);
+      if (n > 0) setCoffee(n);
+    } catch {}
+    setClock(cebuNow(new Date()));
+    const t = setTimeout(() => setSat(true), 90000);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (!coffee) return;
+    try { sessionStorage.setItem("room-coffee", String(coffee)); } catch {}
+  }, [coffee]);
+
+  useEffect(() => {
+    if (sat) say("90 seconds in the chair. Posture check — shoulders down, screen up.");
+  }, [sat, say]);
+
   // The monitor boots the classic desktop; the tower shows the hardware.
   const boot = () => router.push("/os/desktop");
 
@@ -219,6 +284,9 @@ export default function CreatorRoom() {
       return;
     }
     setAward(null);
+    if (id === "mug") setCoffee((n) => n + 1);
+    // An open tab should not still say 1am at noon.
+    if (id === "window") setClock(cebuNow(new Date()));
     setPick(id);
     if (quip) say(quip);
   };
@@ -246,6 +314,7 @@ export default function CreatorRoom() {
     ["shelf", "Shelf", "Four verified results."],
     ["poster", "Poster", "Avante Esports, rebooted 2026."],
     ["mic", "Mic", "Hot mic, on purpose."],
+    ["mug", "Mug", "Coffee count, this session."],
     ["window", "Window", "Cebu at 1am."],
     ["chair", "Chair", "Where the edits happen."],
     ["plant", "Plant", "Somehow still alive."],
@@ -313,7 +382,7 @@ export default function CreatorRoom() {
             <span className="chair-back" aria-hidden="true" />
             <span className="prop-tag">Chair</span>
           </button>
-          <span className="room-mug" aria-hidden="true" />
+          <button type="button" className="room-mug" aria-label="Mug — count a coffee for this session" onClick={() => open("mug")} />
           <span className="room-mat" aria-hidden="true" />
           <span className="room-keyboard" aria-hidden="true" />
           <span className="room-mouse" aria-hidden="true" />
@@ -321,7 +390,7 @@ export default function CreatorRoom() {
         </section>
 
         <aside className="room-panel" aria-live="polite">
-          <Panel id={pick} close={() => setPick(null)} award={award} />
+          <Panel id={pick} close={() => setPick(null)} award={award} eggs={{ coffee, sat, clock }} />
         </aside>
       </div>
       )}
@@ -344,7 +413,7 @@ export default function CreatorRoom() {
                 />
                 {pick === id && (
                   <div className="room-flat-panel">
-                    <Panel id={id} close={() => setPick(null)} award={award} />
+                    <Panel id={id} close={() => setPick(null)} award={award} eggs={{ coffee, sat, clock }} />
                   </div>
                 )}
               </div>
