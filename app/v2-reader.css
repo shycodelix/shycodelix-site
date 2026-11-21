@@ -614,6 +614,10 @@
 }
 @media (max-width: 48rem) {
   .rd-hero-accent { height: 0.55rem; }
+  /* One column here, so the portrait sat above the buttons and pushed the only
+     real call to action 84px under the first screen. The actions go first on a
+     phone; the portrait follows them. */
+  .rd-hero-portrait .rd-hero-actions { order: -1; }
 }
 
 /* ---------- Section system ---------- */
@@ -659,6 +663,17 @@
 }
 .rd-col {
   max-width: 62rem;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+/* Grid items default to a min-content floor. A child built with
+   `repeat(auto-fit, minmax(13rem, 1fr))` reports its whole max-content width
+   as that floor, so the setup grid and the Avante facts stood 2–3× wider than
+   their column and the page-wide `overflow-x: clip` sliced them off. */
+.rd-sec > *,
+.rd-col > *,
+.rd-avante-in > * {
+  min-width: 0;
 }
 .rd-facts {
   display: grid;
@@ -881,8 +896,16 @@
   max-width: 46rem;
   margin: 0 auto;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
   text-align: center;
+}
+/* These centre themselves with `margin: 0 auto`, and an auto margin opts a grid
+   item out of stretching: Chrome then sizes it to max-content, so the copy, the
+   facts and the setup grid hung past the column on a phone. An explicit width
+   keeps the centring and the stretch. */
+.rd-avante-in > :not(.rd-av-logo) {
+  width: 100%;
 }
 .rd-av-logo {
   width: min(76%, 18rem);
@@ -1055,9 +1078,11 @@
 
 .rd-setup {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
   gap: 1.4rem 2.4rem;
   max-width: 76rem;
   margin: 0 auto;
+  width: 100%;
 }
 .rd-setup > div {
   display: grid;
