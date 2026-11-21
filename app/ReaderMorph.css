@@ -1,13 +1,15 @@
 /* ReaderMorph — placed abstract mark: traveling-stroke draw cycle + drift */
 
+/* No mix-blend-mode, for the same reason as the rider: a blended layer over a
+   scrolling section is re-blended every frame. The mark sits on the Avante
+   panel, which is transparent over --rd-paper, so the themed ink still reads;
+   the warm surfaces lose multiply's deepening and get a little more alpha. */
 .rd-morph {
-  opacity: 0.9;
-  mix-blend-mode: multiply;
+  opacity: 0.85;
 }
 
-.page.rd[data-rd-theme="dark"] .rd-morph {
-  mix-blend-mode: screen;
-}
+.page.rd[data-rd-theme="light"] .rd-morph { opacity: 0.95; }
+.page.rd[data-rd-theme="sepia"] .rd-morph { opacity: 0.92; }
 
 /* Sit the morph in open negative space: full bleed of its parent, behind
    everything else in that parent. The parent (e.g. .rd-avante) provides the

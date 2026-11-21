@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { onGsapTick } from "./gsapTick";
 
 export default function Cursor() {
   const dot = useRef(null);
@@ -11,7 +12,7 @@ export default function Cursor() {
     document.documentElement.classList.add("has-cursor");
     window.__pointerX = -100;
     window.__pointerY = -100;
-    let x = -100, y = -100, rx = -100, ry = -100, raf;
+    let x = -100, y = -100, rx = -100, ry = -100;
     const move = (e) => {
       x = e.clientX; y = e.clientY;
       window.__pointerX = x;
@@ -19,16 +20,17 @@ export default function Cursor() {
       dot.current.style.transform = `translate(${x}px,${y}px)`;
       ring.current.classList.toggle("big", !!e.target.closest?.("a,button,summary,[data-cursor]"));
     };
-    const loop = () => {
+    // The ring eases on GSAP's ticker — the one clock Lenis, the scroll scrub
+    // and every reader tween already share — instead of a second rAF loop
+    // running beside it.
+    const stop = onGsapTick(() => {
       rx += (x - rx) * 0.16; ry += (y - ry) * 0.16;
       ring.current.style.transform = `translate(${rx}px,${ry}px)`;
-      raf = requestAnimationFrame(loop);
-    };
+    });
     window.addEventListener("mousemove", move);
-    loop();
     return () => {
       window.removeEventListener("mousemove", move);
-      cancelAnimationFrame(raf);
+      stop();
       document.documentElement.classList.remove("has-cursor");
       window.__pointerX = -100;
       window.__pointerY = -100;

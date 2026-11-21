@@ -26,14 +26,20 @@
 
 /* On the hero the rider sits behind the portrait/action stack so it never
    occludes the headline. On the reading column it lives behind the epigraph
-   only. We keep it fully behind text with a low alpha and a soft halo. */
+   only. We keep it fully behind text with a low alpha and a soft halo.
+
+   No mix-blend-mode. The rider is a full-bleed layer that moves every frame,
+   and a blended layer cannot be cached against a scrolling backdrop, so Chrome
+   re-blended the whole hero on every scroll frame — profiling put nearly every
+   dropped frame in the reader on these two marks. Opacity now carries what the
+   blend did: screen lit the ink up on the dark surface, multiply deepened it on
+   the warm ones, so dark takes less alpha than light and sepia. */
 .rd-rider:not([hidden]) {
-  opacity: 0.85;
-  mix-blend-mode: multiply;
+  opacity: 0.7;
 }
 
-.page.rd[data-rd-theme="dark"] .rd-rider { mix-blend-mode: screen; }
-.page.rd[data-rd-theme="sepia"] .rd-rider { mix-blend-mode: multiply; }
+.page.rd[data-rd-theme="light"] .rd-rider { opacity: 0.9; }
+.page.rd[data-rd-theme="sepia"] .rd-rider { opacity: 0.88; }
 
 /* Keep the rider inside the hero frame so it never leaks to the section
    column. The hero is the one place we want an "always-on" abstract object;
@@ -85,10 +91,9 @@
 /* ---------- Reduced motion: the rider freezes; header loops swap to stills ---------- */
 @media (prefers-reduced-motion: reduce) {
   .rd-rider {
-    opacity: 0.4;
+    opacity: 0.55;
     transform: translate3d(0, 0, 0) !important;
     will-change: auto;
-    mix-blend-mode: normal;
   }
   .rd-loop-badge {
     transform: none !important;
