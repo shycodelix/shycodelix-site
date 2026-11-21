@@ -139,6 +139,7 @@ export default function Profile() {
           <p className="rd-note">{lookingFor.note}</p>
         </div>
       </section>
+      <ReaderSectionScrub target="summary" />
 
       <section id="work" className="rd-sec">
         <h2><Numeral>(02)</Numeral>Selected<br />work<ReaderLiveLoop><HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={120} height={34} className="rd-loop-badge" /></ReaderLiveLoop></h2>
@@ -203,6 +204,7 @@ export default function Profile() {
           </ul>
         </div>
       </section>
+      <ReaderSectionScrub target="verified" />
 
       <section id="experience" className="rd-sec">
         <h2><Numeral>(04)</Numeral>Experience</h2>
@@ -214,6 +216,7 @@ export default function Profile() {
           </details>
         </div>
       </section>
+      <ReaderSectionScrub target="experience" />
 
       <ReaderInterlude
         src="/photos/archive/team-boom-01.webp"
@@ -235,6 +238,7 @@ export default function Profile() {
           </div>
         </section>
       </ReaderScrollChoreo>
+      <ReaderSectionScrub target="skills" />
 
       <ReaderInterlude
         src="/kit/scene-brb.webp"
@@ -305,6 +309,7 @@ export default function Profile() {
           <p className="rd-note">Plays: {games.join(" · ")}</p>
         </div>
       </section>
+      <ReaderSectionScrub target="setup" />
 
       <ReaderInterlude
         src="/kit/scene-ending.webp"
