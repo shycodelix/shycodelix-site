@@ -129,6 +129,39 @@ function lanesFor(env, messages) {
   return lanes;
 }
 
+// One request to one lane. Returns the reply, or the failure worth tracing and
+// whether it is transient enough to be worth a second attempt.
+async function ask(lane) {
+  try {
+    const res = await fetch(lane.endpoint, {
+      method: "POST",
+      headers: lane.headers,
+      body: JSON.stringify(lane.body),
+      signal: AbortSignal.timeout(18000),
+    });
+
+    if (!res.ok) {
+      let text = "";
+      try { text = (await res.text()).slice(0, 200); } catch {}
+      return {
+        error: `${lane.endpoint} ${res.status} ${text}`,
+        retry: res.status === 429 || res.status >= 500,
+      };
+    }
+
+    let data;
+    try { data = await res.json(); } catch { data = {}; }
+    const reply = String(data?.choices?.[0]?.message?.content || "")
+      .replace(/```/g, "")
+      .trim()
+      .slice(0, 700);
+
+    return reply ? { reply } : { error: `${lane.endpoint} empty`, retry: false };
+  } catch (e) {
+    return { error: `${lane.endpoint} threw ${e?.name}: ${e?.message}`, retry: false };
+  }
+}
+
 async function shell(request, env) {
   const ip =
     request.headers.get("cf-connecting-ip") ||
@@ -156,69 +189,25 @@ async function shell(request, env) {
   ];
 
   const lanes = lanesFor(env, messages);
-
   const debug = request.headers.get("x-shell-debug") === "1";
   const trace = [];
-  let coolingDown = false;
 
-  // The free lanes answer and then briefly cool down under load. Try each
-  // lane once; if a lane is unreachable (non-200 or throws), don't retry the
-  // same faulting fetch on a second pass during an egress block — fall through
-  // to the offline facts answer, which needs no outbound request.
-  const unreachable = new Set();
-  for (let pass = 0; pass < 2; pass++) {
-    if (pass > 0) await new Promise((r) => setTimeout(r, 2000));
-
-    for (const lane of lanes) {
-      const { endpoint } = lane;
-      if (unreachable.has(endpoint)) continue;
-
-      try {
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: lane.headers,
-          body: JSON.stringify(lane.body),
-          signal: AbortSignal.timeout(18000),
-        });
-
-        if (!res.ok) {
-          if (!lane.keyed && (res.status === 402 || res.status === 429)) coolingDown = true;
-          // A keyed lane's 429/5xx is worth one retry on the second pass; its
-          // 401/403 is not, and a free lane's refusal never is.
-          if (!lane.keyed || res.status === 401 || res.status === 403) unreachable.add(endpoint);
-          if (debug) {
-            let text = "";
-            try { text = (await res.clone().text()).slice(0, 200); } catch {}
-            trace.push(`${endpoint} ${res.status} ${text}`);
-          }
-          continue;
-        }
-
-        let data;
-        try { data = await res.json(); } catch { data = {}; }
-        const reply = String(data?.choices?.[0]?.message?.content || "")
-          .replace(/```/g, "")
-          .trim()
-          .slice(0, 700);
-
-        if (reply) {
-          if (debug) trace.push(`${endpoint} ok`);
-          return json({ reply, ...(debug ? { trace } : {}) });
-        }
-        if (debug) trace.push(`${endpoint} empty`);
-      } catch (e) {
-        unreachable.add(endpoint);
-        if (debug) trace.push(`${endpoint} threw ${e?.name}: ${e?.message}`);
+  for (const lane of lanes) {
+    // A keyed lane's throttle or 5xx is worth one more try; a free lane's isn't.
+    for (let attempt = 0; attempt < (lane.keyed ? 2 : 1); attempt++) {
+      if (attempt) await new Promise((r) => setTimeout(r, 1500));
+      const out = await ask(lane);
+      if (out.reply) {
+        if (debug) trace.push(`${lane.endpoint} ok`);
+        return json({ reply: out.reply, ...(debug ? { trace } : {}) });
       }
+      if (debug) trace.push(out.error);
+      if (!out.retry) break;
     }
   }
 
-  if (coolingDown && debug) trace.push("free lane cooling down");
-
-  return json({
-    reply: offlineAnswer(question),
-    ...(debug ? { trace } : {}),
-  });
+  // Nothing answered: fall back to the facts, which need no network at all.
+  return json({ reply: offlineAnswer(question), ...(debug ? { trace } : {}) });
 }
 
 function assetPathFor(pathname) {
