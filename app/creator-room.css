@@ -440,12 +440,21 @@
   height: auto;
   filter: drop-shadow(0 0 14px rgba(255, 122, 26, 0.25));
 }
+/* A button: clicking the on-screen result opens the shelf on that row. It
+   sits above `.lm-hit`, whose full-screen box is the boot target. */
 .lm-lower {
-  position: absolute; left: 0; bottom: 0; z-index: 2;
+  position: absolute; left: 0; bottom: 0; z-index: 6;
+  appearance: none;
   display: grid; gap: 0.12rem;
   max-width: 66%;
+  margin: 0;
+  border: 0;
   padding: 1.5rem 0.6rem 0.45rem;
   background: linear-gradient(transparent, rgba(10, 8, 18, 0.92));
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
   font-size: clamp(0.42rem, 0.95vw, 0.66rem);
   line-height: 1.25;
 }
@@ -464,6 +473,13 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+.lm-lower:hover span,
+.lm-lower:focus-visible span {
+  text-decoration: underline;
+  text-decoration-color: var(--tang);
+  text-underline-offset: 2px;
+}
+.lm-lower:focus-visible { outline: 2px solid var(--tang); outline-offset: -2px; }
 .lm-chat {
   position: absolute; top: 13%; right: 2.5%; z-index: 2;
   width: 33%;
@@ -616,6 +632,12 @@
 .room-honest { margin: 0; padding-left: 1rem; display: grid; gap: 0.2rem; font-size: 0.78rem; color: #d7d1e6; }
 .room-wins { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.5rem; }
 .room-wins li { display: grid; gap: 0.1rem; font-size: 0.78rem; border-top: 1px solid var(--room-line); padding-top: 0.4rem; }
+.room-wins li.is-award {
+  border-top-color: var(--tang);
+  box-shadow: inset 2px 0 0 var(--tang);
+  background: rgba(255, 122, 26, 0.08);
+  padding: 0.4rem 0.4rem 0.35rem 0.5rem;
+}
 .room-wins b { color: var(--tang); font-family: var(--font-micro), monospace; font-size: 0.64rem; text-transform: uppercase; }
 .room-wins a { color: var(--room-bone); text-decoration: none; border-bottom: 1px solid transparent; }
 .room-wins a:hover { border-color: var(--tang); }

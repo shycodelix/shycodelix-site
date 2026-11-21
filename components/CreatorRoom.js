@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import LiveMonitor from "./LiveMonitor";
 import RigExploded from "./RigExploded";
 import { achievements, gear, avante, profile } from "../app/data";
@@ -16,7 +16,7 @@ function Rows({ rows }) {
   );
 }
 
-function Panel({ id, close }) {
+function Panel({ id, close, award }) {
   if (!id) {
     return (
       <div className="room-panel-in">
@@ -74,14 +74,15 @@ function Panel({ id, close }) {
         <h2>The record</h2>
         <p>Four results that are on somebody else&rsquo;s website, not just mine.</p>
         <ul className="room-wins">
-          {achievements.map((w) => (
-            <li key={w.event}>
+          {achievements.map((w, i) => (
+            <li key={w.event} className={i === award ? "is-award" : undefined}>
               <b>{w.place}</b>
               <a href={w.href} target="_blank" rel="noreferrer">{w.event}</a>
               <small>{w.team} · {w.role} · {w.date}</small>
             </li>
           ))}
         </ul>
+        {award != null && <p className="room-note">Highlighted is the result the monitor was showing.</p>}
         <Link className="room-cta" href="/#verified">Reader mode: verified record &rarr;</Link>
       </div>
     );
@@ -173,6 +174,8 @@ function PropCard({ label, hint, pressed, expanded, onClick }) {
 
 export default function CreatorRoom() {
   const [pick, setPick] = useState(null);
+  // Which shelf row the monitor's lower third pointed at, if any.
+  const [award, setAward] = useState(null);
   const [toast, setToast] = useState("");
   const [entering, setEntering] = useState(false);
   // Under 40rem the absolutely-positioned stage cannot hold a phone, so the room
@@ -181,6 +184,8 @@ export default function CreatorRoom() {
   // rendering a second, hidden LiveMonitor with its own timers.
   const [flat, setFlat] = useState(false);
   const router = useRouter();
+  const shelfRef = useRef(null);
+  const fromMonitor = useRef(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 40rem)");
@@ -213,9 +218,26 @@ export default function CreatorRoom() {
       boot();
       return;
     }
+    setAward(null);
     setPick(id);
     if (quip) say(quip);
   };
+
+  // The lower third is a real button on the monitor: it opens the shelf on the
+  // result it was showing.
+  const openShelf = useCallback((index) => {
+    setAward(index);
+    setPick("shelf");
+    fromMonitor.current = flat;
+  }, [flat]);
+
+  // On a phone the shelf card sits well below the monitor, so bring its panel
+  // into view — only when the monitor sent you there, not when you tapped it.
+  useEffect(() => {
+    if (!flat || pick !== "shelf" || !fromMonitor.current) return;
+    fromMonitor.current = false;
+    shelfRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+  }, [flat, pick]);
 
   const props = [
     ["monitor", "Monitor", "The live stream, the character rig and the mini-game."],
@@ -274,7 +296,7 @@ export default function CreatorRoom() {
           </button>
 
           <div className="monitor-wrap">
-            <LiveMonitor say={say} onBoot={boot} />
+            <LiveMonitor say={say} onBoot={boot} onShelf={openShelf} />
             <Link className="monitor-boot" href="/os/desktop">Boot shycodelix OS</Link>
             <span className="monitor-neck" aria-hidden="true" />
           </div>
@@ -299,7 +321,7 @@ export default function CreatorRoom() {
         </section>
 
         <aside className="room-panel" aria-live="polite">
-          <Panel id={pick} close={() => setPick(null)} />
+          <Panel id={pick} close={() => setPick(null)} award={award} />
         </aside>
       </div>
       )}
@@ -307,12 +329,12 @@ export default function CreatorRoom() {
       {flat ? (
         <div className="room-flat">
           <div className="monitor-wrap room-flat-monitor">
-            <LiveMonitor say={say} onBoot={boot} />
+            <LiveMonitor say={say} onBoot={boot} onShelf={openShelf} />
           </div>
           <Link className="room-flat-boot" href="/os/desktop">Boot shycodelix OS</Link>
           <div className="room-flat-list" role="group" aria-label="Room props">
             {props.map(([id, label, hint]) => (
-              <div key={id} className="room-flat-item">
+              <div key={id} className="room-flat-item" ref={id === "shelf" ? shelfRef : undefined}>
                 <PropCard
                   label={label}
                   hint={hint}
@@ -322,7 +344,7 @@ export default function CreatorRoom() {
                 />
                 {pick === id && (
                   <div className="room-flat-panel">
-                    <Panel id={id} close={() => setPick(null)} />
+                    <Panel id={id} close={() => setPick(null)} award={award} />
                   </div>
                 )}
               </div>

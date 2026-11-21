@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import AimTrainer from "./AimTrainer";
 import { achievements } from "../app/data";
 
@@ -9,14 +9,15 @@ const SCENES = [
   { id: "ending", src: "/kit/scene-ending.webp", label: "Ending" },
 ];
 
-// The character rig: the four webp frames already in public/kit, paced like speech.
-const FRAMES = [
-  { src: "/kit/idle.webp", ms: 2400 },
-  { src: "/kit/talk.webp", ms: 800 },
-  { src: "/kit/blink.webp", ms: 180 },
-  { src: "/kit/talk.webp", ms: 1000 },
-  { src: "/kit/laugh.webp", ms: 620 },
-];
+// The character rig: the four webp frames already in public/kit. The room drives
+// them — a scene change or a new chat line makes it talk, a record in the aim
+// trainer makes it laugh — and blinking is the only motion it keeps for itself.
+const FRAMES = {
+  idle: "/kit/idle.webp",
+  talk: "/kit/talk.webp",
+  blink: "/kit/blink.webp",
+  laugh: "/kit/laugh.webp",
+};
 
 const CHAT = [
   ["pixelpanda", "the lower third is doing numbers"],
@@ -30,25 +31,46 @@ const CHAT = [
   ["gg_no_re", "aim trainer high score attempt"],
 ];
 
-export default function LiveMonitor({ say, onBoot }) {
+export default function LiveMonitor({ say, onBoot, onShelf }) {
   const [scene, setScene] = useState(0);
-  const [frame, setFrame] = useState(0);
+  const [mood, setMood] = useState("idle");
+  const [blink, setBlink] = useState(false);
   const [chat, setChat] = useState(CHAT.slice(0, 4));
   const [next, setNext] = useState(4);
   const [lower, setLower] = useState(0);
   const [game, setGame] = useState(false);
   const [reduce, setReduce] = useState(false);
+  const moodTimer = useRef(0);
 
   useEffect(() => {
     setReduce(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }, []);
 
-  // Character rig frames: each frame carries its own dwell time.
+  // One reaction at a time: hold the mood for its beat, then fall back to idle.
+  // A single timer means a scene cut mid-laugh does not leave the laugh running.
+  const react = useCallback((next, ms) => {
+    setMood(next);
+    clearTimeout(moodTimer.current);
+    moodTimer.current = setTimeout(() => setMood("idle"), ms);
+  }, []);
+  useEffect(() => () => clearTimeout(moodTimer.current), []);
+
+  // The record in the aim trainer is the one thing worth a laugh.
+  const onAimResult = useCallback((r) => {
+    if (r.record) react("laugh", 3200);
+  }, [react]);
+
+  // Idle life: a blink between events. Everything else is a reaction.
   useEffect(() => {
-    if (reduce) return;
-    const t = setTimeout(() => setFrame((i) => (i + 1) % FRAMES.length), FRAMES[frame].ms);
+    if (reduce || blink) return;
+    const t = setTimeout(() => setBlink(true), 3800);
     return () => clearTimeout(t);
-  }, [frame, reduce]);
+  }, [blink, reduce]);
+  useEffect(() => {
+    if (!blink) return;
+    const t = setTimeout(() => setBlink(false), 180);
+    return () => clearTimeout(t);
+  }, [blink]);
 
   // Scene drive: rotates on its own, but a manual pick holds for a beat.
   useEffect(() => {
@@ -57,15 +79,23 @@ export default function LiveMonitor({ say, onBoot }) {
     return () => clearTimeout(t);
   }, [scene, reduce]);
 
+  // Every cut gets a line of commentary out of the rig.
+  useEffect(() => {
+    if (reduce) return;
+    react("talk", 1600);
+  }, [scene, reduce, react]);
+
   // Canned chat rail.
   useEffect(() => {
     if (reduce) return;
     const t = setTimeout(() => {
       setChat((c) => [...c.slice(-5), CHAT[next % CHAT.length]]);
       setNext((n) => n + 1);
+      // The new line is being read out; between lines the rig idles again.
+      react("talk", 1200);
     }, 3600);
     return () => clearTimeout(t);
-  }, [next, reduce]);
+  }, [next, reduce, react]);
 
   // Lower thirds: the real record, rotating like a broadcast package would.
   useEffect(() => {
@@ -81,8 +111,8 @@ export default function LiveMonitor({ say, onBoot }) {
       <div
         className="lm-screen"
         style={{ backgroundImage: `url(${SCENES[scene].src})` }}
-        role="img"
-        aria-label={`Stream scene: ${SCENES[scene].label}, ${a.event}`}
+        role="group"
+        aria-label={`Live stream monitor: ${SCENES[scene].label}`}
       >
         <span className="lm-air">ON AIR</span>
         <span className="lm-count">live · 1.2k</span>
@@ -99,17 +129,22 @@ export default function LiveMonitor({ say, onBoot }) {
         )}
         <img
           className="lm-cam"
-          src={FRAMES[reduce ? 0 : frame].src}
+          src={FRAMES[reduce ? "idle" : blink ? "blink" : mood]}
           alt="The PNGTuber model, live on the stream"
           width={640}
           height={732}
           decoding="async"
         />
-        <div className="lm-lower">
+        <button
+          type="button"
+          className="lm-lower"
+          onClick={() => onShelf?.(lower)}
+          aria-label={`Shelf — ${a.place}, ${a.event}`}
+        >
           <b>{a.place}</b>
           <span>{a.event}</span>
           <small>{a.team} · {a.date}</small>
-        </div>
+        </button>
         <ul className="lm-chat" aria-label="Canned chat">
           {chat.map(([who, msg], i) => (
             <li key={`${who}-${msg}-${i}`}><b>{who}</b> {msg}</li>
@@ -141,7 +176,7 @@ export default function LiveMonitor({ say, onBoot }) {
             <span>aim_trainer.exe</span>
             <button type="button" aria-label="Close aim trainer" onClick={() => setGame(false)}>×</button>
           </div>
-          <AimTrainer say={say} />
+          <AimTrainer say={say} onResult={onAimResult} />
         </div>
       )}
     </div>

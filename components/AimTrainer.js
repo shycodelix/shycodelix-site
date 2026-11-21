@@ -7,7 +7,7 @@ const CELLS = COLS * ROWS;
 const ROUND = 30;
 
 /** Thirty seconds, one crosshair. Click the lit cell; every miss costs the run. */
-export default function AimTrainer({ say }) {
+export default function AimTrainer({ say, onResult }) {
   const [running, setRunning] = useState(false);
   const [left, setLeft] = useState(ROUND);
   const [target, setTarget] = useState(0);
@@ -59,7 +59,9 @@ export default function AimTrainer({ say }) {
     const acc = total ? Math.round((hits / total) * 100) : 0;
     const score = Math.max(0, hits * 10 - misses * 4) + Math.round(acc / 2);
     setDone({ score, acc, hits, misses });
-    if (score > bestRef.current) {
+    const record = score > bestRef.current;
+    onResult?.({ score, acc, hits, misses, record });
+    if (record) {
       bestRef.current = score;
       setBest(score);
       try { localStorage.setItem("aim-best", String(score)); } catch {}
@@ -67,7 +69,7 @@ export default function AimTrainer({ say }) {
     } else {
       say?.(`${hits} hits, ${misses} misses, ${acc}% accuracy.`);
     }
-  }, [left, running, hits, misses, say]);
+  }, [left, running, hits, misses, say, onResult]);
 
   const fire = useCallback((i) => {
     if (!running) return;
