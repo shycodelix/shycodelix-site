@@ -210,16 +210,26 @@ async function shell(request, env) {
   return json({ reply: offlineAnswer(question), ...(debug ? { trace } : {}) });
 }
 
+// Next's generated metadata images sit on disk with no extension
+// (/work/ti11/opengraph-image). They are PNG bytes, not routes, so they must
+// skip the .html rewrite below and go out with an image content type or the
+// crawlers that fetch them see a 404 or an octet-stream.
+function isMetaImage(pathname) {
+  return /(?:^|\/)(opengraph-image|twitter-image)$/.test(pathname);
+}
+
 function assetPathFor(pathname) {
   if (pathname === "/") return "/index.html";
   if (pathname.endsWith("/")) return pathname + "index.html";
+  if (isMetaImage(pathname)) return pathname;
   // Extensionless route: the export writes /os -> os.html, /os/desktop -> os/desktop.html
   if (!pathname.split("/").pop().includes(".")) return pathname + ".html";
   return pathname;
 }
 
-function withCache(res, pathname) {
+function withCache(res, pathname, contentType) {
   const headers = new Headers(res.headers);
+  if (contentType) headers.set("content-type", contentType);
   const isHtml =
     (headers.get("content-type") || "").startsWith("text/html") ||
     pathname.endsWith(".html");
@@ -248,7 +258,9 @@ export default {
     }
 
     const res = await fetchAsset(env, request, assetPathFor(pathname));
-    if (res.ok) return withCache(res, pathname);
+    if (res.ok) {
+      return withCache(res, pathname, isMetaImage(pathname) ? "image/png" : undefined);
+    }
 
     // Directory-style trailing slash fallback (e.g. /os/).
     if (!pathname.endsWith("/")) {

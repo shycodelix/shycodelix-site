@@ -8,19 +8,23 @@ const poster = (id) => `/thumbs/${id}.webp`;
    card opens the Drive preview in a modal; Escape or the backdrop closes it and
    focus goes back to the card that opened it. Nothing is bundled into the repo. */
 export default function ClipGallery({ clips, label = "Clips" }) {
-  const [open, setOpen] = useState(null);
+  // Tracked by index so ArrowLeft/ArrowRight can step through the strip.
+  // -1 means closed (null would make a 0 index render as "no dialog").
+  const [index, setIndex] = useState(-1);
+  const open = index >= 0 ? clips[index] : null;
+  const isOpen = index >= 0;
   const lastTrigger = useRef(null);
   const closeRef = useRef(null);
   const boxRef = useRef(null);
 
   const close = useCallback(() => {
-    setOpen(null);
+    setIndex(-1);
     const t = lastTrigger.current;
     if (t && typeof t.focus === "function") t.focus();
   }, []);
 
   useEffect(() => {
-    if (!open) return;
+    if (!isOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     closeRef.current?.focus();
@@ -37,6 +41,15 @@ export default function ClipGallery({ clips, label = "Clips" }) {
       if (e.key === "Escape") {
         e.preventDefault();
         close();
+        return;
+      }
+      // Arrows step through the strip without moving focus, so the single-stop
+      // trap is untouched: the close button keeps focus and Escape keeps working.
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        if (!isOpen) return;
+        e.preventDefault();
+        const dir = e.key === "ArrowRight" ? 1 : -1;
+        setIndex((i) => (i < 0 ? i : (i + dir + clips.length) % clips.length));
         return;
       }
       // Tab cannot leave the dialog: it wraps from the last stop back to the
@@ -69,7 +82,7 @@ export default function ClipGallery({ clips, label = "Clips" }) {
       document.removeEventListener("keydown", onKey, true);
       document.body.style.overflow = prev;
     };
-  }, [open, close]);
+  }, [isOpen, close, clips.length]);
 
   if (!clips.length) return null;
 
@@ -90,7 +103,7 @@ export default function ClipGallery({ clips, label = "Clips" }) {
               className="cs-clip"
               onClick={(e) => {
                 lastTrigger.current = e.currentTarget;
-                setOpen(c);
+                setIndex(i);
               }}
               aria-label={`Play ${c.title}, ${c.month}`}
             >

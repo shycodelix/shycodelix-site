@@ -11,7 +11,11 @@ const body = DM_Sans({ subsets: ["latin"], variable: "--font-body", display: "sw
 const grotesk = localFont({ src: "./fonts/outfit-latin.woff2", weight: "300 600", variable: "--font-grotesk", display: "swap" });
 
 const description = "Esports operations, content creation and customer experience. Philippines.";
-const url = "https://shycodelix.vercel.app";
+// The origin that actually serves this build. The vercel.app host is an older
+// deployment: /work/* is a 404 there, so building canonical and og:image URLs
+// from it points every share card at a missing file. Change this one line when
+// the site moves to a custom domain.
+const url = "https://shycodelix-site-reader-motion-review-4e4c6q.freebuff.site";
 
 export const metadata = {
   metadataBase: new URL(url),
