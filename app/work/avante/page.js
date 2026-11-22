@@ -16,11 +16,20 @@ export const metadata = {
     siteName: "shycodelix",
     type: "article",
     locale: "en_PH",
+    images: [
+      {
+        url: "/og/avante.png",
+        width: 1200,
+        height: 630,
+        alt: "Avante, twice — founded in Cebu in 2020, absorbed into The Lootbox Agency, rebooted in 2026",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${title} — case study`,
     description,
+    images: ["/og/avante.png"],
   },
 };
 

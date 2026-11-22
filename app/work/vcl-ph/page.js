@@ -16,11 +16,20 @@ export const metadata = {
     siteName: "shycodelix",
     type: "article",
     locale: "en_PH",
+    images: [
+      {
+        url: "/og/vcl-ph.png",
+        width: 1200,
+        height: 630,
+        alt: "VCL Philippines case study — Abaddon Esports, operations director, first place Split 2 Open Qualifier",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${title} — case study`,
     description,
+    images: ["/og/vcl-ph.png"],
   },
 };
 

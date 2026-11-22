@@ -11,11 +11,12 @@ const body = DM_Sans({ subsets: ["latin"], variable: "--font-body", display: "sw
 const grotesk = localFont({ src: "./fonts/outfit-latin.woff2", weight: "300 600", variable: "--font-grotesk", display: "swap" });
 
 const description = "Esports operations, content creation and customer experience. Philippines.";
-// The origin that actually serves this build. The vercel.app host is an older
-// deployment: /work/* is a 404 there, so building canonical and og:image URLs
-// from it points every share card at a missing file. Change this one line when
-// the site moves to a custom domain.
-const url = "https://shycodelix-site-reader-motion-review-4e4c6q.freebuff.site";
+// The canonical host: the Vercel project's production alias, which the site
+// owner controls. Canonical and og:image URLs are built from it, so it has to
+// be serving the same build as the host the page was opened on. Until the
+// reader/v2-trimmed work is on main, that alias is still the older build and
+// /work/* (and /og/*) 404 there. Change this one line when a real domain is set.
+const url = "https://shycodelix.vercel.app";
 
 export const metadata = {
   metadataBase: new URL(url),
