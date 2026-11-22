@@ -75,6 +75,7 @@ export const achievements = [
     role: "Operations Director",
     note: "First team to qualify for the regular season.",
     href: "https://www.vlr.gg/event/1505/challengers-league-philippines-split-2/open-qualifier",
+    slug: "vcl-ph",
   },
   {
     place: "9–12th",
@@ -84,6 +85,7 @@ export const achievements = [
     role: "Assistant Manager",
     note: "Ran squad logistics, visas and travel for the SEA champions through TI11 in Singapore. $378,612 result.",
     href: "https://liquipedia.net/dota2/The_International/2022",
+    slug: "ti11",
   },
   {
     place: "6th",
@@ -93,6 +95,7 @@ export const achievements = [
     role: "Operations Director",
     note: "Qualified for playoffs, then rebuilt the roster for the next split.",
     href: "https://www.vlr.gg/event/1442/challengers-league-philippines-split-1/playoffs",
+    slug: "vcl-ph",
   },
   {
     place: "1st",

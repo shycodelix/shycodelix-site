@@ -156,6 +156,9 @@ export default function Profile() {
                 <a href={a.href} target="_blank" rel="noreferrer">{a.event} <span aria-hidden="true">↗</span></a>
                 <p className="rd-mono">{a.role} · {a.team} · {a.date}</p>
                 <p className="rd-ach-note">{a.note}</p>
+                {a.slug && (
+                  <Link className="rd-ach-case" href={`/work/${a.slug}`}>Case study <span aria-hidden="true">→</span></Link>
+                )}
               </div>
             </Reveal>
           ))}
@@ -265,6 +268,7 @@ export default function Profile() {
           <p className="rd-av-credit">{avante.credit.note}</p>
           <div className="rd-av-links">
             <a href={avanteMail}>Work with Avante</a>
+            <Link href="/work/avante">Case study</Link>
             {avante.links.map((l) => <a key={l.href} href={l.href} target="_blank" rel="noreferrer">{l.label === "Discord" ? "Discord" : l.label}</a>)}
           </div>
         </div>

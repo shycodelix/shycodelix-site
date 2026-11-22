@@ -1416,3 +1416,18 @@ body,
 @media (prefers-reduced-motion: reduce) {
   .rd-inter-in { will-change: auto; }
 }
+
+/* Case-study link on an achievement row (/work/... ) */
+.rd-ach-case {
+  display: inline-block;
+  margin-top: 0.45rem;
+  font-family: var(--font-micro), monospace;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rd-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rd-accent);
+  padding-bottom: 1px;
+}
+.rd-ach-case:hover { color: var(--rd-accent); }
