@@ -241,7 +241,10 @@ function loadLayout() {
     const vw = window.innerWidth, vh = window.innerHeight;
     const fit = (v, span) => Math.max(0, Math.min(span, Number(v) || 0));
     const wins = (Array.isArray(saved) ? saved : [])
-      .filter((w) => DEFS[w.id] && w.id !== "error") // a "task failed successfully" pop-up is not decor
+      // A "task failed successfully" pop-up is not decor, and the welcome note is
+      // a first-run artefact — restoring it would reopen a stale greeting forever
+      // while the code promises it appears once per session.
+      .filter((w) => DEFS[w.id] && w.id !== "error" && w.id !== "welcome")
       .map((w, i) => ({
         id: w.id,
         x: fit(w.x, vw - 96), // never further right than 96px of title bar in view
@@ -352,7 +355,10 @@ export default function Desktop() {
     const t = setTimeout(() => {
       try {
         localStorage.setItem(LAYOUT_KEY, JSON.stringify({
-          wins: [...wins].sort((a, b) => a.z - b.z).map(({ id, x, y, max, snap, hid }) => ({ id, x, y, max, snap, hid })),
+          wins: wins
+            .filter((w) => w.id !== "welcome")
+            .sort((a, b) => a.z - b.z)
+            .map(({ id, x, y, max, snap, hid }) => ({ id, x, y, max, snap, hid })),
         }));
       } catch {}
     }, 250);
@@ -384,6 +390,11 @@ export default function Desktop() {
 
   const patch = useCallback((id, o) => setWins((ws) => ws.map((w) => (w.id === id ? { ...w, ...o } : w))), []);
 
+  // Desktop windows already focus on mount for every open path, so keep that.
+  // The welcome note is the only pop-up that should not snatch focus from a
+  // mouse click; keyboard visitors still get it landed on so the first-run
+  // greeting is reachable. The "Skip" button on the boot screen is a button,
+  // so it keeps its own focus when clicked.
   const open = useCallback((id) => {
     setStartOpen(false); beep(660);
     const def = DEFS[id];
@@ -391,7 +402,7 @@ export default function Desktop() {
     const from = document.activeElement;
     if (from && from !== document.body && !from.closest(".win")) lastTrigger.current = from;
     // Focus the window once it mounts, whether it was opened by mouse or keyboard.
-    pendingFocus.current = id;
+    if (id !== "welcome") pendingFocus.current = id;
     setWins((ws) => {
       const zi = ++z.current;
       if (ws.some((w) => w.id === id)) return ws.map((w) => (w.id === id ? { ...w, hid: false, min: false, out: false, z: zi } : w));
@@ -623,6 +634,9 @@ export default function Desktop() {
 
   return (
     <div
+      id="content"
+      data-skip-target
+      tabIndex={-1}
       className={`desk ${entering ? "entering" : ""}`}
       data-lenis-prevent
       onPointerMove={parallax}

@@ -229,6 +229,7 @@ export default function CreatorRoom() {
   const [flat, setFlat] = useState(false);
   const router = useRouter();
   const shelfRef = useRef(null);
+  const panelRef = useRef(null);
   const fromMonitor = useRef(false);
 
   useEffect(() => {
@@ -274,10 +275,23 @@ export default function CreatorRoom() {
     if (sat) say("90 seconds in the chair. Posture check — shoulders down, screen up.");
   }, [sat, say]);
 
+  // Move focus to the panel only for keyboard users. A mouse click on the prop
+  // should keep the pointer on the thing the visitor actually touched; dragging
+  // the shelf card into view with the keyboard should not jump the page.
+  useEffect(() => {
+    if (!pick) return;
+    if (lastTrigger.current === "pointer") { lastTrigger.current = null; return; }
+    panelRef.current?.focus({ preventScroll: !flat });
+  }, [pick, flat]);
+
+  // Keyboard focus on the room. Keep a tiny ref so the panel-focus effect can
+  // tell a mouse open from a keyboard open and not snatch focus on a click.
+  const lastTrigger = useRef(null);
+
   // The monitor boots the classic desktop; the tower shows the hardware.
   const boot = () => router.push("/os/desktop");
 
-  const open = (id, quip) => {
+  const open = (id, quip, e) => {
     // "monitor" has no panel of its own: it is the door to the old OS.
     if (id === "monitor") {
       boot();
@@ -289,20 +303,30 @@ export default function CreatorRoom() {
     if (id === "window") setClock(cebuNow(new Date()));
     setPick(id);
     if (quip) say(quip);
+    // Track how the prop was chosen so the panel-focus effect can skip mouse clicks.
+    if (e && e.type === "pointerdown") lastTrigger.current = "pointer";
+    else if (e && e.type === "keydown" && (e.key === "Enter" || e.key === " ")) lastTrigger.current = "keyboard";
+    else if (!lastTrigger.current) lastTrigger.current = "keyboard";
   };
 
   // The lower third is a real button on the monitor: it opens the shelf on the
-  // result it was showing.
+  // result it was showing. The panel-focus effect above still lands the shelf on
+  // the keyboard; this just records whether the monitor itself was pressed by
+  // pointer or keyboard so the phone scroll jump stays keyboard-only.
   const openShelf = useCallback((index) => {
     setAward(index);
     setPick("shelf");
     fromMonitor.current = flat;
+    if (lastTrigger.current === "pointer") { /* leave lastTrigger alone */ }
+    else if (!lastTrigger.current) lastTrigger.current = "keyboard";
   }, [flat]);
 
   // On a phone the shelf card sits well below the monitor, so bring its panel
   // into view — only when the monitor sent you there, not when you tapped it.
+  // Keep the jump keyboard-only: a tap on the monitor should keep focus on the
+  // monitor, and the panel still gets focus by the effect above.
   useEffect(() => {
-    if (!flat || pick !== "shelf" || !fromMonitor.current) return;
+    if (!flat || pick !== "shelf" || !fromMonitor.current || lastTrigger.current === "pointer") return;
     fromMonitor.current = false;
     shelfRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
   }, [flat, pick]);
@@ -315,13 +339,13 @@ export default function CreatorRoom() {
     ["poster", "Poster", "Avante Esports, rebooted 2026."],
     ["mic", "Mic", "Hot mic, on purpose."],
     ["mug", "Mug", "Coffee count, this session."],
-    ["window", "Window", "Cebu at 1am."],
+    ["window", "Window", "Cebu time, your clock."],
     ["chair", "Chair", "Where the edits happen."],
     ["plant", "Plant", "Somehow still alive."],
   ];
 
   return (
-          <div className={`room ${entering ? "entering" : ""}`}>
+          <div id="content" data-skip-target tabIndex={-1} className={`room ${entering ? "entering" : ""}`}>
       <header className={`room-top ${entering ? "entering" : ""}`}>
         <span className="room-brand">
           <i aria-hidden="true" />
@@ -338,28 +362,28 @@ export default function CreatorRoom() {
       <div className="room-main">
         <section className="room-stage" aria-label="Creator room">
           <div className="room-wall" aria-hidden="true" />
-          <button type="button" className="prop prop-window" onClick={() => open("window", "It is always 1am in Cebu.")}>
+          <button type="button" className="prop prop-window" onPointerDown={(e) => open("window", "Cebu time, read from your clock.", e)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("window", "Cebu time, read from your clock.", e); } }}>
             <span className="win-fixture" aria-hidden="true"><i /><i /><i /><i /><i /><i /></span>
             <span className="prop-tag">Window</span>
           </button>
 
-          <button type="button" className="prop prop-poster" onClick={() => open("poster")}>
+          <button type="button" className="prop prop-poster" onPointerDown={(e) => open("poster", undefined, e)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("poster", undefined, e); } }}>
             <span className="poster-art" aria-hidden="true">AVANTE<br /><small>EST. 2020</small></span>
             <span className="prop-tag">Poster</span>
           </button>
 
-          <button type="button" className="prop prop-shelf" onClick={() => open("shelf")}>
+          <button type="button" className="prop prop-shelf" onPointerDown={(e) => open("shelf", undefined, e)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("shelf", undefined, e); } }}>
             <span className="shelf-row" aria-hidden="true"><i /><i /><i /><i /></span>
             <span className="shelf-plank" aria-hidden="true" />
             <span className="prop-tag">Shelf</span>
           </button>
 
-          <button type="button" className="prop prop-plant" onClick={() => open("plant", "The plant has seen things.")}>
+          <button type="button" className="prop prop-plant" onPointerDown={(e) => open("plant", "The plant has seen things.", e)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("plant", "The plant has seen things.", e); } }}>
             <span className="plant-pot" aria-hidden="true"><i /><i /><i /></span>
             <span className="prop-tag">Plant</span>
           </button>
 
-          <button type="button" className="prop prop-rig" onClick={() => open("rig")}>
+          <button type="button" className="prop prop-rig" onPointerDown={(e) => open("rig", undefined, e)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("rig", undefined, e); } }}>
             <RigExploded />
             <span className="prop-tag">Rig specs</span>
           </button>
@@ -370,26 +394,26 @@ export default function CreatorRoom() {
             <span className="monitor-neck" aria-hidden="true" />
           </div>
 
-          <button type="button" className="prop prop-deck" onClick={() => open("deck")}>
+          <button type="button" className="prop prop-deck" onPointerDown={(e) => open("deck", undefined, e)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("deck", undefined, e); } }}>
             <span className="deck-keys" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <i key={i} />)}</span>
             <span className="prop-tag">Deck</span>
           </button>
-          <button type="button" className="prop prop-mic" onClick={() => open("mic", "Mic is live. It is always live.")}>
+          <button type="button" className="prop prop-mic" onPointerDown={(e) => open("mic", "Mic is live. It is always live.", e)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("mic", "Mic is live. It is always live.", e); } }}>
             <span className="mic-arm" aria-hidden="true"><i /></span>
             <span className="prop-tag">Mic</span>
           </button>
-          <button type="button" className="prop prop-chair" onClick={() => open("chair")}>
+          <button type="button" className="prop prop-chair" onPointerDown={(e) => open("chair", undefined, e)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("chair", undefined, e); } }}>
             <span className="chair-back" aria-hidden="true" />
             <span className="prop-tag">Chair</span>
           </button>
-          <button type="button" className="room-mug" aria-label="Mug — count a coffee for this session" onClick={() => open("mug")} />
+          <button type="button" className="room-mug" aria-label="Mug — count a coffee for this session" onPointerDown={(e) => open("mug", undefined, e)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("mug", undefined, e); } }} />
           <span className="room-mat" aria-hidden="true" />
           <span className="room-keyboard" aria-hidden="true" />
           <span className="room-mouse" aria-hidden="true" />
           <div className="room-desk" aria-hidden="true" />
         </section>
 
-        <aside className="room-panel" aria-live="polite">
+        <aside className="room-panel" aria-live="polite" ref={panelRef} tabIndex={-1}>
           <Panel id={pick} close={() => setPick(null)} award={award} eggs={{ coffee, sat, clock }} />
         </aside>
       </div>
@@ -412,7 +436,7 @@ export default function CreatorRoom() {
                   onClick={() => (pick === id ? setPick(null) : open(id))}
                 />
                 {pick === id && (
-                  <div className="room-flat-panel">
+                  <div className="room-flat-panel" ref={panelRef} tabIndex={-1}>
                     <Panel id={id} close={() => setPick(null)} award={award} eggs={{ coffee, sat, clock }} />
                   </div>
                 )}

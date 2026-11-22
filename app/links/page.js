@@ -16,7 +16,7 @@ export default function Links() {
   const tip = L("support").find((l) => l.label === "Tip me");
 
   return (
-    <main className="lb">
+    <main id="content" data-skip-target tabIndex={-1} className="lb">
       <div className="lb-card">
         <div className="lb-top">
           <span className="lb-chip">{profile.status}</span>

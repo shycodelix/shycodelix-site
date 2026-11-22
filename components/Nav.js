@@ -5,8 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { publishLenisVelocityOnScrollTick } from "./scrollTick";
 
 // Labels match the headings they jump to, so the active chip never names a
-// section the reader cannot see.
-const items = [["summary", "Profile"], ["verified", "Verified"], ["work", "Work"], ["experience", "Experience"], ["skills", "What I do"], ["avante", "Avante"], ["career", "Frames"], ["setup", "Setup"], ["contact", "Contact"]];
+// section the reader cannot see. Document order, not importance: a jump list
+// that sends you backwards reads as broken.
+const items = [["summary", "Profile"], ["work", "Work"], ["verified", "Verified"], ["experience", "Experience"], ["skills", "What I do"], ["avante", "Avante"], ["career", "Frames"], ["setup", "Setup"], ["contact", "Contact"]];
 
 export default function Nav() {
   const [active, setActive] = useState("");

@@ -76,6 +76,10 @@ export default function Profile() {
       <ReaderTheme />
       <h1 className="sr-only">shycodelix — operations, production, content</h1>
 
+      {/* The document itself, after the dock and the theme HUD, so the skip link
+          and the main landmark both start at the hero. */}
+      <main id="content" data-skip-target tabIndex={-1}>
+
       <ReaderVelocityLayer className="rd-hero">
         <div className="rd-rider-container" aria-hidden="true">
           <ReaderAmbient />
@@ -247,7 +251,8 @@ export default function Profile() {
         sticker={{ src: "/kit/on-air.gif", still: "/kit/on-air.png", alt: "On air", w: 96, h: 34, badge: true }}
       />
 
-      <ReaderVelocityLayer className="rd-avante">
+      {/* The dock's Avante chip jumps here; without the id it scrolled nowhere. */}
+      <ReaderVelocityLayer id="avante" className="rd-avante">
         <div className="rd-avante-in">
           <ReaderMorph className="rd-morph-wrap" />
           <img className="rd-av-logo" src="/avante/logo-white.svg" alt="Avante Esports" />
@@ -341,6 +346,7 @@ export default function Profile() {
         <p>Gamer tag: {profile.tag} · reader mode of shycodelix OS</p>
         <p><Link href="/links">Links</Link> · <Link href="/os">My room</Link> · <a href={profile.source} target="_blank" rel="noreferrer">Konect</a></p>
       </footer>
+      </main>
     </div>
   );
 }

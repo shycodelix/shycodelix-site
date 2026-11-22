@@ -885,6 +885,8 @@
 
 .rd-avante {
   padding: clamp(3.5rem, 8vw, 7rem) 1.25rem;
+  /* The dock jumps to #avante; same offset the numbered sections take. */
+  scroll-margin-top: 1rem;
   text-align: center;
   color: var(--rd-text);
   background:
@@ -911,6 +913,13 @@
   width: min(76%, 18rem);
   margin: 0 auto;
   border: 1px solid var(--rd-line);
+}
+/* The supplied mark is the white-on-dark artboard (#E8E8E8), which is invisible
+   on both warm surfaces. It has no cream variant, and a second file for a
+   monochrome silhouette is not worth the request: flip it to near-ink instead. */
+.page.rd[data-rd-theme="light"] .rd-av-logo,
+.page.rd[data-rd-theme="sepia"] .rd-av-logo {
+  filter: invert(1) brightness(0.45);
 }
 .rd-av-tag {
   font-family: var(--font-grotesk), var(--font-display), Impact, sans-serif;

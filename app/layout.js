@@ -34,6 +34,11 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${display.variable} ${body.variable} ${grotesk.variable} ${pixel.variable} ${micro.variable}`}>
       <body>
         <Cursor />
+        {/* Every surface opens with a bar of controls — the reader dock, the room
+            header, the desktop chrome — so the first tab stop skips them. On the
+            reader, room and desktop the target is the #content landmark; pressing
+            Enter on the revealed skip link moves focus there. */}
+        <a className="skip-link" href="#content">Skip to content</a>
         {children}
       </body>
     </html>

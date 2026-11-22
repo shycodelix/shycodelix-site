@@ -44,6 +44,15 @@ export default function Notepad() {
     } catch {}
   }, []);
 
+  // A draft saves itself. Esc closes the focused window, and the X closes it too,
+  // so text typed and not yet saved used to go with the frame — on the one
+  // surface that tells the visitor notepad actually saves.
+  useEffect(() => {
+    if (saved) return;
+    const t = setTimeout(() => save(text), 500);
+    return () => clearTimeout(t);
+  }, [text, saved, save]);
+
   function change(e) {
     setText(e.target.value);
     setSaved(false);
