@@ -115,9 +115,6 @@ export default function ClipGallery({ clips, label = "Clips" }) {
             if (e.target === e.currentTarget) close();
           }}
         >
-          {/* Focus sentinels: Tab out of the cross-origin iframe lands here and
-              is pulled straight back inside, so focus never escapes the dialog. */}
-          <span className="cs-trap" tabIndex={0} onFocus={() => closeRef.current?.focus()} />
           <div className="cs-modal-box" ref={boxRef}>
             <div className="cs-modal-bar">
               <span className="cs-mono">{open.title}</span>
@@ -141,7 +138,6 @@ export default function ClipGallery({ clips, label = "Clips" }) {
               />
             </div>
           </div>
-          <span className="cs-trap" tabIndex={0} onFocus={() => closeRef.current?.focus()} />
         </div>
       )}
     </section>

@@ -283,18 +283,6 @@
 }
 .cs-modal-screen iframe { width: 100%; height: 100%; border: 0; display: block; }
 
-/* Off-screen focus sentinels for the modal trap. */
-.cs-trap {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-}
-
 /* ---------- footer ---------- */
 .cs-foot {
   margin-top: clamp(2.2rem, 5vw, 3.4rem);
