@@ -287,6 +287,11 @@ export default function CreatorRoom() {
   // Keyboard focus on the room. Keep a tiny ref so the panel-focus effect can
   // tell a mouse open from a keyboard open and not snatch focus on a click.
   const lastTrigger = useRef(null);
+  // The control that most recently opened the panel, used only by the in-panel
+  // close button (Window's "Back to the room") to return focus to the opener.
+  // Card toggles in flat and wide mode keep focus on the card by browser default,
+  // so they do not use this ref.
+  const lastControlRef = useRef(null);
 
   // The monitor boots the classic desktop; the tower shows the hardware.
   const boot = () => router.push("/os/desktop");
@@ -303,11 +308,47 @@ export default function CreatorRoom() {
     if (id === "window") setClock(cebuNow(new Date()));
     setPick(id);
     if (quip) say(quip);
-    // Track how the prop was chosen so the panel-focus effect can skip mouse clicks.
-    if (e && e.type === "pointerdown") lastTrigger.current = "pointer";
-    else if (e && e.type === "keydown" && (e.key === "Enter" || e.key === " ")) lastTrigger.current = "keyboard";
-    else if (!lastTrigger.current) lastTrigger.current = "keyboard";
+    // Track pointer vs keyboard for the panel-focus effect and the shelf scroll
+    // jump, so a mouse click does not steal focus and does not scroll the page.
+    if (e) {
+      if (e.type === "pointerdown") lastTrigger.current = "pointer";
+      else if (e.type === "keydown" && (e.key === "Enter" || e.key === " ")) lastTrigger.current = "keyboard";
+      if (e.currentTarget && typeof e.currentTarget.focus === "function") {
+        lastControlRef.current = e.currentTarget;
+      }
+    }
   };
+
+  // ---- keyboard model ----
+  // Open:   Enter/Space on a prop control opens its panel.
+  //         - Wide stage buttons are open-only (decorative scene props).
+  //         - Wide .room-picks cards and flat cards are open/close toggles.
+  //         - The Window panel has an in-panel "Back to the room" button.
+  // Close:  - Toggling the card that opened the panel (Enter/Space again) closes it
+  //           and leaves focus on that card (browser default).
+  //         - The Window in-panel close button calls closePick(), which returns
+  //           focus to the control that opened the panel.
+  //         - Escape, when a panel is open, closes it via closePick() too.
+  const closePick = () => {
+    setPick(null);
+    const target = lastControlRef.current;
+    if (target && typeof target.focus === "function") target.focus();
+  };
+
+  // Escape closes the panel from anywhere inside it (the aside, the Window
+  // in-panel close button, or any focusable element the panel contains) and
+  // returns focus to the control that opened it. It only runs while a panel is
+  // open, so it never touches the skip link or the rest of the page.
+  useEffect(() => {
+    if (!pick) return;
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      e.preventDefault();
+      closePick();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [pick]);
 
   // The lower third is a real button on the monitor: it opens the shelf on the
   // result it was showing. The panel-focus effect above still lands the shelf on
@@ -414,7 +455,7 @@ export default function CreatorRoom() {
         </section>
 
         <aside className="room-panel" aria-live="polite" ref={panelRef} tabIndex={-1}>
-          <Panel id={pick} close={() => setPick(null)} award={award} eggs={{ coffee, sat, clock }} />
+          <Panel id={pick} close={() => closePick()} award={award} eggs={{ coffee, sat, clock }} />
         </aside>
       </div>
       )}
@@ -433,11 +474,11 @@ export default function CreatorRoom() {
                   hint={hint}
                   pressed={pick === id}
                   expanded={pick === id}
-                  onClick={() => (pick === id ? setPick(null) : open(id))}
+                  onClick={(e) => (pick === id ? setPick(null) : open(id, undefined, e))}
                 />
                 {pick === id && (
                   <div className="room-flat-panel" ref={panelRef} tabIndex={-1}>
-                    <Panel id={id} close={() => setPick(null)} award={award} eggs={{ coffee, sat, clock }} />
+                    <Panel id={id} close={() => closePick()} award={award} eggs={{ coffee, sat, clock }} />
                   </div>
                 )}
               </div>
@@ -447,7 +488,14 @@ export default function CreatorRoom() {
       ) : (
         <div className="room-picks" role="group" aria-label="Room props">
           {props.map(([id, label, hint]) => (
-            <PropCard key={id} label={label} hint={hint} pressed={pick === id} onClick={() => open(id)} />
+            <PropCard
+              key={id}
+              label={label}
+              hint={hint}
+              pressed={pick === id}
+              expanded={pick === id}
+              onClick={(e) => (pick === id ? setPick(null) : open(id, undefined, e))}
+            />
           ))}
         </div>
       )}
