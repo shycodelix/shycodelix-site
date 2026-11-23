@@ -87,10 +87,10 @@ export default function Profile() {
 
         <div className="rd-hero-bar">
           <span className="rd-status"><i aria-hidden="true" />{profile.status}</span>
-          <span className="rd-mono">shycodelix · reader mode</span>
+          <span className="rd-mono rd-mark">sc*/26</span>
         </div>
 
-        <ReaderScrollChoreo target=".rh" headerSkew={0} headerY={14}>
+        <ReaderScrollChoreo className="rd-hero-body" target=".rh" headerSkew={0} headerY={14}>
           <ReaderHero
             headline="operations,<br />production,<br />content"
             subtitle="I run esports teams and tournaments, produce the broadcast around them, and have spent
@@ -99,29 +99,31 @@ export default function Profile() {
             byline="Usually replies within a day · Philippine time"
           />
 
-          <div className="rd-hero-portrait">
-            <figure className="rd-portrait">
-              <Image
-                src="/photos/studio.jpg"
-                alt="shycodelix, studio portrait in a black jacket"
-                width={900}
-                height={1160}
-                priority
-                sizes="(min-width: 56rem) 18rem, 16rem"
-              />
-              <figcaption className="rd-mono">shycodelix · Cebu, PH</figcaption>
-            </figure>
+          <div className="rd-hero-ident">
             <div className="rd-hero-actions">
               <a className="rd-cta" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>
                 Email me <span aria-hidden="true">↗</span>
               </a>
               <a className="rd-link" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
-              <a className="rd-link" href="/links">Links</a>
               <Link className="rd-link" href="/os">Creator room</Link>
             </div>
-            <div className="rd-hero-accent" aria-hidden="true" />
+            <div className="rd-hero-note">
+              <figure className="rd-portrait">
+                <Image
+                  src="/photos/studio.jpg"
+                  alt="shycodelix, studio portrait in a black jacket"
+                  width={900}
+                  height={1160}
+                  priority
+                  sizes="8rem"
+                />
+              </figure>
+              <p className="rd-mono rd-portrait-cap">Cebu, PH</p>
+            </div>
           </div>
         </ReaderScrollChoreo>
+
+        <div className="rd-hero-rule" aria-hidden="true" />
       </ReaderVelocityLayer>
 
       <ReaderTicker />

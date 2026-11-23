@@ -187,9 +187,6 @@ export default function ReaderHero({ headline, subtitle, byline }) {
 
       {subtitle && <p className="rh-sub">{subtitle}</p>}
       {byline && <p className="rh-by">{byline}</p>}
-
-      {/* Reveal progress baseline — a thin kinetic stroke under the headline. */}
-      <div className="rh-baseline" aria-hidden="true" />
     </div>
   );
 }

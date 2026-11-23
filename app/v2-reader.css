@@ -315,10 +315,13 @@
    is set at display size and broken by explicit <br> breaks. */
 .page.rd .rh {
   font-family: var(--font-grotesk), var(--font-display), Impact, sans-serif;
-  font-size: clamp(2.5rem, 10.5vw, 7.5rem);
+  /* Width alone made the headline eat the whole fold on a 720/800px-tall laptop
+     and dropped the primary CTA under it. The svh term only bites on short
+     viewports; a 900px-tall screen still gets the full 9.5rem. */
+  font-size: clamp(3rem, min(12vw, 17svh), 9.5rem);
   font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.035em;
+  line-height: 0.86;
+  letter-spacing: -0.04em;
 }
 .rh-lines { display: block; }
 
@@ -392,25 +395,9 @@
   letter-spacing: 0;
 }
 .rd-hero .rh-by { max-width: 42ch; }
-.rh-baseline {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3px;
-  background: var(--rd-accent);
-  transform-origin: left;
-  transform: scaleX(0);
-  opacity: 0.5;
-  animation: rhBaseline 1.1s 0.15s both cubic-bezier(0.16, 1, 0.3, 1);
-}
 @keyframes rhFade {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
-}
-@keyframes rhBaseline {
-  from { transform: scaleX(0); opacity: 0; }
-  to { transform: scaleX(1); opacity: 0; }
 }
 
 /* ---------- Reader nav rides the active reading surface ---------- */
@@ -463,23 +450,26 @@
 .page.rd[data-rd-theme="sepia"] .rd-ticker .rd-track b { color: #f3e9d2; }
 .page.rd[data-rd-theme="light"] .rd-ticker .rd-track b { color: #1e1633; }
 
-/* ---------- Reader hero / portrait block layout ---------- */
+/* ---------- Reader hero: the type is the image ---------- */
+/* One composition: a hairline bar with the monogram, the headline set as large
+   as the fold allows, one row of actions, the portrait as a margin note, and a
+   single rule that closes the section. The portrait used to sit beside the
+   headline as a 18rem card with a hard shadow; at that size it competed with the
+   type and pushed the fourth action onto its own line. */
 .rd-hero {
   position: relative;
   min-height: 90svh;
   padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1.25rem, 5vw, 4rem) 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-bottom: 2px solid var(--rd-text);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(0.9rem, 2.4vh, 1.6rem);
 }
 .rd-hero .rh { max-width: 100%; }
-.rd-hero .rd-hero-copy { max-width: 60ch; }
 
 /* The ambient rider lives behind the hero so the reader has one gentle,
    always-on abstract object that drifts with Lenis velocity and guides the
-   cursor a little. It sits behind the copy stack (below) so it never touches
-   the headline, the actions, or the portrait caption. */
+   cursor a little. It sits behind the copy stack so it never touches the
+   headline, the actions, or the portrait note. */
 .rd-rider-container {
   position: absolute;
   inset: 0;
@@ -512,51 +502,40 @@
   border-radius: 50%;
   opacity: 0.9;
 }
-.rd-hero-portrait {
+/* The monogram: one persistent signature, set like a masthead. It inherits the
+   bar's ink — the accent asterisk disappeared against the accent-filled bar. */
+.rd-hero-bar .rd-mark {
+  letter-spacing: 0.02em;
+  font-weight: 600;
+}
+
+/* The hero body holds the headline and the identification row, pinned to the
+   bottom of the fold so the type rises out of the rule rather than floating. */
+.rd-hero-body {
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.4rem;
-  padding: 2.4rem 0 1rem;
-  max-width: 76rem;
-  margin: 0 auto;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: clamp(1rem, 2.2vh, 1.6rem);
+  min-height: 0;
 }
-.rd-portrait {
-  border: 2px solid var(--rd-line);
-  box-shadow: 8px 8px 0 var(--rd-text);
-  overflow: hidden;
-  background: var(--rd-paper2);
-  max-width: 16rem;
-  align-self: start;
-}
-.rd-portrait img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.rd-portrait figcaption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 0.4rem 0.6rem;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
-  color: var(--rd-paper);
-  font-family: var(--font-grotesk), var(--font-micro), monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+
+.rd-hero-ident {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.4rem 2rem;
+  flex-wrap: wrap;
+  padding-bottom: clamp(0.75rem, 2vh, 1.4rem);
 }
 .rd-hero-actions {
   position: relative;
   z-index: 3;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  align-items: flex-start;
+  gap: 0.6rem 0.9rem;
+  align-items: center;
 }
 .rd-cta {
   display: inline-flex;
@@ -570,7 +549,6 @@
   border: 2px solid var(--rd-text);
   box-shadow: 3px 3px 0 var(--rd-text);
   transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
-  align-self: start;
 }
 .rd-cta:hover {
   transform: translate(-1px, -1px);
@@ -589,35 +567,70 @@
   color: var(--rd-accent);
   border-color: var(--rd-accent);
 }
-@media (min-width: 56rem) {
-  .rd-hero-portrait {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 16rem);
-    gap: 2.6rem;
-    align-items: start;
-  }
-  .rd-portrait { max-width: 18rem; }
+
+/* Portrait as a margin note: a face at the size of a seal, not a card. The
+   caption sits under the seal, not beside it — beside it ran off the hero's
+   right padding. */
+.rd-hero-note {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+}
+.rd-portrait {
+  width: clamp(5rem, 12vw, 7rem);
+  height: clamp(5rem, 12vw, 7rem);
+  flex: 0 0 auto;
+  border: 2px solid var(--rd-line);
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--rd-paper2);
+}
+.rd-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 16%;
+  display: block;
+}
+.rd-portrait-cap {
+  font-family: var(--font-grotesk), var(--font-micro), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rd-ink-soft);
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
 }
 
-/* Signature gesture — a single full-bleed accent band, only in the hero.
-   One vivid mark, per-surface via --rd-accent, sitting at the bottom of the
-   portrait block (where the eye lands after the CTA stack), never behind body
-   copy anywhere else. */
-.rd-hero-accent {
+/* One rule closes the hero. It draws once and stays; it replaced both the
+   headline baseline and the accent band, which were two gestures doing the
+   same job. */
+.rd-hero-rule {
   grid-column: 1 / -1;
-  position: relative;
-  z-index: 2;
-  height: clamp(0.5rem, 1.1vw, 0.9rem);
-  background: var(--rd-accent);
-  margin-top: 0.2rem;
-  border-radius: 0 0 2px 2px;
-  box-shadow: 0 1px 0 var(--rd-paper2);
+  height: 2px;
+  background: var(--rd-text);
+  transform-origin: left center;
+  animation: rhRuleDraw 0.8s 0.15s both cubic-bezier(0.16, 1, 0.3, 1);
 }
+@keyframes rhRuleDraw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
 @media (max-width: 48rem) {
-  .rd-hero-accent { height: 0.55rem; }
-  /* One column here, so the portrait sat above the buttons and pushed the only
-     real call to action 84px under the first screen. The actions go first on a
-     phone; the portrait follows them. */
-  .rd-hero-portrait .rd-hero-actions { order: -1; }
+  /* A full 90svh here left a quarter of the phone screen empty above the
+     headline; the type only needs to sit a little low, not at the very bottom. */
+  .rd-hero { min-height: 72svh; }
+  /* Actions first, portrait after: the one real call to action should not be
+     pushed under the fold by a photograph. */
+  .rd-hero-ident {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.1rem;
+  }
+  .rd-hero-note { gap: 0.8rem; }
 }
 
 /* ---------- Section system ---------- */
@@ -1219,9 +1232,12 @@
     position: absolute;
   }
   .rh-sub,
-  .rh-by,
-  .rh-baseline {
+  .rh-by {
     opacity: 1;
+    animation: none;
+    transform: none;
+  }
+  .rd-hero-rule {
     animation: none;
     transform: none;
   }
@@ -1244,8 +1260,7 @@
   .rh-line,
   .rh-line-in,
   .rh-sub,
-  .rh-by,
-  .rh-baseline {
+  .rh-by {
     opacity: 1;
     clip-path: inset(0 0 0 0);
     transform: none;

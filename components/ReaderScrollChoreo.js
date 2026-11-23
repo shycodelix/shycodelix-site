@@ -67,7 +67,7 @@ export default function ReaderScrollChoreo({
   }, [scrub, headerSkew, headerY, target]);
 
   return (
-    <div ref={wrapper} className={className} style={{ willChange: "transform" }} {...rest}>
+    <div ref={wrapper} className={className} {...rest}>
       {children}
     </div>
   );
