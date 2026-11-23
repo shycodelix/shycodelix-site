@@ -108,6 +108,33 @@ export default function ReaderTheme() {
     } catch {}
   }, [theme, size]);
 
+  // The hero sizes itself against the fold, so it has to know how much room the
+  // dock above it actually takes: the section dock plus this HUD, both of which
+  // wrap. Measured from the document instead of assumed, and published back as
+  // --rd-dock-h for the CSS to subtract.
+  useEffect(() => {
+    const root = document.querySelector(".page.rd");
+    const main = root?.querySelector("main");
+    if (!root || !main) return;
+
+    const measure = () => {
+      const offset = main.getBoundingClientRect().top - root.getBoundingClientRect().top;
+      if (offset > 0) root.style.setProperty("--rd-dock-h", `${Math.round(offset)}px`);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    root.querySelectorAll(".dock, .rd-theme-hud").forEach((el) => ro.observe(el));
+    addEventListener("resize", measure);
+    document.fonts?.ready.then(measure, () => {});
+
+    return () => {
+      ro.disconnect();
+      removeEventListener("resize", measure);
+      root.style.removeProperty("--rd-dock-h");
+    };
+  }, []);
+
   const t = THEMES[theme];
 
   // Liquid glass tint for floating HUD controls only.
