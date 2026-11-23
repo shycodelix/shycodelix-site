@@ -36,6 +36,61 @@ content.rs
 # local dev server log
 dev.log
 
+# abandoned OpenNext / Freebuff Sites migration experiment debris (rebuildable, not part of this site)
+deploy-*
+dist/
+dist-manifest.json
+static-manifest.json
+static-manifest-explicit.json
+wrangler.json
+wrangler.toml
+wrangler-build.toml
+wrangler-build2.toml
+wrangler-test.toml
+wrangler-build3.jsonc
+wrangler-final.jsonc
+wrangler-sites.jsonc
+wrangler-sites-only.jsonc
+wrangler-standalone-sites.jsonc
+preview-wrangler.jsonc
+sites-preview-deploy.jsonc
+freebuff.open-next.config.ts
+freebuff.open-next.config.ts.bak
+freebuff.wrangler.jsonc
+manifest.json
+opennext-build*.log
+esbuild-build*.log
+wrangler-build-run*.log
+wrangler-bundle*.log
+wrangler-outdir-test.log
+build-*.log
+build-*.js
+build-followups.log
+build-minified.js
+build-probe.log
+build-esbuild-new.js
+dev-os*.log
+dev-p1.log
+dev-p1.pid
+preview-dev.log
+serve-out.log
+sites-static/.wrangler/
+sites-worker.js
+simple-worker.js
+static-site-worker.js
+smoke-proxy.js
+serve-out.py
+fix-imports.js
+fix-all-imports.js
+prepare-deploy-site.sh
+restart-preview.sh
+support-freebuff-opennext-502.md
+support-freebuff-sites-verify.md
+opennextjs-*.tgz
+site.zip
+screenshot-*.png
+test-*
+
 # Freebuff Sites deploy attempt artifacts (local, rebuildable - not part of the site)
 dist-freebuff/
 freebuff-deploy/
@@ -45,19 +100,30 @@ wrangler-build.jsonc
 check-worker.py
 build-phase3-*.log
 install-gsap.log
+
+# local dev server / process artifacts
+*.pid
+
+# older pre-existing deploy logs that weren't covered by the experiment-debris block above
 build2.log
 build3.log
-build-fix.log
-build-final.log
-build-final2.log
+dev-final.log
+dev-fix.log
 dev-phase3.log
 dev-phase3b.log
 dev-phase3c.log
 dev2.log
 dev3.log
-dev-final.log
-dev-fix.log
+dist-freebuff/
+freebuff-deploy/
+freebuff-deploy2/
+freebuff-manifest.json
+wrangler-build.jsonc
+wrangler-bundled/
+wrangler-bundled3/
 
-/freebuff-sites-build/
-/.open-next/
-/.wrangler/
+# leftovers the experiment-debris block above missed
+.install-gsap.log
+.open-next/
+.wrangler/
+install-gsap.log
