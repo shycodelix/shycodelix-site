@@ -8,7 +8,10 @@ const pixel = Press_Start_2P({ subsets: ["latin"], weight: "400", variable: "--f
 const micro = Silkscreen({ subsets: ["latin"], weight: "400", variable: "--font-micro", display: "swap" });
 const body = DM_Sans({ subsets: ["latin"], variable: "--font-body", display: "swap" });
 // Self-hosted variable Outfit: the reader-mode display face, no build-time fetch.
-const grotesk = localFont({ src: "./fonts/outfit-latin.woff2", weight: "300 600", variable: "--font-grotesk", display: "swap" });
+// The file's wght axis is 100-900 (verified against its fvar table), so declaring
+// the full range is what lets the 800/900 display weights the reader asks for
+// actually render instead of clamping to 600.
+const grotesk = localFont({ src: "./fonts/outfit-latin.woff2", weight: "100 900", variable: "--font-grotesk", display: "swap" });
 
 const description = "Esports operations, content creation and customer experience. Philippines.";
 

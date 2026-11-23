@@ -21,6 +21,10 @@ export default function ReaderScrollChoreo({
   children,
   className = "",
   headerRef,
+  // Selector for the element the scrub drives. Sections have an <h2>; the hero
+  // does not (it is a div.rh), so it passes ".rh" and used to get a null target
+  // and no choreography at all.
+  target = "h2",
   scrub = 1.2,
   headerSkew = 0.04,
   headerY = 8,
@@ -37,7 +41,7 @@ export default function ReaderScrollChoreo({
       gsap.registerPlugin(ScrollTrigger);
     }
 
-    const h = headerRef?.current || w.querySelector("h2");
+    const h = headerRef?.current || (target ? w.querySelector(target) : null);
 
     // Pin the section's choreography scroll range to the section itself.
     const trigger = ScrollTrigger.create({
@@ -60,7 +64,7 @@ export default function ReaderScrollChoreo({
     // Kill only this section's trigger: a global kill would tear down every
     // other section and component's ScrollTrigger on unmount.
     return () => trigger.kill();
-  }, [scrub, headerSkew, headerY]);
+  }, [scrub, headerSkew, headerY, target]);
 
   return (
     <div ref={wrapper} className={className} style={{ willChange: "transform" }} {...rest}>

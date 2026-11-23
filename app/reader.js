@@ -80,7 +80,7 @@ export default function Profile() {
           and the main landmark both start at the hero. */}
       <main id="content" data-skip-target tabIndex={-1}>
 
-      <ReaderVelocityLayer className="rd-hero">
+      <ReaderVelocityLayer className="rd-hero" target=".rd-rider-container">
         <div className="rd-rider-container" aria-hidden="true">
           <ReaderAmbient />
         </div>
@@ -90,7 +90,7 @@ export default function Profile() {
           <span className="rd-mono">shycodelix · reader mode</span>
         </div>
 
-        <ReaderScrollChoreo>
+        <ReaderScrollChoreo target=".rh" headerSkew={0} headerY={14}>
           <ReaderHero
             headline="operations,<br />production,<br />content"
             subtitle="I run esports teams and tournaments, produce the broadcast around them, and have spent
@@ -255,7 +255,7 @@ export default function Profile() {
       />
 
       {/* The dock's Avante chip jumps here; without the id it scrolled nowhere. */}
-      <ReaderVelocityLayer id="avante" className="rd-avante">
+      <ReaderVelocityLayer id="avante" className="rd-avante" skewX={0} driftY={4}>
         <div className="rd-avante-in">
           <ReaderMorph className="rd-morph-wrap" />
           <img className="rd-av-logo" src="/avante/logo-white.svg" alt="Avante Esports" />

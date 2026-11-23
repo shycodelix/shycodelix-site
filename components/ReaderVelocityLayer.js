@@ -16,6 +16,12 @@ import { onGsapTick, prefersReducedMotion } from "./gsapTick";
 export default function ReaderVelocityLayer({
   children,
   className = "",
+  // Which element actually takes the transform. Skewing a wrapper that holds
+  // display-size text re-rasterises every glyph each frame at up to 2.4deg, so
+  // the hero points this at its decorative rider layer and the text column stays
+  // untouched. Empty = the wrapper itself (translate-only sections should also
+  // pass skewX={0}).
+  target = "",
   skewX = 0.00018,     // per-unit vertical velocity -> skew
   driftY = 0.18,        // per-unit vertical velocity -> translate (px)
   maxSkew = 2.4,        // degrees clamp
@@ -27,6 +33,7 @@ export default function ReaderVelocityLayer({
   useEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
+    const node = (target && el.querySelector(target)) || el;
 
     let rx = 0;
     let ry = 0;
@@ -43,18 +50,24 @@ export default function ReaderVelocityLayer({
       const skew = Math.max(-maxSkew, Math.min(maxSkew, rx * 120));
       const drift = Math.max(-maxDrift, Math.min(maxDrift, ry));
 
-      el.style.transform = `translate3d(0,${drift}px,0) skewX(${skew}deg)`;
+      node.style.transform = `translate3d(0,${drift}px,0) skewX(${skew}deg)`;
     };
+
+    // The compositor hint belongs on the element that moves, not on a section
+    // wrapper that is now static (a permanent will-change there pinned a layer
+    // for the whole visit).
+    node.style.willChange = "transform";
 
     const stop = onGsapTick(tick);
     return () => {
       stop();
-      el.style.transform = "";
+      node.style.transform = "";
+      node.style.willChange = "";
     };
-  }, [skewX, driftY, maxSkew, maxDrift]);
+  }, [skewX, driftY, maxSkew, maxDrift, target]);
 
   return (
-    <div ref={ref} className={className} style={{ willChange: "transform" }} {...rest}>
+    <div ref={ref} className={className} {...rest}>
       {children}
     </div>
   );
