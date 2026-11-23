@@ -1,5 +1,8 @@
 # https://developers.cloudflare.com/workers/static-assets/headers
 # https://opennext.js.org/cloudflare/caching#static-assets-caching
+# Share-card PNG cache policy — single source of truth for the rule value. This
+# project deploys as a Next.js Lambda on Vercel, which does not process this
+# _headers file; on Vercel the /og/*.png rule is applied via vercel.json (same value).
 /_next/static/*
   Cache-Control: public,max-age=31536000,immutable
 /og/*.png
