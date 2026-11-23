@@ -1,4 +1,4 @@
-// Serves the Next.js static export (out/) from the Freebuff Sites ASSETS binding,
+// Serve the Next.js static export (out/) from the Freebuff Sites ASSETS binding,
 // plus the one dynamic route the export can't carry: POST /api/shell, cmd.exe's brain.
 //
 // app/api/shell/route.js can't exist in a static export, so the same handler
@@ -210,21 +210,11 @@ async function shell(request, env) {
   return json({ reply: offlineAnswer(question), ...(debug ? { trace } : {}) });
 }
 
-// Next's generated metadata images sit on disk with no extension
-// (/work/ti11/opengraph-image). They are PNG bytes, not routes, so they must
-// skip the .html rewrite below and go out with an image content type or the
-// crawlers that fetch them see a 404 or an octet-stream.
-function isMetaImage(pathname) {
-  return /(?:^|\/)(opengraph-image|twitter-image)$/.test(pathname);
-}
-
-function assetPathFor(pathname) {
-  if (pathname === "/") return "/index.html";
-  if (pathname.endsWith("/")) return pathname + "index.html";
-  if (isMetaImage(pathname)) return pathname;
-  // Extensionless route: the export writes /os -> os.html, /os/desktop -> os/desktop.html
-  if (!pathname.split("/").pop().includes(".")) return pathname + ".html";
-  return pathname;
+// The share cards live at /og/<slug>.png. Nothing in this static export generates
+// them at that path, so treat them like any other committed asset: serve from disk
+// with a long cache and an explicit image/png content type.
+function isPublicPngCard(pathname) {
+  return /^\/og\/[a-z0-9-]+?\.png$/.test(pathname);
 }
 
 function withCache(res, pathname, contentType) {
@@ -259,7 +249,11 @@ export default {
 
     const res = await fetchAsset(env, request, assetPathFor(pathname));
     if (res.ok) {
-      return withCache(res, pathname, isMetaImage(pathname) ? "image/png" : undefined);
+      return withCache(
+        res,
+        pathname,
+        isPublicPngCard(pathname) ? "image/png" : undefined
+      );
     }
 
     // Directory-style trailing slash fallback (e.g. /os/).
