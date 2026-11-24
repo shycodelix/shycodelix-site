@@ -1,0 +1,127 @@
+/* ---------------------------------------------------------------------------
+   Section-reactive atmosphere for the reader.
+
+   A fixed field behind the document. `main` is lifted to z-index 1 so the text
+   always paints above it; sections keep their transparent backgrounds, so the
+   atmosphere reads through the page instead of sitting on it.
+
+   Retinted per section through --za/--zb (set by ReaderAtmosphere.js) and
+   softened per reading surface, because the same pool that glows on the dark
+   surface would dull the sepia and light ones.
+   --------------------------------------------------------------------------- */
+
+.rd-atmos {
+  position: fixed;
+  inset: -8vmax;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.5;
+  contain: strict;
+  transition: opacity 0.6s ease;
+  will-change: transform;
+}
+
+.page.rd main {
+  position: relative;
+  z-index: 1;
+}
+
+.page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.26; }
+.page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.22; }
+
+.rd-atmos-blob {
+  position: absolute;
+  width: 64vmax;
+  height: 64vmax;
+  border-radius: 50%;
+  filter: blur(46px);
+  transform-origin: center;
+}
+
+.rd-atmos-blob-a {
+  left: -14vmax;
+  top: -20vmax;
+  background: radial-gradient(circle, var(--za, #7c6cff) 0%, transparent 62%);
+  opacity: 0.22;
+}
+
+.rd-atmos-blob-b {
+  right: -18vmax;
+  bottom: -24vmax;
+  background: radial-gradient(circle, var(--zb, #3c7bff) 0%, transparent 60%);
+  opacity: 0.18;
+}
+
+/* Motif layers — one visible at a time, cross-faded on the same 0.6s beat as
+   the palette so a section change is a single move, not two. */
+.rd-atmos-dots,
+.rd-atmos-rules,
+.rd-atmos-rings {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.rd-atmos[data-motif="grid"] .rd-atmos-dots { opacity: 0.5; }
+.rd-atmos[data-motif="rules"] .rd-atmos-rules { opacity: 0.5; }
+.rd-atmos[data-motif="rings"] .rd-atmos-rings { opacity: 0.55; }
+
+.rd-atmos-dots {
+  background-image: radial-gradient(currentColor 1px, transparent 1.4px);
+  background-size: 30px 30px;
+  color: var(--za, #7c6cff);
+  opacity: 0;
+  -webkit-mask-image: radial-gradient(120% 90% at 20% 0%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(120% 90% at 20% 0%, #000 0%, transparent 72%);
+}
+
+.rd-atmos-rules {
+  background-image: repeating-linear-gradient(
+    104deg,
+    currentColor 0 1px,
+    transparent 1px 46px
+  );
+  color: var(--zb, #3c7bff);
+  opacity: 0;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
+}
+
+.rd-atmos-rings {
+  background-image: repeating-radial-gradient(
+    circle at 78% 22%,
+    currentColor 0 1px,
+    transparent 1px 54px
+  );
+  color: var(--za, #7c6cff);
+  opacity: 0;
+  -webkit-mask-image: radial-gradient(80% 70% at 78% 22%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(80% 70% at 78% 22%, #000 0%, transparent 78%);
+}
+
+/* The motif opacities above are gated by data-motif; keep the base at 0 so the
+   two dormant motifs stay invisible in every case. */
+.rd-atmos[data-motif="grid"] .rd-atmos-dots { opacity: 0.5; }
+.rd-atmos[data-motif="rules"] .rd-atmos-rules { opacity: 0.45; }
+.rd-atmos[data-motif="rings"] .rd-atmos-rings { opacity: 0.5; }
+
+@media (max-width: 48rem) {
+  .rd-atmos { opacity: 0.42; inset: -14vmax; }
+  .rd-atmos-blob { width: 78vmax; height: 78vmax; filter: blur(38px); }
+  .rd-atmos-dots { background-size: 24px 24px; }
+  .rd-atmos-rings { background-size: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rd-atmos,
+  .rd-atmos-blob,
+  .rd-atmos-dots,
+  .rd-atmos-rules,
+  .rd-atmos-rings {
+    transition: none !important;
+    animation: none !important;
+  }
+  .rd-atmos { transform: none !important; }
+}

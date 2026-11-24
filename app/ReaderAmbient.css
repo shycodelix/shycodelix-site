@@ -77,15 +77,26 @@
   position: absolute;
   top: 0.2em;
   right: 0;
-  height: auto;
+  /* Size the frame, never the artwork. A GIF header loop renders as a
+     <picture> with a bare <img> inside, so a height set here would miss the
+     image and the width/height attributes alone would squash a 232x265 rig
+     into 120x42. Width on the frame + height:auto inside keeps the natural
+     ratio at every viewport. */
+  width: clamp(4.6rem, 6.4vw, 7rem);
   display: block;
   opacity: 0.9;
   transform-origin: right center;
   will-change: transform;
 }
+.rd-loop-badge img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 
 @media (max-width: 48rem) {
   .rd-sec h2::after { width: 0.6em; }
+  .rd-loop-badge { width: 3.9rem; top: 0; }
 }
 
 /* ---------- Reduced motion: the rider freezes; header loops swap to stills ---------- */
@@ -120,7 +131,13 @@
 }
 .rd-verified-loop .rd-loop-inline {
   display: inline-block;
+  width: clamp(4rem, 5.4vw, 5.4rem);
   transform-origin: center;
+}
+.rd-loop-inline img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .rd-av-tag-loop {

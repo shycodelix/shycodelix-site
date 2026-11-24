@@ -12,6 +12,7 @@ import ReaderTicker from "../components/ReaderTicker";
 import ReaderInterlude from "../components/ReaderInterlude";
 import ScrollWords from "../components/ScrollWords";
 import ReaderAmbient from "../components/ReaderAmbient";
+import ReaderAtmosphere from "../components/ReaderAtmosphere";
 import HeaderLoop from "../components/HeaderLoop";
 import ReaderMorph from "../components/ReaderMorph";
 import ReaderVelocityLayer from "../components/ReaderVelocityLayer";
@@ -21,6 +22,7 @@ import ReaderSectionScrub from "../components/ReaderSectionScrub";
 import Wordmark from "../components/Wordmark";
 import "./v2-reader.css";
 import "./ReaderAmbient.css";
+import "./ReaderAtmosphere.css";
 import "./ReaderMorph.css";
 import "./ReaderChoreo.css";
 import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, avanteMail, sensitivity, sensitivityNote, gear, valorant } from "./data";
@@ -75,6 +77,7 @@ export default function Profile() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Nav />
       <ReaderTheme />
+      <ReaderAtmosphere />
       <h1 className="sr-only">shycodelix — operations, production, content</h1>
 
       {/* The document itself, after the dock and the theme HUD, so the skip link
@@ -147,7 +150,7 @@ export default function Profile() {
         </div>
       </section>
       <section id="work" className="rd-sec">
-        <h2><Numeral>(02)</Numeral>Selected<br />work<ReaderLiveLoop><HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={120} height={34} className="rd-loop-badge" /></ReaderLiveLoop></h2>
+        <h2><Numeral>(02)</Numeral>Selected<br />work<ReaderLiveLoop><HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={96} height={34} className="rd-loop-badge" /></ReaderLiveLoop></h2>
         <div className="rd-col">
         <ol className="rd-ach">
           {achievements.map((a, i) => (
@@ -193,7 +196,7 @@ export default function Profile() {
         <h2><Numeral>(03)</Numeral>Verified<br />record</h2>
         <div className="rd-col">
           <div className="rd-verified-loop">
-            <HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={86} height={30} className="rd-loop-inline" />
+            <HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={96} height={34} className="rd-loop-inline" />
           </div>
           <p className="rd-note">
             Third-party records for the same person. Not self-reported: BOOM Esports assistant manager
@@ -233,7 +236,10 @@ export default function Profile() {
 
       <ReaderScrollChoreo>
         <section id="skills" className="rd-sec">
-          <h2><Numeral>(05)</Numeral>What<br />I do<ReaderLiveLoop><HeaderLoop src="/kit/cam-loop.gif" still="/kit/idle.webp" alt="The PNGTuber model blinking and talking" width={120} height={42} className="rd-loop-badge" /></ReaderLiveLoop></h2>
+          {/* The rig is a portrait frame (232x265). The old 120x42 attributes
+              were the only size the bare <img> inside <picture> ever saw, so the
+              PNGTuber rendered squashed to a 2.86:1 sliver. */}
+          <h2><Numeral>(05)</Numeral>What<br />I do<ReaderLiveLoop><HeaderLoop src="/kit/cam-loop.gif" still="/kit/idle.webp" alt="The PNGTuber model blinking and talking" width={232} height={265} className="rd-loop-badge" /></ReaderLiveLoop></h2>
           <div className="rd-caps">
             {capabilities.map((c, i) => (
               <Reveal key={c.k} delay={i * 60}>
