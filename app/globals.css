@@ -258,6 +258,27 @@ h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
    for the asterisk. */
 .mark { white-space: nowrap; }
 .mark-star { color: var(--rd-accent, var(--tang)); }
+
+/* The mode curtain: an accent panel that wipes off the arriving surface in
+   240ms. It uses the site accent rather than the reader's palette on purpose —
+   it paints before the stored reading surface is applied, and a half-applied
+   reader colour is exactly what it must not flash. */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--tang);
+  pointer-events: none;
+  transform-origin: 50% 0;
+  animation: curtainWipe 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes curtainWipe {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .curtain { display: none; }
+}
 .topbar a {
   font-family: var(--font-micro), monospace;
   font-size: 0.75rem;

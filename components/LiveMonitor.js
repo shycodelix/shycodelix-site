@@ -122,10 +122,21 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
     <div className="lm">
       <div
         className="lm-screen"
-        style={{ backgroundImage: `url(${SCENES[scene].src})` }}
         role="group"
         aria-label={`Live stream monitor: ${SCENES[scene].label}`}
       >
+        {/* Every scene is stacked; the current one fades in over the last, the
+            way a broadcast cuts rather than swaps a background image. */}
+        <div className="lm-scene-stack" aria-hidden="true">
+          {SCENES.map((s, i) => (
+            <span
+              key={s.id}
+              className="lm-scene"
+              data-on={i === scene ? "true" : undefined}
+              style={{ backgroundImage: `url(${s.src})` }}
+            />
+          ))}
+        </div>
         <span className="lm-air">ON AIR</span>
         <span className="lm-count">live · 1.2k</span>
         {onBoot && (
@@ -158,8 +169,8 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
           <small>{a.team} · {a.date}</small>
         </button>
         <ul className="lm-chat" aria-label="Canned chat">
-          {chat.map(([who, msg], i) => (
-            <li key={`${who}-${msg}-${i}`}><b>{who}</b> {msg}</li>
+          {chat.map(([who, msg]) => (
+            <li key={`${who}-${msg}`}><b>{who}</b> {msg}</li>
           ))}
         </ul>
       </div>
