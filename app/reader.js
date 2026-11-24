@@ -182,7 +182,9 @@ export default function Profile() {
             </Reveal>
           ))}
         </ol>
-          <Link className="rd-viewall" href="/work">
+          {/* static export has no /work.txt RSC payload, so prefetching it only
+              earns a 404 in the console */}
+          <Link className="rd-viewall" href="/work" prefetch={false}>
             View all work <span aria-hidden="true">→</span>
           </Link>
           <a className="rd-kit" href="/os">
