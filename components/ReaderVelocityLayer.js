@@ -1,11 +1,13 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { onGsapTick, prefersReducedMotion } from "./gsapTick";
+import { prefersReducedMotion } from "./gsapTick";
+import { subscribeDrift, VELOCITY_SLOPE } from "./pointerDrift";
 
 /* ---------------------------------------------------------------------------
    ReaderVelocityLayer — wraps a reader section (hero or .rd-sec) and applies
-   a very subtle, GPU-composited skew + vertical drift driven by Lenis scroll
-   velocity from the shared bus the Nav publishes.
+   a very subtle, GPU-composited skew + vertical drift driven by the scroll
+   velocity that pointerDrift samples, so no component reads the Lenis bus
+   directly any more.
 
    The point (Gap 1): make scrolling feel spatial, in the yanxinzhang sense
    that the page breathes with the scroll, rather than only the scrollbar
@@ -35,30 +37,25 @@ export default function ReaderVelocityLayer({
     if (!el || prefersReducedMotion()) return;
     const node = (target && el.querySelector(target)) || el;
 
-    let rx = 0;
-    let ry = 0;
+    const clampTo = (n, limit) => Math.max(-limit, Math.min(limit, n));
 
-    // Runs on GSAP's ticker: Lenis has already stepped this frame, so the
-    // published velocity is the one the reader is scrolling at.
-    const tick = () => {
-      const v = window.__lenisVelocity || [0, 0];
-      // The page scrolls vertically, so the horizontal component is always 0:
-      // the skew has to lean on the vertical velocity or it never fires.
-      rx += (v[1] * skewX - rx) * 0.12;
-      ry += (v[1] * driftY - ry) * 0.12;
-
-      const skew = Math.max(-maxSkew, Math.min(maxSkew, rx * 120));
-      const drift = Math.max(-maxDrift, Math.min(maxDrift, ry));
-
-      node.style.transform = `translate3d(0,${drift}px,0) skewX(${skew}deg)`;
-    };
+    // The shared drift publishes velocity as a pixel lean (already eased and
+    // clamped at ±36px). Dividing by the bus slope puts it back in the px/frame
+    // units these gains were written against, so a section still skews by the
+    // same degrees per unit of scroll as before. The page scrolls vertically,
+    // so the skew leans on that component only.
+    const stop = subscribeDrift(({ vy }) => {
+      const v = vy / VELOCITY_SLOPE;
+      const skew = clampTo(v * skewX * 120, maxSkew);
+      const drift = clampTo(v * driftY, maxDrift);
+      node.style.transform = `translate3d(0,${drift.toFixed(2)}px,0) skewX(${skew.toFixed(3)}deg)`;
+    });
 
     // The compositor hint belongs on the element that moves, not on a section
     // wrapper that is now static (a permanent will-change there pinned a layer
     // for the whole visit).
     node.style.willChange = "transform";
 
-    const stop = onGsapTick(tick);
     return () => {
       stop();
       node.style.transform = "";
