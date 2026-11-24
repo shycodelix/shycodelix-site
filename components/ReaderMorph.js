@@ -1,12 +1,14 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { onGsapTick, prefersReducedMotion } from "./gsapTick";
+import { prefersReducedMotion } from "./gsapTick";
+import { subscribeDrift } from "./pointerDrift";
 
 /* ---------------------------------------------------------------------------
    ReaderMorph — one placed abstract mark in open negative space (behind the
    Avante banner, etc.). It is "alive" via a slow CSS stroke-dashoffset draw
-   cycle on its path (no gsap, no console errors) plus a gentle rAF drift driven
-   by cursor + Lenis scroll velocity from the shared bus.
+   cycle on its path (no gsap, no console errors) plus a gentle drift from the
+   shared pointerDrift, so it leans with the rider and the atmosphere instead
+   of easing against them.
 
    We deliberately do NOT morph the SVG `d` attribute: free gsap cannot cycle
    through multiple `d` shapes (that needs the paid MorphSVGPlugin), and the
@@ -25,38 +27,21 @@ export default function ReaderMorph({ className = "", strength = 1 }) {
     const el = svg.current;
     if (!el || prefersReducedMotion()) return;
 
-    let mx = 0;
-    let my = 0;
-    let vx = 0;
-    let vy = 0;
+    // Gains, not maths: pointerDrift publishes ±12px of pointer lean and ±36px
+    // of velocity lean, both already clamped and eased once for every layer.
+    // 1.7x restores this mark's old ±20px reach; velocity keeps its original
+    // 0.35 vertical scaling (x needs 1.7 because the bus slopes x at 0.35 while
+    // the mark used 0.6).
+    const POINTER_GAIN = 1.7 * strength;
+    const VELOCITY_GAIN = strength;
 
-    // The mark is pointer-events:none, so it never receives pointer events:
-    // track the pointer on the window instead. Measure the parent box, because
-    // the mark's own box moves once the drift transform is applied.
-    // The pointer can now be anywhere in the viewport, so the offset is clamped
-    // to a small reach: the mark drifts, it does not swing across the page.
-    const reach = 20 * strength;
-    const clamp = (n) => Math.max(-reach, Math.min(reach, n));
-    const onMove = (e) => {
-      const box = (el.parentElement || el).getBoundingClientRect();
-      mx = clamp((e.clientX - box.left - box.width / 2) * 0.05 * strength);
-      my = clamp((e.clientY - box.top - box.height / 2) * 0.05 * strength);
-    };
+    const stop = subscribeDrift(({ x, y, vx, vy }) => {
+      const tx = x * POINTER_GAIN + vx * 1.7 * VELOCITY_GAIN;
+      const ty = y * POINTER_GAIN + vy * VELOCITY_GAIN;
+      el.style.transform = `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0)`;
+    });
 
-    window.addEventListener("pointermove", onMove, { passive: true });
-
-    const tick = () => {
-      const v = window.__lenisVelocity || [0, 0];
-      vx += (v[0] * 0.6 * strength - vx) * 0.15;
-      vy += (v[1] * 0.35 * strength - vy) * 0.15;
-      mx *= 0.88;
-      my *= 0.88;
-      el.style.transform = `translate3d(${mx + vx}px, ${my + vy}px, 0)`;
-    };
-
-    const stop = onGsapTick(tick);
     return () => {
-      window.removeEventListener("pointermove", onMove);
       stop();
       el.style.transform = "";
     };
