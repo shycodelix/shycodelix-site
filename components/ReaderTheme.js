@@ -137,8 +137,11 @@ export default function ReaderTheme() {
 
   const t = THEMES[theme];
 
-  // Liquid glass tint for floating HUD controls only.
-  const glass = `${t.glass}; backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%)`;
+  // Liquid glass tint for floating HUD controls only. This must stay a single
+  // colour: the blur lives in the .rd-theme-btn rule, and stitching extra
+  // declarations onto the value makes it an invalid custom property that
+  // silently falls back to the dark tint on every surface.
+  const glass = t.glass;
 
   return (
     <div
