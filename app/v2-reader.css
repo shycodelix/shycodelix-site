@@ -312,7 +312,12 @@
 }
 .rd-theme-btn[aria-pressed="true"] {
   background: var(--rd-accent);
-  color: var(--rd-paper);
+  /* Paper on accent is the same pair as accent on paper (2.35:1 on light,
+     4.04:1 on sepia) for an 11.5px label. --rd-on-accent is the token the rest
+     of the reader uses for ink on an accent fill, and it already won here via
+     .page.rd .rd-theme-btn[aria-pressed="true"]; this keeps the base rule from
+     contradicting it. */
+  color: var(--rd-on-accent);
   border-color: var(--rd-accent);
 }
 .rd-theme-btn:focus-visible {
