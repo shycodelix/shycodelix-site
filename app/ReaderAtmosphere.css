@@ -37,6 +37,10 @@
 .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.34; }
 .page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.3; }
 
+/* Contact's field is the warmest of the set, and its small mono line sat right
+   on 4.5:1 over it; hold this zone back rather than dim every section. */
+.page.rd[data-rd-theme="dark"] .rd-atmos[data-zone="contact"] { opacity: 0.56; }
+
 @media (max-width: 48rem) {
   .rd-atmos { opacity: 0.6; }
   .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.3; }
