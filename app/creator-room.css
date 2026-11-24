@@ -395,9 +395,16 @@
   inset: 0;
   background: center / cover no-repeat;
   opacity: 0;
-  transition: opacity 0.32s linear;
+  /* Fade out only after the incoming scene has landed: while it is still
+     opaque underneath, the incoming layer dissolves over an image instead of
+     over the black monitor, so the cut never dips through the background. */
+  transition: opacity 0.32s linear 0.32s;
 }
-.lm-scene[data-on="true"] { opacity: 1; }
+.lm-scene[data-on="true"] {
+  opacity: 1;
+  z-index: 1;
+  transition-delay: 0s;
+}
 .lm-screen::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background:
