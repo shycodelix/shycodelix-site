@@ -53,6 +53,7 @@
   font-style: normal;
   font-weight: 600;
   opacity: 0.55;
+  /* overridden to 1 on the warm surfaces below */
   font-size: 0.55em;
   letter-spacing: 0.04em;
   display: block;
@@ -100,6 +101,9 @@
   /* Accent for large display text. --rd-accent is a fill colour: #ff7a1a on
      #f6f3ea is 2.35:1, fine behind ink but not as type. */
   --rd-accent-ink: #ff7a1a;
+  /* Opacity of not-yet-revealed words. 0.18 is a visible ghost on the dark
+     surface; warm paper swallows it, so those surfaces start higher. */
+  --rd-ghost: 0.32;
 }
 .page.rd[data-rd-theme="sepia"] {
   --rd-paper: #f1e9d6;
@@ -120,7 +124,9 @@
   --rd-zone-warm: #c2722a;
   --rd-zone-gold: #b9862a;
   --rd-zone-pink: #a8557a;
-  --rd-accent-ink: #b8531a;
+  /* 5.36:1 on --rd-paper, and dark enough for the small labels that use it. */
+  --rd-accent-ink: #9b4413;
+  --rd-ghost: 0.38;
 }
 .page.rd[data-rd-theme="light"] {
   --rd-paper: #f6f3ea;
@@ -141,8 +147,9 @@
   --rd-zone-warm: #e07a1f;
   --rd-zone-gold: #c98a12;
   --rd-zone-pink: #d94f8c;
-  /* 4.75:1 on --rd-paper, versus 2.35:1 for the fill accent. */
+  /* 4.74:1 on --rd-paper, versus 2.35:1 for the fill accent. */
   --rd-accent-ink: #b8490a;
+  --rd-ghost: 0.42;
 }
 
 /* Reader chrome that should react to the surface, but only inside the reader. */
@@ -301,7 +308,7 @@
 .rd-theme-btn:hover {
   transform: translateY(-1px);
   border-color: var(--rd-accent);
-  color: var(--rd-accent);
+  color: var(--rd-accent-ink, var(--rd-accent));
 }
 .rd-theme-btn[aria-pressed="true"] {
   background: var(--rd-accent);
@@ -648,7 +655,7 @@
   transition: color 0.15s, border-color 0.15s;
 }
 .rd-link:hover {
-  color: var(--rd-accent);
+  color: var(--rd-accent-ink, var(--rd-accent));
   border-color: var(--rd-accent);
 }
 
@@ -746,6 +753,14 @@
   border-top: 2px solid var(--rd-line);
 }
 .rd-sec:first-of-type { border-top: 0; }
+/* The numeral is a statement, not a watermark. At 0.55 no accent can clear 3:1
+   on paper (measured 2.3:1 even with the ink accent), so the warm surfaces keep
+   it fully opaque; the dark surface stays muted. */
+.page.rd[data-rd-theme="light"] h2 em,
+.page.rd[data-rd-theme="sepia"] h2 em {
+  opacity: 1;
+}
+
 .page.rd .rd-sec h2 {
   font-size: clamp(2.3rem, 6.6vw, 4.6rem);
   margin-bottom: 1.7rem;
@@ -768,7 +783,7 @@
   letter-spacing: 0.14em;
   display: block;
   margin-bottom: 0.5rem;
-  color: var(--rd-accent);
+  color: var(--rd-accent-ink, var(--rd-accent));
 }
 .rd-sec h2 em span {
   display: inline-block;
@@ -783,7 +798,7 @@
 }
 .rd-num:hover span {
   transform: translateY(-0.5em);
-  color: var(--rd-accent);
+  color: var(--rd-accent-ink, var(--rd-accent));
 }
 .rd-col {
   max-width: 62rem;
@@ -865,7 +880,7 @@
   font-weight: 900;
   font-size: clamp(2.6rem, 6vw, 4.4rem);
   line-height: 1;
-  color: var(--rd-accent);
+  color: var(--rd-accent-ink, var(--rd-accent));
 }
 .rd-ach-body { display: flex; flex-direction: column; gap: 0.3rem; }
 .rd-ach-body a {
@@ -875,7 +890,7 @@
   text-decoration: none;
   transition: color 0.15s;
 }
-.rd-ach-body a:hover { color: var(--rd-accent); }
+.rd-ach-body a:hover { color: var(--rd-accent-ink, var(--rd-accent)); }
 .rd-ach-body a span { opacity: 0.6; margin-left: 0.25rem; }
 .rd-ach-body .rd-mono { font-size: 0.78rem; color: var(--rd-ink-soft); }
 .rd-ach-note { color: var(--rd-ink-soft); }
@@ -1281,7 +1296,7 @@
   border-bottom: 2px solid var(--rd-accent);
   transition: color 0.15s, border-color 0.15s;
 }
-.rd-big-mail:hover { color: var(--rd-accent); border-color: var(--rd-accent); }
+.rd-big-mail:hover { color: var(--rd-accent-ink, var(--rd-accent)); border-color: var(--rd-accent); }
 .rd-contact-links {
   display: flex;
   flex-wrap: wrap;
@@ -1299,7 +1314,7 @@
   transition: color 0.15s, border-color 0.15s;
 }
 .rd-contact-links a:hover {
-  color: var(--rd-accent);
+  color: var(--rd-accent-ink, var(--rd-accent));
   border-color: var(--rd-accent);
 }
 
@@ -1577,4 +1592,4 @@ body,
   border-bottom: 1px solid var(--rd-accent);
   padding-bottom: 1px;
 }
-.rd-ach-case:hover { color: var(--rd-accent); }
+.rd-ach-case:hover { color: var(--rd-accent-ink, var(--rd-accent)); }
