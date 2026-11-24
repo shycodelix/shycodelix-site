@@ -146,8 +146,6 @@ export default function Profile() {
           <p className="rd-note">{lookingFor.note}</p>
         </div>
       </section>
-      <ReaderSectionScrub target="summary" />
-
       <section id="work" className="rd-sec">
         <h2><Numeral>(02)</Numeral>Selected<br />work<ReaderLiveLoop><HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={120} height={34} className="rd-loop-badge" /></ReaderLiveLoop></h2>
         <div className="rd-col">
@@ -226,8 +224,6 @@ export default function Profile() {
           </details>
         </div>
       </section>
-      <ReaderSectionScrub target="experience" />
-
       <ReaderInterlude
         src="/photos/archive/team-boom-01.webp"
         alt="The BOOM Esports Dota 2 squad together"
@@ -321,8 +317,6 @@ export default function Profile() {
           <p className="rd-note">Plays: {games.join(" · ")}</p>
         </div>
       </section>
-      <ReaderSectionScrub target="setup" />
-
       <ReaderInterlude
         src="/kit/scene-ending.webp"
         alt="Pixels-3 stream overlay on an ending scene"
@@ -346,8 +340,6 @@ export default function Profile() {
           <a href="https://www.streamelements.com/shycodelix/tip" target="_blank" rel="noreferrer">Tip jar</a>
         </div>
       </section>
-
-      <ReaderSectionScrub target="contact" />
 
       <footer className="rd-foot">
         <p>Gamer tag: {profile.tag} · reader mode of shycodelix OS</p>

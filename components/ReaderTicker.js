@@ -1,3 +1,6 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+
 const ITEMS = [
   "Esports operations",
   "Broadcast production",
@@ -11,13 +14,24 @@ const ITEMS = [
   "Community events",
 ];
 
-// The marquee's only moving part is CSS. Pausing it used to be done here with
-// inline animation-play-state on the wrapper, but the animation lives on the
-// track and its two spans, so the wrapper never paused anything; the
-// prefers-reduced-motion block in v2-reader.css now stops all three.
+// The marquee's only moving part is CSS, and it only moves while it is on
+// screen: a band that runs forever under a page you are reading is a beat
+// marker that never lets the beat rest. Paused is the default, so the band also
+// stands still without JavaScript; the reduced-motion block stops it outright.
 export default function ReaderTicker() {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <div className="rd-ticker" aria-hidden="true">
+    <div className="rd-ticker" aria-hidden="true" ref={ref} data-in-view={inView}>
       <div className="rd-track">
         {[0, 1].map((k) => (
           <span key={k}>

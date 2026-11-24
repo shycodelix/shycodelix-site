@@ -17,6 +17,10 @@ import { prefersReducedMotion } from "./gsapTick";
    beyond the mount point, and it is a no-op under reduced motion. The timeline
    is built in a `gsap.context` scoped to the section, so revert() kills only
    this section's tweens and trigger and restores the inline styles it wrote.
+
+   Mounted on the four sections you scan — work, verified, skills, career — and
+   not on the sections you read. The lift is one wrapper per section, so on a
+   prose section it drifts the whole column under the paragraph in front of you.
    --------------------------------------------------------------------------- */
 
 const LIFT = 22;   // px the blocks rise from

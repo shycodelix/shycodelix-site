@@ -225,6 +225,9 @@
 }
 .rd-ticker:hover .rd-track { animation-play-state: paused; }
 .rd-ticker:focus-within .rd-track { animation-play-state: paused; }
+/* A beat marker, not a permanent conveyor: the band runs only while it is on
+   screen. Paused is the default, so it stands still without JavaScript too. */
+.rd-ticker:not([data-in-view="true"]) .rd-track { animation-play-state: paused; }
 
 /* ---------- Liquid Glass — ONLY on floating HUD controls ---------- */
 /* No glass behind body copy anywhere in the reader. */
@@ -1297,7 +1300,6 @@
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
-.rd-track span { animation: rdScroll 56s linear infinite; }
 
 /* ---------- Reduced motion: kill every new motion, reveal everything ---------- */
 @media (prefers-reduced-motion: reduce) {
@@ -1322,8 +1324,7 @@
     animation: none;
     transform: none;
   }
-  .rd-track,
-  .rd-track span { animation: none; transform: none; }
+  .rd-track { animation: none; transform: none; }
   .rd-ticker {
     background: var(--rd-paper);
     border-block-color: var(--rd-line);
