@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { onGsapTick, prefersReducedMotion } from "./gsapTick";
+import { prefersReducedMotion } from "./gsapTick";
+import { subscribeDrift } from "./pointerDrift";
 
 /* ---------------------------------------------------------------------------
    Ambient reader rider — a single small SVG "rider" behind the reader that
@@ -8,9 +9,10 @@ import { onGsapTick, prefersReducedMotion } from "./gsapTick";
    the tang; calmer in dark/sepia).
 
    It is deliberately small and GPU-composited (transform-only on the rider
-   group). Motion is on the <svg> element, not the document, so it is cheap
-   and does not install a scroll listener. Under reduced motion the rider is
-   frozen mid-phrase via CSS.
+   group). The pointer and scroll velocity come from the shared drift in
+   pointerDrift.js — the rider owns neither, it only chooses how far to lean —
+   so it stays in phase with the section atmosphere instead of easing against
+   it. Under reduced motion the rider is frozen mid-phrase via CSS.
    --------------------------------------------------------------------------- */
 
 export default function ReaderAmbient({ className = "" }) {
@@ -20,49 +22,16 @@ export default function ReaderAmbient({ className = "" }) {
     const s = svg.current;
     if (!s || prefersReducedMotion()) return;
 
-    let mx = 0;
-    let my = 0;
+    // Lean further than the atmosphere does (1.5x) so the rider still reads as
+    // a mark tracking the cursor, while sharing the atmosphere's smoothing and
+    // its rest position. 18px at the edge of the viewport was the old reach.
+    const GAIN = 1.5;
+    const VELOCITY_GAIN = 0.5;
+    const stop = subscribeDrift(({ x, y, vx, vy }) => {
+      s.style.transform = `translate3d(${(x * GAIN + vx * VELOCITY_GAIN).toFixed(2)}px, ${(y * GAIN + vy * VELOCITY_GAIN).toFixed(2)}px, 0)`;
+    });
 
-    // The rider is pointer-events:none, so the pointer is tracked on the window
-    // and measured against its container (the rider's own box moves with the
-    // drift transform). Clamped, so a cursor across the page is a lean, not a
-    // swing. Keep it gentle so the drift reads as editorial, not a magnet.
-    const reach = 18;
-    const clamp = (n) => Math.max(-reach, Math.min(reach, n));
-    const onMove = (e) => {
-      const box = (s.parentElement || s).getBoundingClientRect();
-      mx = clamp((e.clientX - box.left - box.width / 2) * 0.10);
-      my = clamp((e.clientY - box.top - box.height / 2) * 0.10);
-    };
-
-    window.addEventListener("pointermove", onMove, { passive: true });
-
-    let sx = 0; // smoothed scroll-velocity drift (px), signed
-    let sy = 0;
-
-    const tick = () => {
-      // A little scroll-velocity drift, read off the shared Lenis bus the Nav
-      // publishes. Keep the amplitude tiny so the rider never looks driven by
-      // scrolling — it reads as a mark that lives in the same world as the
-      // page, not as a scroll progress indicator.
-      const v = window.__lenisVelocity || [0, 0];
-      sx += (v[0] * 0.6 - sx) * 0.12;
-      sy += (v[1] * 0.35 - sy) * 0.12;
-
-      // Cursor settles toward the pointer; scroll drift eases back toward rest
-      // when scrolling stops.
-      mx *= 0.88;
-      my *= 0.88;
-      if (sx || sy) {
-        sx *= 0.9;
-        sy *= 0.9;
-      }
-      s.style.transform = `translate3d(${mx + sx}px, ${my + sy}px, 0)`;
-    };
-
-    const stop = onGsapTick(tick);
     return () => {
-      window.removeEventListener("pointermove", onMove);
       stop();
       s.style.transform = "";
     };

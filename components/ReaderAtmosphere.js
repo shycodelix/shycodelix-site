@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { onGsapTick, prefersReducedMotion } from "./gsapTick";
+import { prefersReducedMotion } from "./gsapTick";
+import { subscribeDrift } from "./pointerDrift";
 
 /* ---------------------------------------------------------------------------
    ReaderAtmosphere — the reader's background as a place rather than a surface.
@@ -13,22 +14,28 @@ import { onGsapTick, prefersReducedMotion } from "./gsapTick";
 
    Rules it keeps:
    - Pointer-events none, aria-hidden, behind `main` (which takes z-index 1).
-   - Colours arrive as --za/--zb so each section retints by variable alone.
-   - Drift runs on the shared GSAP ticker, never its own rAF, and is transform
-     only, so nothing repaints layout under the text.
-   - Reduced motion freezes it: no tweens, no cursor lean, no drift.
+   - Colours arrive as --za/--zb, and those resolve to the reading surface's
+     own zone tokens (--rd-zone-*), so dark/sepia/light each supply their own
+     tuned values instead of the component hard-coding a hue that only works on
+     one surface.
+   - Drift comes from pointerDrift.js, which owns the pointer and velocity for
+     every reactive layer; this file only decides its gain. Transform only, so
+     nothing repaints layout under the text.
+   - Reduced motion freezes it: no tweens, no lean, no drift.
    --------------------------------------------------------------------------- */
 
+// Token recipes, not hex: the surface defines what "cool" or "warm" means on
+// its paper. Two zones have no single token, so they mix one from the surface.
 const ZONES = {
-  summary: { a: "#7c6cff", b: "#3c7bff", motif: "grid" },
-  work: { a: "#ff9a3c", b: "#ff5f3c", motif: "rings" },
-  verified: { a: "#3ad39b", b: "#2fa8ff", motif: "grid" },
-  experience: { a: "#5aa7ff", b: "#8f7cff", motif: "rules" },
-  skills: { a: "#ffb020", b: "#ff7a1a", motif: "rings" },
-  avante: { a: "#ff4fa3", b: "#a35cff", motif: "rules" },
-  career: { a: "#9aa4c9", b: "#6f7ea8", motif: "grid" },
-  setup: { a: "#a6e22e", b: "#3ad39b", motif: "rings" },
-  contact: { a: "#ff7a1a", b: "#ffd76a", motif: "rules" },
+  summary: { a: "var(--rd-zone-cool)", b: "var(--rd-zone-blue)", motif: "grid" },
+  work: { a: "var(--rd-zone-warm)", b: "var(--rd-zone-gold)", motif: "rings" },
+  verified: { a: "var(--rd-zone-green)", b: "var(--rd-zone-blue)", motif: "grid" },
+  experience: { a: "var(--rd-zone-blue)", b: "var(--rd-zone-cool)", motif: "rules" },
+  skills: { a: "var(--rd-zone-gold)", b: "var(--rd-zone-warm)", motif: "rings" },
+  avante: { a: "var(--rd-zone-pink)", b: "var(--rd-zone-cool)", motif: "rules" },
+  career: { a: "color-mix(in oklab, var(--rd-zone-cool) 55%, var(--rd-ink-soft))", b: "var(--rd-zone-blue)", motif: "grid" },
+  setup: { a: "color-mix(in oklab, var(--rd-zone-green) 72%, var(--rd-zone-gold))", b: "var(--rd-zone-green)", motif: "rings" },
+  contact: { a: "var(--rd-zone-warm)", b: "var(--rd-zone-gold)", motif: "rules" },
 };
 
 export default function ReaderAtmosphere() {
@@ -89,28 +96,13 @@ export default function ReaderAtmosphere() {
     tl.to(blobs[0], { xPercent: 9, yPercent: 7, scale: 1.14, duration: 19 }, 0)
       .to(blobs[1], { xPercent: -11, yPercent: -8, scale: 0.9, duration: 24 }, 0);
 
-    // Cursor + scroll velocity lean, kept to a few dozen pixels: the field
-    // should feel alive under the page, not follow the pointer (or a jump-to
-    // -anchor scroll, whose velocity spike is enormous) off the screen. Both
-    // terms are eased and clamped so the layer's oversized inset always still
-    // covers the viewport.
-    const LEAN = 12;
-    const DRIFT = 36;
-    let px = 0;
-    let py = 0;
-    let vy = 0;
-    const clamp = (n, lim) => Math.max(-lim, Math.min(lim, n));
-    const tick = () => {
-      const cx = Number.isFinite(window.__pointerX) ? window.__pointerX : window.innerWidth / 2;
-      const cy = Number.isFinite(window.__pointerY) ? window.__pointerY : window.innerHeight / 2;
-      px += (clamp((cx - window.innerWidth / 2) * 0.012, LEAN) - px) * 0.06;
-      py += (clamp((cy - window.innerHeight / 2) * 0.012, LEAN) - py) * 0.06;
-      const v = window.__lenisVelocity || [0, 0];
-      const targetVy = clamp((Number(v[1]) || 0) * 0.35, DRIFT);
-      vy += (targetVy - vy) * 0.08;
-      el.style.transform = `translate3d(${px.toFixed(2)}px, ${(py + vy).toFixed(2)}px, 0)`;
-    };
-    const stop = onGsapTick(tick);
+    // Full gain on the shared drift: the field is the reference motion, so it
+    // takes pointerDrift's values as-is and the rider leans off it. The drift
+    // is already clamped to the layer's oversized inset, so no extra guard is
+    // needed here.
+    const stop = subscribeDrift(({ x, y, vy }) => {
+      el.style.transform = `translate3d(${x.toFixed(2)}px, ${(y + vy).toFixed(2)}px, 0)`;
+    });
 
     return () => {
       stop();

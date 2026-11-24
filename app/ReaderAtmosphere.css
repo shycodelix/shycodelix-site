@@ -42,14 +42,14 @@
 .rd-atmos-blob-a {
   left: -14vmax;
   top: -20vmax;
-  background: radial-gradient(circle, var(--za, #7c6cff) 0%, transparent 62%);
+  background: radial-gradient(circle, var(--za, currentColor) 0%, transparent 62%);
   opacity: 0.22;
 }
 
 .rd-atmos-blob-b {
   right: -18vmax;
   bottom: -24vmax;
-  background: radial-gradient(circle, var(--zb, #3c7bff) 0%, transparent 60%);
+  background: radial-gradient(circle, var(--zb, currentColor) 0%, transparent 60%);
   opacity: 0.18;
 }
 
@@ -64,14 +64,10 @@
   transition: opacity 0.7s ease;
 }
 
-.rd-atmos[data-motif="grid"] .rd-atmos-dots { opacity: 0.5; }
-.rd-atmos[data-motif="rules"] .rd-atmos-rules { opacity: 0.5; }
-.rd-atmos[data-motif="rings"] .rd-atmos-rings { opacity: 0.55; }
-
 .rd-atmos-dots {
   background-image: radial-gradient(currentColor 1px, transparent 1.4px);
   background-size: 30px 30px;
-  color: var(--za, #7c6cff);
+  color: var(--za, currentColor);
   opacity: 0;
   -webkit-mask-image: radial-gradient(120% 90% at 20% 0%, #000 0%, transparent 72%);
   mask-image: radial-gradient(120% 90% at 20% 0%, #000 0%, transparent 72%);
@@ -83,7 +79,7 @@
     currentColor 0 1px,
     transparent 1px 46px
   );
-  color: var(--zb, #3c7bff);
+  color: var(--zb, currentColor);
   opacity: 0;
   -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
   mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
@@ -95,14 +91,14 @@
     currentColor 0 1px,
     transparent 1px 54px
   );
-  color: var(--za, #7c6cff);
+  color: var(--za, currentColor);
   opacity: 0;
   -webkit-mask-image: radial-gradient(80% 70% at 78% 22%, #000 0%, transparent 78%);
   mask-image: radial-gradient(80% 70% at 78% 22%, #000 0%, transparent 78%);
 }
 
-/* The motif opacities above are gated by data-motif; keep the base at 0 so the
-   two dormant motifs stay invisible in every case. */
+/* Only the motif the current zone asks for is painted. Declared once, after the
+   base rules, so it wins over their `opacity: 0`. */
 .rd-atmos[data-motif="grid"] .rd-atmos-dots { opacity: 0.5; }
 .rd-atmos[data-motif="rules"] .rd-atmos-rules { opacity: 0.45; }
 .rd-atmos[data-motif="rings"] .rd-atmos-rings { opacity: 0.5; }
@@ -111,7 +107,6 @@
   .rd-atmos { opacity: 0.42; inset: -14vmax; }
   .rd-atmos-blob { width: 78vmax; height: 78vmax; filter: blur(38px); }
   .rd-atmos-dots { background-size: 24px 24px; }
-  .rd-atmos-rings { background-size: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
