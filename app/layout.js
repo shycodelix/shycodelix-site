@@ -2,6 +2,7 @@ import { Archivo, DM_Sans, Press_Start_2P, Silkscreen } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Cursor from "../components/Cursor";
+import Curtain from "../components/Curtain";
 
 const display = Archivo({ subsets: ["latin"], weight: ["800", "900"], variable: "--font-display", display: "swap" });
 const pixel = Press_Start_2P({ subsets: ["latin"], weight: "400", variable: "--font-pixel", display: "swap" });
@@ -82,6 +83,7 @@ export default function RootLayout({ children }) {
             Enter on the revealed skip link moves focus there. */}
         <a className="skip-link" href="#content">Skip to content</a>
         {children}
+        <Curtain />
       </body>
     </html>
   );

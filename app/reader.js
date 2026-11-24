@@ -19,7 +19,6 @@ import ReaderLiveLoop from "../components/ReaderLiveLoop";
 import ReaderScrollChoreo from "../components/ReaderScrollChoreo";
 import ReaderSectionScrub from "../components/ReaderSectionScrub";
 import Wordmark from "../components/Wordmark";
-import Curtain from "../components/Curtain";
 import "./v2-reader.css";
 import "./ReaderAmbient.css";
 import "./ReaderMorph.css";
@@ -73,7 +72,6 @@ export default function Profile() {
 
   return (
     <div className="page rd">
-      <Curtain surface="reader" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Nav />
       <ReaderTheme />

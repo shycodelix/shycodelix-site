@@ -5,7 +5,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import LiveMonitor from "./LiveMonitor";
 import RigExploded from "./RigExploded";
 import Wordmark from "./Wordmark";
-import Curtain from "./Curtain";
 import { achievements, gear, avante, profile } from "../app/data";
 
 const mail = `mailto:${profile.email}?subject=Let%27s%20work%20together`;
@@ -388,9 +387,7 @@ export default function CreatorRoom() {
   ];
 
   return (
-    <>
-      <Curtain surface="room" />
-          <div id="content" data-skip-target tabIndex={-1} className="room">
+    <div id="content" data-skip-target tabIndex={-1} className="room">
       <header className={`room-top ${entering ? "entering" : ""}`}>
         <span className="room-brand">
           <i aria-hidden="true" />
@@ -511,6 +508,5 @@ export default function CreatorRoom() {
 
       {toast && <div className="room-toast" role="status">{toast}</div>}
     </div>
-    </>
   );
 }
