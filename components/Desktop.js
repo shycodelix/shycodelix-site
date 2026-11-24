@@ -12,6 +12,7 @@ import Photos from "./Photos";
 import Notepad from "./Notepad";
 import StreamKit from "./StreamKit";
 import AvanteStudy from "./AvanteStudy";
+import Wordmark from "./Wordmark";
 import { icons, mascot, fine, cloud } from "../app/sprites";
 import { profile, achievements, experience, sensitivity, sensitivityNote, gear, valorant, avante, schedule } from "../app/data";
 
@@ -651,7 +652,7 @@ export default function Desktop() {
       ))}
 
       <header className="topbar">
-        <span className="brand">shycodelix OS</span>
+        <span className="brand"><Wordmark /> OS</span>
         <span className="topbar-links">
           <Link href="/links">Links</Link>
           <Link href="/os">Creator room</Link>

@@ -18,6 +18,7 @@ import ReaderVelocityLayer from "../components/ReaderVelocityLayer";
 import ReaderLiveLoop from "../components/ReaderLiveLoop";
 import ReaderScrollChoreo from "../components/ReaderScrollChoreo";
 import ReaderSectionScrub from "../components/ReaderSectionScrub";
+import Wordmark from "../components/Wordmark";
 import "./v2-reader.css";
 import "./ReaderAmbient.css";
 import "./ReaderMorph.css";
@@ -87,7 +88,7 @@ export default function Profile() {
 
         <div className="rd-hero-bar">
           <span className="rd-status"><i aria-hidden="true" />{profile.status}</span>
-          <span className="rd-mono rd-mark">sc*/26</span>
+          <Wordmark className="rd-mono rd-mark" />
         </div>
 
         <ReaderScrollChoreo className="rd-hero-body" target=".rh" headerSkew={0} headerY={14}>

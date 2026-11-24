@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import LiveMonitor from "./LiveMonitor";
 import RigExploded from "./RigExploded";
+import Wordmark from "./Wordmark";
 import { achievements, gear, avante, profile } from "../app/data";
 
 const mail = `mailto:${profile.email}?subject=Let%27s%20work%20together`;
@@ -390,7 +391,7 @@ export default function CreatorRoom() {
       <header className={`room-top ${entering ? "entering" : ""}`}>
         <span className="room-brand">
           <i aria-hidden="true" />
-          shycodelix · creator room
+          <Wordmark /> · creator room
         </span>
         <nav aria-label="Modes">
           <Link href="/">Reader mode</Link>

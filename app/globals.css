@@ -251,6 +251,13 @@ h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
 .topbar { position: absolute; inset: 0 0 auto 0; z-index: 8; display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 0.7rem; pointer-events: none; }
 .topbar > * { pointer-events: auto; }
 .brand { font-family: var(--font-pixel), monospace; font-size: 0.7rem; color: #fff; text-shadow: 2px 2px 0 rgba(10, 36, 106, 0.65); }
+
+/* The wordmark — sc, asterisk, /26 — that the reader bar, the creator room bar
+   and this title bar all carry. It keeps the face of the bar it sits in (mono on
+   the reader and the room, the title bar's pixel face here) and takes the accent
+   for the asterisk. */
+.mark { white-space: nowrap; }
+.mark-star { color: var(--rd-accent, var(--tang)); }
 .topbar a {
   font-family: var(--font-micro), monospace;
   font-size: 0.75rem;

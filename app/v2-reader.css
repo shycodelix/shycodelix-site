@@ -559,6 +559,9 @@
   letter-spacing: 0.02em;
   font-weight: 600;
 }
+/* The bar is accent-filled, so the mark's asterisk takes the on-accent ink here
+   rather than the accent it is set in on the room and the OS title bar. */
+.rd-hero-bar .rd-mark .mark-star { color: inherit; }
 
 /* The hero body holds the headline and the identification row, pinned to the
    bottom of the fold so the type rises out of the rule rather than floating. */
@@ -1375,9 +1378,9 @@
     transform: none;
     width: 100%;
     max-width: none;
-    /* Four chips and one disclosure fit a phone, so the row wraps instead of
-       scrolling; nothing hides behind a mask fade, and a second row costs the
-       fold nothing because the hero measures the dock. */
+    /* Five items fit one row at 432px with the chips' side padding trimmed; a
+       narrower phone wraps rather than scrolls, and a second row costs the fold
+       nothing because the hero measures the dock. */
     flex-wrap: wrap;
     justify-content: flex-start;
     overflow: visible;
@@ -1391,7 +1394,7 @@
     -webkit-mask-image: none;
     mask-image: none;
   }
-  .page.rd .dock-more > summary { padding: 0.55rem 0.75rem; }
+  .page.rd .dock-more > summary { padding: 0.55rem 0.6rem; }
   /* On a phone the row wraps, so the disclosure can end up anywhere on it. As a
      static box it stops being the panel's containing block, and the panel
      anchors to the dock's right edge instead — always on screen, whichever row
@@ -1407,7 +1410,9 @@
   }
   .page.rd .dock a {
     flex: 0 0 auto;
-    padding: 0.55rem 0.75rem;
+    /* Trimmed from 0.75rem so all five items share one row at 432px. The height
+       is untouched, and the site's 32px min-height still applies below 700px. */
+    padding: 0.55rem 0.6rem;
     border-right: 1px solid var(--rd-line);
   }
   .rd-theme-hud {
