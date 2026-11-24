@@ -270,7 +270,7 @@ h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
   background: var(--tang);
   pointer-events: none;
   transform-origin: 50% 0;
-  animation: curtainWipe 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: curtainWipe 240ms cubic-bezier(0.2, 0, 0.3, 1) both;
 }
 @keyframes curtainWipe {
   from { transform: scaleY(1); }
