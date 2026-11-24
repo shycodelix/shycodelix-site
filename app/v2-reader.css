@@ -97,6 +97,9 @@
   --rd-zone-warm: #ff9a3c;
   --rd-zone-gold: #ffb020;
   --rd-zone-pink: #ff4fa3;
+  /* Accent for large display text. --rd-accent is a fill colour: #ff7a1a on
+     #f6f3ea is 2.35:1, fine behind ink but not as type. */
+  --rd-accent-ink: #ff7a1a;
 }
 .page.rd[data-rd-theme="sepia"] {
   --rd-paper: #f1e9d6;
@@ -117,6 +120,7 @@
   --rd-zone-warm: #c2722a;
   --rd-zone-gold: #b9862a;
   --rd-zone-pink: #a8557a;
+  --rd-accent-ink: #b8531a;
 }
 .page.rd[data-rd-theme="light"] {
   --rd-paper: #f6f3ea;
@@ -137,6 +141,8 @@
   --rd-zone-warm: #e07a1f;
   --rd-zone-gold: #c98a12;
   --rd-zone-pink: #d94f8c;
+  /* 4.75:1 on --rd-paper, versus 2.35:1 for the fill accent. */
+  --rd-accent-ink: #b8490a;
 }
 
 /* Reader chrome that should react to the surface, but only inside the reader. */
@@ -1045,7 +1051,9 @@
   text-transform: uppercase;
   font-size: clamp(1.5rem, 4.6vw, 3rem);
   line-height: 1;
-  color: var(--rd-accent);
+  /* Display-size type, so it needs a surface-safe accent rather than the fill
+     colour: on the light surface the fill accent sits at 2.35:1. */
+  color: var(--rd-accent-ink, var(--rd-accent));
   max-width: 22ch;
   margin: 0 auto;
 }

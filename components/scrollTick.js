@@ -60,9 +60,16 @@ export function publishLenisVelocityOnScrollTick(getVelocity) {
     }
     const next = Array.isArray(v) && v.length >= 2 ? [Number(v[0]) || 0, Number(v[1]) || 0] : [0, 0];
     const idle = Math.abs(next[0]) < STOPPED && Math.abs(next[1]) < STOPPED;
-    last = idle ? [0, 0] : next;
+    if (!idle && tail-- > 0) {
+      last = next;
+      schedule();
+    } else {
+      // Two ways to get here: Lenis has decayed to a stop, or the tail ran out
+      // while it still reports motion. Either way the bus must not outlive the
+      // gesture with a stuck value, so it is written as rest and left there.
+      last = [0, 0];
+    }
     window.__lenisVelocity = last;
-    if (!idle && tail-- > 0) schedule();
   };
 
   // ~2s of frames at 60fps; Lenis settles well inside that.
