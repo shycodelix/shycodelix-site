@@ -110,7 +110,10 @@
   --rd-paper2: #f7f1e2;
   --rd-ink: #3a2f22;
   --rd-ink-soft: #6b5d47;
-  --rd-dusk: #8a7a5e;
+  /* Deeper umber than the shared dusk: at #8a7a5e the section numeral sat at
+     3.28:1, below the 4.5:1 bar. Warm rather than grey so it stays distinct
+     from --rd-ink-soft. */
+  --rd-dusk: #75573a;
   --rd-tang: #b8531a;
   --rd-line: rgba(58, 47, 34, 0.18);
   --rd-accent: #b8531a;
