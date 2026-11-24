@@ -782,6 +782,12 @@
 .page.rd[data-rd-theme="dark"] .rd-sec h2 em span {
   color: var(--rd-dusk-dim, var(--rd-dusk));
 }
+/* On narrow screens the numerals shrink below 18.66px, so the large-text 3:1
+   allowance no longer applies and the 0.55 composite stops passing 4.5. There
+   the mute comes off the opacity and stays only in the colour. */
+@media (max-width: 48rem) {
+  .page.rd[data-rd-theme="dark"] h2 em { opacity: 1; }
+}
 
 .page.rd .rd-sec h2 {
   font-size: clamp(2.3rem, 6.6vw, 4.6rem);
@@ -1226,8 +1232,13 @@
   inset: auto 0 0 0;
   display: grid;
   padding: 1.2rem 1rem 0.8rem;
-  color: var(--rd-paper);
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+  /* Literal, not --rd-paper: the scrim is always dark, and --rd-paper inverts
+     with the surface, which left the dark theme's captions dark-on-dark. */
+  color: #f6f3ea;
+  /* The old scrim faded to transparent exactly where the title line sits, so a
+     bright frame left paper text at ~1.1:1. This keeps a dark base across the
+     whole caption box: 0.62 at the top line still clears 4.5:1 over white. */
+  background: linear-gradient(to top, rgba(8, 6, 14, 0.88) 0%, rgba(8, 6, 14, 0.78) 55%, rgba(8, 6, 14, 0.62) 100%);
 }
 .rd-shot figcaption b {
   font-family: var(--font-grotesk), var(--font-display), Impact, sans-serif;
@@ -1238,7 +1249,10 @@
 }
 .rd-shot figcaption span {
   font-size: 0.78rem;
-  color: var(--rd-ink-soft);
+  /* ink-soft belonged to the old light scrim; against the dark one it reads at
+     1.00:1. The note follows the title onto paper, just a step quieter. */
+  color: #f6f3ea;
+  opacity: 0.82;
   margin-top: 0.1rem;
 }
 @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {

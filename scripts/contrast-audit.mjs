@@ -18,14 +18,23 @@
  */
 import { chromium } from "playwright";
 
-const URL = process.argv[2] || "http://127.0.0.1:3001/";
+const argv = process.argv.slice(2);
+const arg = (name, dflt) => {
+  const hit = argv.find((a) => a.startsWith(`--${name}=`));
+  return hit ? hit.split("=").slice(1).join("=") : dflt;
+};
+const URL = argv.find((a) => a.startsWith("http")) || "http://127.0.0.1:3001/";
+const WIDTH = Number(arg("width", 1440));
+const HEIGHT = WIDTH < 600 ? 844 : 900;
+const REDUCED = argv.includes("--reduced");
 const CHROME = "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const THEMES = ["dark", "sepia", "light"];
 const NORMAL = 4.5;
 const LARGE = 3;
 
 const browser = await chromium.launch({ executablePath: CHROME, headless: true });
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const page = await browser.newPage({ viewport: { width: WIDTH, height: HEIGHT } });
+if (REDUCED) await page.emulateMedia({ reducedMotion: "reduce" });
 const consoleErrors = [];
 page.on("pageerror", (e) => consoleErrors.push(e.message));
 page.on("console", (m) => {
@@ -230,7 +239,9 @@ for (const theme of THEMES) {
   await page.evaluate(() => document.querySelectorAll("[data-audit-hover]").forEach((el) => el.removeAttribute("data-audit-hover")));
 }
 
-console.log(`\n${total} elements checked across ${THEMES.length} surfaces; ${failures.length} failure(s); ${consoleErrors.length} console error(s).`);
+console.log(
+  `\n${total} elements checked at ${WIDTH}px${REDUCED ? " with reduced motion" : ""} across ${THEMES.length} surfaces; ${failures.length} failure(s); ${consoleErrors.length} console error(s).`,
+);
 if (failures.length) {
   console.log("\nFailures, worst first:");
   failures.sort((a, b) => a.cr - b.cr).forEach((f) => console.log(`  ${f.cr.toFixed(2)}:1 ${f.theme} ${f.sel} (${f.size}px/${f.weight}, op=${f.opacity}) "${f.text}"`));
