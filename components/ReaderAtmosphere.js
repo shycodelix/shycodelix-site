@@ -25,8 +25,8 @@ const ZONES = {
   summary: { a: "var(--rd-zone-cool)", b: "var(--rd-zone-blue)", speed: 0.55, curl: 1.0, motes: 1.0, lift: 0.5 },
   work: { a: "var(--rd-zone-warm)", b: "var(--rd-zone-gold)", speed: 0.7, curl: 1.5, motes: 1.15, lift: 0.8 },
   verified: { a: "var(--rd-zone-green)", b: "var(--rd-zone-blue)", speed: 0.45, curl: 0.8, motes: 0.9, lift: 0.3 },
-  experience: { a: "var(--rd-zone-blue)", b: "var(--rd-zone-cool)", speed: 0.5, curl: 0.6, motes: 1.0, lift: 0.35 },
-  skills: { a: "var(--rd-zone-gold)", b: "var(--rd-zone-warm)", speed: 0.85, curl: 1.8, motes: 1.3, lift: 0.9 },
+  experience: { a: "var(--rd-zone-blue)", b: "var(--rd-zone-pink)", speed: 0.5, curl: 0.6, motes: 1.0, lift: 0.35 },
+  skills: { a: "var(--rd-zone-pink)", b: "var(--rd-zone-gold)", speed: 0.85, curl: 1.8, motes: 1.3, lift: 0.9 },
   avante: { a: "var(--rd-zone-pink)", b: "var(--rd-zone-cool)", speed: 0.65, curl: 1.2, motes: 1.2, lift: 0.7 },
   career: {
     a: "color-mix(in oklab, var(--rd-zone-cool) 55%, var(--rd-ink-soft))",
@@ -37,7 +37,7 @@ const ZONES = {
     lift: 0.6,
   },
   setup: { a: "color-mix(in oklab, var(--rd-zone-green) 72%, var(--rd-zone-gold))", b: "var(--rd-zone-green)", speed: 0.4, curl: 0.9, motes: 0.95, lift: 0.25 },
-  contact: { a: "var(--rd-zone-warm)", b: "var(--rd-zone-gold)", speed: 0.75, curl: 1.4, motes: 1.1, lift: 0.85 },
+  contact: { a: "var(--rd-zone-warm)", b: "var(--rd-zone-pink)", speed: 0.75, curl: 1.4, motes: 1.1, lift: 0.85 },
 };
 
 const parse = (rgb) => (rgb.match(/[\d.]+/g) || []).map(Number).slice(0, 3);
@@ -56,6 +56,9 @@ function resolve(root, value, fallback) {
 
 export default function ReaderAtmosphere() {
   const wrap = useRef(null);
+  // Set by the draw loop, called when the active zone changes: the palette has
+  // to be re-resolved from the new zone's tokens, not only at mount.
+  const applyZone = useRef(null);
   const zoneRef = useRef("summary");
   const [zone, setZone] = useState("summary");
   zoneRef.current = zone;
@@ -123,13 +126,13 @@ export default function ReaderAtmosphere() {
     const cur = { a: [128, 128, 128], b: [128, 128, 128], speed: 0.5, curl: 1, motes: 1, lift: 0.5 };
     let target = { a: cur.a.slice(), b: cur.b.slice(), ...ZONES[zoneRef.current] };
 
-    const readZone = () => {
-      const z = ZONES[zoneRef.current] || ZONES.summary;
+    const readZone = (id) => {
+      const z = ZONES[id] || ZONES.summary;
       const a = resolve(root, z.a, cur.a);
       const b = resolve(root, z.b, cur.b);
       target = { a, b, speed: z.speed, curl: z.curl, motes: z.motes, lift: z.lift };
     };
-    readZone();
+    readZone(zoneRef.current);
 
     // Motes: position, heading and length, seeded across the viewport.
     const count = Math.round(Math.min(150, Math.max(46, (w * h) / 26000)));
@@ -265,6 +268,13 @@ export default function ReaderAtmosphere() {
     addEventListener("resize", onResize);
     document.addEventListener("visibilitychange", onVisibility);
 
+    // A zone change re-reads its tokens. Under reduced motion the single still
+    // frame is repainted too, otherwise it would keep the first section's tint.
+    applyZone.current = () => {
+      readZone(zoneRef.current);
+      if (reduced) draw(true);
+    };
+
     if (reduced) {
       draw(true);
     } else {
@@ -273,6 +283,7 @@ export default function ReaderAtmosphere() {
 
     return () => {
       running = false;
+      applyZone.current = null;
       cancelAnimationFrame(raf);
       stopDrift();
       io.disconnect();
@@ -281,6 +292,11 @@ export default function ReaderAtmosphere() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
   }, []);
+
+  // Re-resolve the palette whenever the active section changes.
+  useEffect(() => {
+    applyZone.current?.();
+  }, [zone]);
 
   return (
     <div ref={wrap} className="rd-atmos" data-zone={zone} aria-hidden="true">
