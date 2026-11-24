@@ -26,6 +26,8 @@ const arg = (n, d) => {
 const WIDTH = Number(arg("width", 1440));
 const HEIGHT = WIDTH < 600 ? 844 : 900;
 const FRAMES = Number(arg("frames", 2));
+const THEME = arg("theme", "dark");
+const THEME_LABEL = THEME[0].toUpperCase() + THEME.slice(1) + " reading surface";
 const ZONES = ["summary", "work", "verified", "experience", "skills", "career", "setup", "contact"];
 const CHROME = "C:/Program Files/Google/Chrome/Application/chrome.exe";
 
@@ -44,7 +46,7 @@ const browser = await chromium.launch({ executablePath: CHROME, headless: true }
 const page = await browser.newPage({ viewport: { width: WIDTH, height: HEIGHT } });
 await page.goto("http://127.0.0.1:3001/", { waitUntil: "load", timeout: 45000 });
 await page.waitForTimeout(1800);
-await page.locator('.rd-theme-chip[aria-label="Dark reading surface"]').click({ force: true });
+await page.locator(`.rd-theme-chip[aria-label="${THEME_LABEL}"]`).click({ force: true });
 await page.waitForTimeout(700);
 
 /** Canvas as a coarse grid of [r,g,b,a], plus the page colour and layer opacity. */
@@ -162,7 +164,9 @@ for (const zone of ZONES) {
       }
       const rec = { zone, ...it, need, ratio: Number.isFinite(min) ? min : null };
       if (!worst || (rec.ratio ?? 0) < (worst.ratio ?? 0)) worst = rec;
-      if (f === FRAMES - 1 && rec.ratio != null && rec.ratio < need) fail.push(rec);
+      // Union across frames: a dip on any sampled frame is a real state a
+      // reader can land on, so it counts even if the last frame is clean.
+      if (rec.ratio != null && rec.ratio < need) fail.push(rec);
     }
     await page.waitForTimeout(300);
   }
@@ -172,7 +176,7 @@ for (const zone of ZONES) {
 }
 
 const uniq = [...new Map(fail.map((f) => [`${f.zone}|${f.sel}|${f.text}`, f])).values()].sort((a, b) => a.ratio - b.ratio);
-console.log(`\n${uniq.length} below AA over the field, ${WIDTH}px:`);
+console.log(`\n${uniq.length} below AA over the field, ${THEME} ${WIDTH}px (union of ${FRAMES} frames):`);
 uniq.slice(0, 24).forEach((f) => console.log(`  ${f.ratio.toFixed(2)}:1 ${f.zone.padEnd(11)} ${f.sel} (${f.size}px/${f.weight}) "${f.text}"`));
 await browser.close();
 process.exit(uniq.length ? 1 : 0);

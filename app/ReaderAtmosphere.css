@@ -34,8 +34,11 @@
 
 /* Dark paper can take the brightest version; the warm surfaces need the field
    held back so it never competes with body copy. */
-.page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.34; }
-.page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.3; }
+/* Warm surfaces carry dark copy, so the field costs contrast instead of adding
+   it: measured over the field, sepia copy sat at 4.38-4.49 and had to come
+   down. These values keep the field as a wash rather than a tint under text. */
+.page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.2; }
+.page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.16; }
 
 /* Contact's field is the warmest of the set, and its small mono line sat right
    on 4.5:1 over it; hold this zone back rather than dim every section. */
@@ -43,8 +46,10 @@
 
 @media (max-width: 48rem) {
   .rd-atmos { opacity: 0.6; }
-  .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.3; }
-  .page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.26; }
+  /* On a phone the copy runs wider and the field costs more contrast; warm
+     surfaces keep only a breath of it so labels stay above 4.5. */
+  .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.08; }
+  .page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.06; }
 }
 
 @media (prefers-reduced-motion: reduce) {
