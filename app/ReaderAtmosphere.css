@@ -34,11 +34,16 @@
 
 /* Dark paper can take the brightest version; the warm surfaces need the field
    held back so it never competes with body copy. */
-/* Warm surfaces carry dark copy, so the field costs contrast instead of adding
-   it: measured over the field, sepia copy sat at 4.38-4.49 and had to come
-   down. These values keep the field as a wash rather than a tint under text. */
-.page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.2; }
-.page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.16; }
+/* Warm surfaces carry dark copy, so a saturated field costs contrast. Fading
+   the whole layer fixed the ratio but killed the motion, so the surfaces now
+   keep the layer at full presence and instead lift the field's own colours
+   toward the paper (--rd-field-lift) and clamp its alpha (--rd-field-amp). */
+.page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.5; }
+.page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.46; }
+
+.page.rd[data-rd-theme="dark"] { --rd-field-lift: 0; --rd-field-amp: 1; }
+.page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.7; --rd-field-amp: 0.92; --rd-field-tint: #fffdf4; }
+.page.rd[data-rd-theme="light"] { --rd-field-lift: 0.5; --rd-field-amp: 0.95; --rd-field-tint: #ffffff; }
 
 /* Contact's field is the warmest of the set, and its small mono line sat right
    on 4.5:1 over it; hold this zone back rather than dim every section. */
@@ -46,10 +51,12 @@
 
 @media (max-width: 48rem) {
   .rd-atmos { opacity: 0.6; }
-  /* On a phone the copy runs wider and the field costs more contrast; warm
-     surfaces keep only a breath of it so labels stay above 4.5. */
-  .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.08; }
-  .page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.06; }
+  /* On a phone the field sits under wider copy, so it lifts further toward the
+     paper rather than disappearing. */
+  .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.46; }
+  .page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.42; }
+  .page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.76; --rd-field-amp: 0.9; --rd-field-tint: #fffdf4; }
+  .page.rd[data-rd-theme="light"] { --rd-field-lift: 0.62; --rd-field-amp: 0.96; --rd-field-tint: #ffffff; }
 }
 
 @media (prefers-reduced-motion: reduce) {

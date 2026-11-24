@@ -132,6 +132,16 @@ export default function Profile() {
 
       <ReaderTicker />
 
+      {/* Statement band: the mirror target opens with one large idea before any
+          lists, so the reader gets the argument before the evidence. */}
+      <section className="rd-statement" aria-label="Statement">
+        <p>
+          Nine years of getting other people's shows on air — then building the team
+          that does it properly. Everything below is that work, in the order it happened.
+        </p>
+        <span className="rd-mono">Cebu, PH · available from January</span>
+      </section>
+
       <section id="summary" className="rd-sec">
         <h2><Numeral>(01)</Numeral>Profile</h2>
         <div className="rd-col">
@@ -160,6 +170,11 @@ export default function Profile() {
                 <a href={a.href} target="_blank" rel="noreferrer">{a.event} <span aria-hidden="true">↗</span></a>
                 <p className="rd-mono">{a.role} · {a.team} · {a.date}</p>
                 <p className="rd-ach-note">{a.note}</p>
+                {a.tags && (
+                  <ul className="rd-ach-tags">
+                    {a.tags.map((t) => <li key={t}>{t}</li>)}
+                  </ul>
+                )}
                 {a.slug && (
                   <Link className="rd-ach-case" href={`/work/${a.slug}`}>Case study <span aria-hidden="true">→</span></Link>
                 )}
@@ -167,6 +182,9 @@ export default function Profile() {
             </Reveal>
           ))}
         </ol>
+          <Link className="rd-viewall" href="/work">
+            View all work <span aria-hidden="true">→</span>
+          </Link>
           <a className="rd-kit" href="/os">
             <img src="/kit/scene-starting.webp" alt="Starting scene from the Pixels-3 stream overlay pack" width={1200} height={675} loading="lazy" />
             <span className="rd-kit-body">

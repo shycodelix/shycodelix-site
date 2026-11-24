@@ -141,14 +141,16 @@
   --rd-paper: #f6f3ea;
   --rd-paper2: #fbfaf5;
   --rd-ink: #1e1633;
-  --rd-ink-soft: #4a4366;
-  --rd-dusk: #6b6486;
+  /* A step darker than the old #4a4366 / #6b6486: this surface's copy is what
+     pays for a visible field behind it, so the budget comes out of the ink. */
+  --rd-ink-soft: #3a3352;
+  --rd-dusk: #4b4664;
   --rd-tang: #ff7a1a;
   --rd-line: rgba(30, 22, 51, 0.18);
   --rd-accent: #ff7a1a;
   --rd-reader-bg: #f6f3ea;
   --rd-text: #1e1633;
-  --rd-text-soft: #4a4366;
+  --rd-text-soft: #3a3352;
   --rd-on-accent: #1e1633;
   --rd-zone-cool: #6f63d6;
   --rd-zone-blue: #3f7fbf;
@@ -922,6 +924,69 @@
 .rd-ach-body a span { opacity: 0.6; margin-left: 0.25rem; }
 .rd-ach-body .rd-mono { font-size: 0.78rem; color: var(--rd-ink-soft); }
 .rd-ach-note { color: var(--rd-ink-soft); }
+/* Statement band: one large idea between the hero and the first list. */
+.rd-statement {
+  max-width: 62rem;
+  margin: clamp(3rem, 8vw, 7rem) auto;
+  padding: 0 clamp(1.1rem, 4vw, 3.2rem);
+}
+.rd-statement p {
+  font-family: var(--font-display), var(--font-grotesk), Impact, sans-serif;
+  font-size: clamp(1.6rem, 4.4vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--rd-text);
+  text-wrap: balance;
+  margin: 0 0 1.1rem;
+}
+.rd-statement .rd-mono {
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rd-ink-soft);
+}
+.rd-viewall {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--rd-line);
+  border-radius: 999px;
+  font-family: var(--font-grotesk), var(--font-micro), monospace;
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rd-text);
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s, transform 0.15s;
+}
+.rd-viewall:hover {
+  color: var(--rd-accent-ink, var(--rd-accent));
+  border-color: var(--rd-accent-ink, var(--rd-accent));
+  transform: translateY(-1px);
+}
+/* Discipline chips, the row anatomy the mirrored portfolio uses: what kind of
+   work this was, scannable before you read the note. */
+.rd-ach-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.15rem 0 0;
+}
+.rd-ach-tags li {
+  font-family: var(--font-grotesk), var(--font-micro), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rd-text);
+  border: 1px solid var(--rd-line);
+  border-radius: 999px;
+  padding: 0.18rem 0.5rem;
+}
 
 .rd-verified {
   list-style: none;
