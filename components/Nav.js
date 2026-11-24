@@ -9,10 +9,11 @@ import { publishLenisVelocityOnScrollTick } from "./scrollTick";
 // that sends you backwards reads as broken.
 const items = [["summary", "Profile"], ["work", "Work"], ["verified", "Verified"], ["experience", "Experience"], ["skills", "What I do"], ["avante", "Avante"], ["career", "Frames"], ["setup", "Setup"], ["contact", "Contact"]];
 
-// Four chips carry the spine of the page — who, proof, history, reach. The
-// other five sections and the two off-page destinations sit behind one
+// Three chips, in the order the mirror target uses: work, about, then lab —
+// the room. The other seven sections and the links page sit behind the
 // disclosure, so the dock is not an eleven-item strip that has to scroll.
-const PRIMARY = ["summary", "work", "experience", "contact"];
+const PRIMARY = ["work", "summary"];
+const LABELS = { summary: "About" };
 const primary = items.filter(([id]) => PRIMARY.includes(id));
 const rest = items.filter(([id]) => !PRIMARY.includes(id));
 
@@ -57,12 +58,12 @@ export default function Nav() {
       <div className="progress" ref={bar} aria-hidden="true" />
       <nav className="dock" aria-label="Sections">
         {primary.map(([id, label]) => (
-          <a key={id} href={`#${id}`} onClick={(e) => go(e, id)} aria-current={active === id ? "true" : undefined}>{label}</a>
+          <a key={id} href={`#${id}`} onClick={(e) => go(e, id)} aria-current={active === id ? "true" : undefined}>{LABELS[id] || label}</a>
         ))}
+        <Link href="/os">Lab</Link>
         <details className="dock-more">
           <summary>All sections</summary>
           <div className="dock-more-panel">
-            <Link href="/os">My room</Link>
             <Link href="/links">Links</Link>
             {rest.map(([id, label]) => (
               <a key={id} href={`#${id}`} onClick={(e) => go(e, id)} aria-current={active === id ? "true" : undefined}>{label}</a>
