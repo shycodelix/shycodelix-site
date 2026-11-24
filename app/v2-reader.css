@@ -409,18 +409,13 @@
 /* ---------- Reader nav rides the active reading surface ---------- */
 /* The dock no longer stays hard white with black links on every surface; fill,
    text and rules all come from the active [data-rd-theme] tokens. */
+/* Four chips and one disclosure fit without scrolling, so the dock no longer
+   carries the mask fade that used to say "there is more to the right". */
 .page.rd .dock {
   background: var(--rd-paper);
   border-bottom: 1px solid var(--rd-line);
   color: var(--rd-text);
-  overflow-x: auto;
-  scrollbar-width: none;
-  /* Soft right fade when the section list is wider than the viewport, so
-     trailing chips read as scrollable rather than clipped. */
-  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 3rem), transparent 100%);
-  mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 3rem), transparent 100%);
 }
-.page.rd .dock::-webkit-scrollbar { display: none; }
 .page.rd .dock a {
   color: var(--rd-text);
   border-right: 1px solid var(--rd-line);
@@ -436,6 +431,54 @@
   background: var(--rd-ink);
   color: var(--rd-paper);
 }
+
+/* ---------- Dock disclosure: the sections that are not on the spine ---------- */
+.page.rd .dock-more { position: relative; }
+.page.rd .dock-more > summary {
+  list-style: none;
+  cursor: pointer;
+  /* Same metrics as a chip, so the disclosure does not make the dock taller
+     than the row it replaces. */
+  padding: 0.2rem 0.55rem;
+  /* The chips' own face, not the display face: this is a chip, not a title. */
+  font-family: var(--font-micro), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+  color: var(--rd-text-soft);
+  user-select: none;
+}
+.page.rd .dock-more > summary::-webkit-details-marker { display: none; }
+.page.rd .dock-more > summary::after { content: " +"; }
+.page.rd .dock-more > summary:hover,
+.page.rd .dock-more[open] > summary {
+  background: var(--rd-paper2);
+  color: var(--rd-ink);
+}
+.page.rd .dock-more[open] > summary::after { content: " –"; }
+.page.rd .dock-more-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  min-width: 11rem;
+  padding: 0.3rem;
+  background: var(--rd-paper);
+  border: 1px solid var(--rd-line);
+  box-shadow: 4px 4px 0 var(--rd-text);
+}
+.page.rd .dock-more-panel a {
+  border-right: 0;
+  border-bottom: 1px solid var(--rd-line);
+  padding: 0.5rem 0.7rem;
+  /* Match the chips: the panel was inheriting the site's uppercase links. */
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+}
+.page.rd .dock-more-panel a:last-child { border-bottom: 0; }
 
 /* ---------- Reader marquee: low-contrast, palette follows the surface ---------- */
 .page.rd[data-rd-theme="dark"] .rd-ticker {
@@ -670,11 +713,19 @@
   border-top: 2px solid var(--rd-line);
 }
 .rd-sec:first-of-type { border-top: 0; }
-.rd-sec h2 {
+.page.rd .rd-sec h2 {
   font-size: clamp(2.3rem, 6.6vw, 4.6rem);
   margin-bottom: 1.7rem;
   letter-spacing: -0.02em;
   line-height: 0.96;
+  /* Lowercase section heads read as a person's table of contents rather than a
+     form: `(02) selected work`. The numerals are unaffected by case. */
+  text-transform: lowercase;
+}
+/* (06) `career in frames` heads the frames strip rather than an .rd-sec, but it
+   is the same numbered family, so it is set the same way. */
+.page.rd .rd-frames h2 {
+  text-transform: lowercase;
 }
 .rd-sec h2 em {
   font-style: normal;
@@ -1284,18 +1335,29 @@
 }
 
 @media (scripting: none) {
-  .rh-line,
-  .rh-line-in,
+  /* The animated lines and the fallback carry the same words. Showing both
+     doubled the headline, and because the fallback's segments sit flush with
+     no break opportunity it also forced the hero body to 1451px inside a 1280
+     viewport, dropping the seal's caption under the fold. One headline only:
+     the fallback is the one that reads without the reveal. */
+  .rh-lines { display: none; }
+  .rh-fallback {
+    visibility: visible;
+    position: static;
+  }
+  /* One source line per block, at the display's tight leading instead of the
+     body leading that `.page.rd *` hands to every descendant — that universal
+     rule wins over a single class, so this has to match its specificity. */
+  .page.rd .rh-fallback-line {
+    display: block;
+    line-height: 0.86;
+  }
   .rh-sub,
   .rh-by {
     opacity: 1;
     clip-path: inset(0 0 0 0);
     transform: none;
     animation: none;
-  }
-  .rh-fallback {
-    visibility: visible;
-    position: static;
   }
 }
 
@@ -1313,24 +1375,32 @@
     transform: none;
     width: 100%;
     max-width: none;
-    flex-wrap: nowrap;
+    /* Four chips and one disclosure fit a phone, so the row wraps instead of
+       scrolling; nothing hides behind a mask fade, and a second row costs the
+       fold nothing because the hero measures the dock. */
+    flex-wrap: wrap;
     justify-content: flex-start;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 0;
+    overflow: visible;
+    padding: 0.2rem 0.4rem;
     border: 0;
     border-bottom: 1px solid var(--rd-line);
     box-shadow: none;
     background: var(--rd-paper);
-    scrollbar-width: none;
-    /* Fade both ends on mobile so the row reads as scrollable, not clipped,
-       and so it never collides with the top progress bar (z-index 45 stays
-       below the 46 here; the progress bar is painted last via its own paint
-       order). */
-    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 10px, #000 calc(100% - 22px), transparent 100%);
-    mask-image: linear-gradient(90deg, transparent 0, #000 10px, #000 calc(100% - 22px), transparent 100%);
+    /* The site-wide dock fades its ends at this width; the reader's no longer
+       scrolls, so the fade has nothing to say and goes. */
+    -webkit-mask-image: none;
+    mask-image: none;
   }
-  .page.rd .dock::-webkit-scrollbar { display: none; }
+  .page.rd .dock-more > summary { padding: 0.55rem 0.75rem; }
+  /* On a phone the row wraps, so the disclosure can end up anywhere on it. As a
+     static box it stops being the panel's containing block, and the panel
+     anchors to the dock's right edge instead — always on screen, whichever row
+     the chip landed on. */
+  .page.rd .dock-more { position: static; }
+  .page.rd .dock-more-panel {
+    left: auto;
+    right: 0;
+  }
   /* The dock now sits on top of anchor targets: keep headings clear of it. */
   .page.rd [id] {
     scroll-margin-top: 3rem;

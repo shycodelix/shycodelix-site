@@ -9,6 +9,13 @@ import { publishLenisVelocityOnScrollTick } from "./scrollTick";
 // that sends you backwards reads as broken.
 const items = [["summary", "Profile"], ["work", "Work"], ["verified", "Verified"], ["experience", "Experience"], ["skills", "What I do"], ["avante", "Avante"], ["career", "Frames"], ["setup", "Setup"], ["contact", "Contact"]];
 
+// Four chips carry the spine of the page — who, proof, history, reach. The
+// other five sections and the two off-page destinations sit behind one
+// disclosure, so the dock is not an eleven-item strip that has to scroll.
+const PRIMARY = ["summary", "work", "experience", "contact"];
+const primary = items.filter(([id]) => PRIMARY.includes(id));
+const rest = items.filter(([id]) => !PRIMARY.includes(id));
+
 export default function Nav() {
   const [active, setActive] = useState("");
   const bar = useRef(null);
@@ -24,6 +31,9 @@ export default function Nav() {
   }, [lenis]);
 
   function go(e, id) {
+    // Picking a destination also closes the disclosure, which is absolutely
+    // positioned and would otherwise float open over the section we jumped to.
+    e.currentTarget.closest("details")?.removeAttribute("open");
     if (!lenis) return;
     e.preventDefault();
     lenis.scrollTo("#" + id, { duration: 1.6 });
@@ -46,11 +56,19 @@ export default function Nav() {
     <>
       <div className="progress" ref={bar} aria-hidden="true" />
       <nav className="dock" aria-label="Sections">
-        <Link href="/os">My room</Link>
-        <Link href="/links">Links</Link>
-        {items.map(([id, label]) => (
+        {primary.map(([id, label]) => (
           <a key={id} href={`#${id}`} onClick={(e) => go(e, id)} aria-current={active === id ? "true" : undefined}>{label}</a>
         ))}
+        <details className="dock-more">
+          <summary>All sections</summary>
+          <div className="dock-more-panel">
+            <Link href="/os">My room</Link>
+            <Link href="/links">Links</Link>
+            {rest.map(([id, label]) => (
+              <a key={id} href={`#${id}`} onClick={(e) => go(e, id)} aria-current={active === id ? "true" : undefined}>{label}</a>
+            ))}
+          </div>
+        </details>
       </nav>
     </>
   );
