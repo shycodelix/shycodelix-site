@@ -344,6 +344,14 @@
 .room-stage:hover .monitor-wrap {
   transform: translateX(-50%) translateY(-2px);
 }
+
+/* The aim trainer hangs below the monitor's frame, over the desk dressing. The
+   keyboard, mouse and mug are later siblings at the same z-index and sit above
+   the monitor's whole subtree, so they painted bands across the window's footer.
+   Lift the monitor (and anything it holds) while the game is open. */
+.monitor-wrap:has(.lm-game) {
+  z-index: 5;
+}
 .monitor-boot {
   position: absolute;
   right: 0.6rem;
