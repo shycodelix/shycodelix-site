@@ -9,7 +9,10 @@ Live: [shycodelix.vercel.app](https://shycodelix.vercel.app)
 | Route | What it is |
 | --- | --- |
 | `/` | **Reader mode.** The serious CV: summary card, verified profiles, selected work, experience, capabilities, Avante, career strip, setup, contact. Three reading surfaces (dark/sepia/light), A-/A+ text size, section dock, interludes, print-friendly. |
-| `/os` | **The lab.** The Windows XP desktop, built around the stream: draggable windows, wallpaper with day/night palette, taskbar, Start menu. Opens on the wallpaper, with a welcome note the first time per session. |
+| `/work` | **Work index.** The three case studies in reading order, linking through to each. |
+| `/work/ti11`, `/work/vcl-ph`, `/work/avante` | **Case studies.** Kicker, facts row, lead photo, numbered story, clips from the edits archive, the third-party link that verifies the result. |
+| `/os` | **The lab.** The creator room: desk props, a live monitor running the Pixels-3 scenes with the PNGTuber rig, a canned chat rail, lower thirds from the verified record, and a playable aim trainer. The monitor boots the desktop. |
+| `/os/desktop` | **The old OS.** The Windows XP desktop, built around the stream: draggable windows, wallpaper with day/night palette, taskbar, Start menu. Opens on the wallpaper, with a welcome note the first time per session. |
 | `/links` | **Links page.** Streams (Twitch / TikTok / Kick / YouTube), socials, Avante, tips, verified profiles. Built to be pasted in a bio. |
 | `/profile` | 308 redirect to `/`, so older résumé links keep working. |
 | `/not-found` | The 404, as an XP error dialog. |
