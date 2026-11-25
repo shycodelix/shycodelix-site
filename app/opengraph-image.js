@@ -41,7 +41,7 @@ export default function Image() {
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#1A63C4", border: "3px solid #1450A8", padding: "10px 16px" }}>
           <div style={{ display: "flex", background: "#3C9B3C", color: "#FFFFFF", border: "3px solid #14560F", padding: "8px 22px", fontSize: 22 }}>start</div>
-          <div style={{ display: "flex", fontSize: 20, color: "#FFFFFF" }}>shycodelix.vercel.app</div>
+          <div style={{ display: "flex", fontSize: 20, color: "#FFFFFF" }}>shy-jble.freemilk.app</div>
         </div>
       </div>
     ),

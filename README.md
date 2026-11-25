@@ -2,7 +2,7 @@
 
 The reader is the front door: `/` is the editorial, hiring-first version of the same person. `/os` is the retro desktop and the creator side of the site — the streaming rig, the overlay pack, the clips. `/links` is the link-in-bio page.
 
-Live: [shycodelix.vercel.app](https://shycodelix.vercel.app)
+Live: [shy-jble.freemilk.app](https://shy-jble.freemilk.app) — the canonical host; still mirrored at [shycodelix.vercel.app](https://shycodelix.vercel.app)
 
 ## Routes
 

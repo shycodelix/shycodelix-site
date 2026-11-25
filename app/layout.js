@@ -16,12 +16,14 @@ const grotesk = localFont({ src: "./fonts/outfit-latin.woff2", weight: "100 900"
 
 const description = "Esports operations, content creation and customer experience. Philippines.";
 
-// The canonical host: the Vercel project's production alias, which the site
-// owner controls. Canonical and og:image URLs are built from it, so it has to
-// be serving the same build as the host the page was opened on. Until the
-// reader/v2-trimmed work is on main, that alias is still the older build and
-// /work/* (and /og/*) 404 there. Change this one line when a real domain is set.
-const url = "https://shycodelix.vercel.app";
+// The canonical host: the site's own published address, which serves this build.
+// Canonical and og:image URLs are built from it, so it has to be a host that
+// serves the same build as the page it is stamped on. The Vercel project alias
+// still mirrors the site, but it is a mirror now, not the address anything is
+// published or shared from. Change this one line if the published subdomain
+// changes — the same host is repeated in app/reader.js (jsonLd url), the share
+// card's taskbar text, index.html and the README.
+const url = "https://shy-jble.freemilk.app";
 
 export const metadata = {
   metadataBase: new URL(url),

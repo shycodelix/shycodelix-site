@@ -33,7 +33,7 @@ const jsonLd = {
   name: "shycodelix",
   jobTitle: "Esports operations, production and content",
   description: "Video editing, team management, events production, social media and marketing. Founder of Avante Esports. Philippines.",
-  url: "https://shycodelix.vercel.app/",
+  url: "https://shy-jble.freemilk.app/",
   email: "mailto:shycodelix@gmail.com",
   address: { "@type": "PostalAddress", addressLocality: "Cebu City", addressCountry: "PH" },
   worksFor: { "@type": "Organization", name: "Avante Esports" },
