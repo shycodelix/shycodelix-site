@@ -4,9 +4,9 @@ import Parallax from "./Parallax";
  *  and optionally one small looping object in the corner (a GIF, so the photo
  *  behind it stays a cheap still). Deliberately sparse — it exists to break the
  *  type column, not to decorate. */
-export default function ReaderInterlude({ src, alt, caption, sticker }) {
+export default function ReaderInterlude({ src, alt, caption, sticker, className = "" }) {
   return (
-    <div className="rd-inter">
+    <div className={`rd-inter ${className}`.trim()}>
       <Parallax speed={0.07} max={48} className="rd-inter-in">
         <img src={src} alt={alt} loading="lazy" decoding="async" />
       </Parallax>

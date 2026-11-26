@@ -44,18 +44,22 @@ export const capabilities = [
   {
     k: "Team & programme operations",
     v: "Roster management, player welfare, contracts and logistics. Ran a Dota 2 squad through The International, plus boots-on-the-ground tournament marshalling at CONQuest and Campus ACES.",
+    services: ["Roster management", "Player welfare", "Team logistics", "Tournament operations"],
   },
   {
     k: "Production & content",
     v: "Short-form editing at volume, show packaging and production direction. Broadcast assets and lower thirds come from our creative director; I run the pipeline and the deliverable.",
+    services: ["Short-form editing", "Show packaging", "Production direction", "Deliverable management"],
   },
   {
     k: "Brand, social & community",
     v: "Social strategy, campaign planning, community management and the unglamorous work of answering DMs. Grew and ran social for two esports organisations, and built Avante's visual system.",
+    services: ["Social strategy", "Campaign planning", "Community management", "Visual systems"],
   },
   {
     k: "Customer-facing leadership",
     v: "Nine years across Amazon, IntouchCX and Alorica, up to team manager: metric coaching, onboarding, escalations and employee engagement.",
+    services: ["Metric coaching", "Manager onboarding", "Escalation handling", "Employee engagement"],
   },
 ];
 

@@ -33,6 +33,7 @@ import "./ReaderAtmosphere.css";
 import "./ReaderMorph.css";
 import "./ReaderChoreo.css";
 import "./ReaderMotion.css";
+import "./ReaderReference.css";
 import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, avanteMail, sensitivity, sensitivityNote, gear, valorant } from "./data";
 
 const jsonLd = {
@@ -124,7 +125,7 @@ export default function Profile() {
 
           <div className="rd-hero-copy">
             <ReaderHero
-              headline="operations,<br />production,<br />content"
+              headline="operations,<br />production,<br />content<span style='color: #ff4a00'>*</span>"
               subtitle="I run esports teams and tournaments, produce the broadcast around them, and have spent
                        nine years leading customer-facing teams in the corporate world. Currently founding
                        Avante Esports."
@@ -159,16 +160,16 @@ export default function Profile() {
         <ReaderHeroMotion />
       </ReaderVelocityLayer>
 
-      <ReaderTicker />
-
       {/* A short statement leads into the work, not a list of credentials. */}
       <ReaderStatement />
+      <ReaderShowreel />
 
       <section id="work" className="rd-sec rd-work">
-        <h2 className="sr-only">Selected work</h2>
-        <ReaderMotionTitle text="selected work" />
+        <h2 className="sr-only">Featured work</h2>
+        <ReaderMotionTitle text="featured work" />
         <div className="rd-col">
           <CaseStudyList className="cs-index rd-case-index" />
+          <Link className="rd-viewall" href="/work">view all work</Link>
           <div className="rd-work-results">
             <h3>Recent results</h3>
             <ol className="rd-ach">
@@ -196,7 +197,6 @@ export default function Profile() {
         </div>
       </section>
       <ReaderSectionScrub target="work" />
-      <ReaderShowreel />
 
       <section id="about" className="rd-sec">
         <h2><Numeral>(02)</Numeral>About</h2>
@@ -271,25 +271,42 @@ export default function Profile() {
         sticker={{ src: "/kit/on-air.gif", still: "/kit/on-air.png", alt: "On air", w: 96, h: 34, badge: true }}
       />
 
-      <ReaderScrollChoreo>
+      <ReaderScrollChoreo className="rd-capability-band">
         <section id="skills" className="rd-sec rd-capabilities">
-          <h2><Numeral>(05)</Numeral>What<br />I do<ReaderLiveLoop><HeaderLoop src="/kit/cam-loop.gif" still="/kit/idle.webp" alt="The PNGTuber model blinking and talking" width={232} height={265} className="rd-loop-badge" /></ReaderLiveLoop></h2>
-          <div className="rd-caps">
-            {capabilities.map((c, i) => (
-              <Reveal key={c.k} delay={i * 90}>
-                <div className="rd-cap-head">
-                  <span className="rd-cap-num">({String(i + 1).padStart(2, "0")})</span>
-                  <h3>{c.k}</h3>
-                </div>
-                <p>{c.v}</p>
-              </Reveal>
-            ))}
+          <h2><Numeral>(05)</Numeral>What<br />I do</h2>
+          <p className="rd-cap-intro">{profile.bio} {lookingFor.note}</p>
+          <div className="rd-cap-layout">
+            <figure className="rd-cap-plate">
+              <img src="/photos/abaddon-solo.jpg" alt="shycodelix in an Abaddon Esports jacket" loading="lazy" />
+              <figcaption>shy*</figcaption>
+            </figure>
+            <div className="rd-caps">
+              {capabilities.map((c, i) => (
+                <Reveal key={c.k} delay={i * 90}>
+                  <div className="rd-cap-head">
+                    <span className="rd-cap-num">({String(i + 1).padStart(2, "0")})</span>
+                    <h3>{c.k}</h3>
+                  </div>
+                  <div className="rd-cap-details">
+                    <p>{c.v}</p>
+                    <ol>
+                      {c.services.map((service, j) => (
+                        <li key={service}>
+                          <span>({String(i + 1).padStart(2, "0")}.{String(j + 1).padStart(2, "0")})</span> {service}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
           </div>
         </section>
       </ReaderScrollChoreo>
       <ReaderSectionScrub target="skills" />
 
       <ReaderInterlude
+        className="rd-inter-dark"
         src="/kit/scene-brb.webp"
         alt="Pixels-3 stream overlay on a be-right-back scene"
         caption="Avante Esports — built out of a Discord server and a bad idea."
@@ -318,10 +335,10 @@ export default function Profile() {
 
       <section id="career" className="rd-frames">
         <div className="rd-frames-head">
-          <h2 className="sr-only">Career in frames</h2>
-          <p className="rd-mono">Lionne → BOOM → Abaddon → Avante · scroll to move the rail</p>
+          <h2 className="sr-only">Teams and people</h2>
+          <p className="rd-mono">Lionne → BOOM → Abaddon → Avante · teams and people behind the work</p>
         </div>
-        <ReaderMotionTitle text="career in frames" />
+        <ReaderMotionTitle text="teams and people" />
         <FramesStrip>
           {photos.map((p) => (
             <figure key={p.src} className="rd-shot" style={{ "--ar": p.ar }}>
@@ -332,6 +349,7 @@ export default function Profile() {
         </FramesStrip>
       </section>
       <ReaderSectionScrub target="career" />
+      <ReaderTicker />
 
       <section id="setup" className="rd-sec">
         <h2><Numeral>(07)</Numeral>Setup</h2>
@@ -362,6 +380,7 @@ export default function Profile() {
         </div>
       </section>
       <ReaderInterlude
+        className="rd-inter-dark"
         src="/kit/scene-ending.webp"
         alt="Pixels-3 stream overlay on an ending scene"
         caption="That's the show. Here's the desk behind it."
@@ -413,7 +432,7 @@ export default function Profile() {
       <section id="contact" className="rd-contact">
         <p className="rd-mono">(08) — Contact</p>
         <p className="rd-contact-lead">got a project in mind?</p>
-        <a className="rd-big-mail" href={`mailto:${profile.email}`}>{profile.email}</a>
+        <p className="rd-contact-line">let’s talk <a className="rd-big-mail" href={`mailto:${profile.email}`}>{profile.email}</a></p>
         <div className="rd-contact-links">
           {[...stream, ...social].map((l) => (
             <a key={l.href} href={l.href} target="_blank" rel="noreferrer">{l.label}</a>

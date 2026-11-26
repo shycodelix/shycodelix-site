@@ -32,6 +32,7 @@ export default function CaseStudyList({ className = "cs-index" }) {
             <Link className="cs-index-item" href={`/work/${cs.slug}`}>
               <span className="cs-index-image">
                 <img src={cs.lead.src} alt={cs.lead.alt} loading="lazy" />
+                <span className="cs-index-badge">Case study</span>
               </span>
               <span className="cs-index-in">
                 <span className="cs-index-kicker">{cs.kicker}</span>

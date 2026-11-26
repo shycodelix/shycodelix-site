@@ -2,16 +2,16 @@
 import { useEffect, useRef, useState } from "react";
 
 const ITEMS = [
-  "Esports operations",
-  "Broadcast production",
-  "Video editing",
-  "Team management",
-  "Social & community",
-  "Events",
-  "Customer experience",
-  "Tournament operations",
-  "Short-form at volume",
-  "Community events",
+  "BOOM Esports",
+  "Abaddon Esports",
+  "Avante Esports",
+  "AcadArena",
+  "VNG Corporation",
+  "Tencent Games",
+  "Amazon",
+  "IntouchCX",
+  "Alorica",
+  "Polaris Esports",
 ];
 
 // The marquee's only moving part is CSS, and it only moves while it is on
