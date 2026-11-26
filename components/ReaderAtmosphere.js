@@ -32,24 +32,25 @@ import { subscribeDrift } from "./pointerDrift";
 
 // mode: how much of each layer this section shows (0..1, cross-faded in draw).
 const ZONES = {
-  summary: { a: "var(--rd-zone-cool)", b: "var(--rd-zone-blue)", speed: 0.55, curl: 1.0, motes: 1.0, lift: 0.5, move: "orbit", mode: { mesh: 1, nodes: 0.85, grid: 0.12, wave: 0 } },
-  work: { a: "var(--rd-zone-warm)", b: "var(--rd-zone-gold)", speed: 0.7, curl: 1.5, motes: 1.15, lift: 0.8, move: "rise", mode: { mesh: 0.5, nodes: 0.12, grid: 1, wave: 0 } },
-  verified: { a: "var(--rd-zone-green)", b: "var(--rd-zone-blue)", speed: 0.45, curl: 0.8, motes: 0.9, lift: 0.3, move: "grid", mode: { mesh: 0.75, nodes: 0.6, grid: 0.35, wave: 0 } },
-  experience: { a: "var(--rd-zone-blue)", b: "var(--rd-zone-pink)", speed: 0.5, curl: 0.6, motes: 1.0, lift: 0.35, move: "swirl", mode: { mesh: 1, nodes: 0.9, grid: 0.1, wave: 0 } },
-  skills: { a: "var(--rd-zone-pink)", b: "var(--rd-zone-gold)", speed: 0.85, curl: 1.8, motes: 1.3, lift: 0.9, move: "rise", mode: { mesh: 0.65, nodes: 1, grid: 0.18, wave: 0 } },
-  avante: { a: "var(--rd-zone-pink)", b: "var(--rd-zone-cool)", speed: 0.65, curl: 1.2, motes: 1.2, lift: 0.7, move: "swirl", mode: { mesh: 0.4, nodes: 0.2, grid: 0.15, wave: 1 } },
+  work: { a: "var(--rd-zone-warm)", b: "var(--rd-zone-gold)", speed: 0.56, curl: 1.2, motes: 0.95, lift: 0.45, move: "rise", mode: { mesh: 0.28, nodes: 0.08, grid: 1, wave: 0 } },
+  about: { a: "var(--rd-zone-cool)", b: "var(--rd-zone-blue)", speed: 0.42, curl: 0.8, motes: 0.8, lift: 0.3, move: "orbit", mode: { mesh: 1, nodes: 0.95, grid: 0.05, wave: 0 } },
+  verified: { a: "var(--rd-zone-green)", b: "var(--rd-zone-blue)", speed: 0.38, curl: 0.65, motes: 0.7, lift: 0.25, move: "grid", mode: { mesh: 0.72, nodes: 0.6, grid: 0.2, wave: 0 } },
+  experience: { a: "var(--rd-zone-blue)", b: "var(--rd-zone-pink)", speed: 0.42, curl: 0.6, motes: 0.75, lift: 0.28, move: "swirl", mode: { mesh: 1, nodes: 0.8, grid: 0.08, wave: 0 } },
+  skills: { a: "var(--rd-zone-pink)", b: "var(--rd-zone-gold)", speed: 0.58, curl: 1.05, motes: 0.9, lift: 0.35, move: "rise", mode: { mesh: 0.55, nodes: 1, grid: 0.12, wave: 0 } },
+  avante: { a: "var(--rd-zone-pink)", b: "var(--rd-zone-warm)", speed: 0.5, curl: 0.9, motes: 0.85, lift: 0.35, move: "swirl", mode: { mesh: 0.35, nodes: 0.15, grid: 0.1, wave: 0.6 } },
   career: {
     a: "color-mix(in oklab, var(--rd-zone-cool) 55%, var(--rd-ink-soft))",
     b: "var(--rd-zone-blue)",
-    speed: 0.6,
-    curl: 1.1,
-    motes: 1.05,
-    lift: 0.6,
+    speed: 0.44,
+    curl: 0.8,
+    motes: 0.75,
+    lift: 0.4,
     move: "orbit",
-    mode: { mesh: 0.4, nodes: 0.1, grid: 1, wave: 0.1 },
+    mode: { mesh: 0.35, nodes: 0.08, grid: 0.8, wave: 0.05 },
   },
-  setup: { a: "color-mix(in oklab, var(--rd-zone-green) 72%, var(--rd-zone-gold))", b: "var(--rd-zone-green)", speed: 0.4, curl: 0.9, motes: 0.95, lift: 0.25, move: "grid", mode: { mesh: 0.5, nodes: 0.2, grid: 0.9, wave: 0.3 } },
-  contact: { a: "var(--rd-zone-warm)", b: "var(--rd-zone-pink)", speed: 0.75, curl: 1.4, motes: 1.1, lift: 0.85, move: "swirl", mode: { mesh: 0.5, nodes: 0.3, grid: 0.15, wave: 1 } },
+  setup: { a: "color-mix(in oklab, var(--rd-zone-green) 72%, var(--rd-zone-gold))", b: "var(--rd-zone-green)", speed: 0.34, curl: 0.7, motes: 0.7, lift: 0.2, move: "grid", mode: { mesh: 0.42, nodes: 0.16, grid: 0.78, wave: 0.2 } },
+  lab: { a: "var(--rd-zone-warm)", b: "var(--rd-zone-gold)", speed: 0.62, curl: 1.05, motes: 0.95, lift: 0.4, move: "swirl", mode: { mesh: 0.25, nodes: 0.08, grid: 0.08, wave: 1 } },
+  contact: { a: "var(--rd-zone-warm)", b: "var(--rd-zone-pink)", speed: 0.48, curl: 0.85, motes: 0.78, lift: 0.35, move: "swirl", mode: { mesh: 0.4, nodes: 0.2, grid: 0.08, wave: 0.75 } },
 };
 
 const parse = (rgb) => (rgb.match(/[\d.]+/g) || []).map(Number).slice(0, 3);
@@ -71,8 +72,8 @@ function resolve(root, value, fallback) {
 export default function ReaderAtmosphere() {
   const wrap = useRef(null);
   const applyZone = useRef(null);
-  const zoneRef = useRef("summary");
-  const [zone, setZone] = useState("summary");
+  const zoneRef = useRef("about");
+  const [zone, setZone] = useState("about");
   zoneRef.current = zone;
 
   // Which section owns the middle of the viewport.
@@ -163,7 +164,7 @@ export default function ReaderAtmosphere() {
     };
 
     const readZone = (id) => {
-      const z = ZONES[id] || ZONES.summary;
+      const z = ZONES[id] || ZONES.about;
       const a = resolve(root, z.a, cur.a);
       const b = resolve(root, z.b, cur.b);
       raw = { a, b, speed: z.speed, curl: z.curl, motes: z.motes, lift: z.lift, move: z.move || "swirl", mode: z.mode };

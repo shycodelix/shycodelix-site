@@ -18,7 +18,6 @@ export default function CaseStudy({ slug }) {
         </nav>
 
         <header className="cs-head">
-          <p className="cs-kicker">{cs.kicker}</p>
           <h1 className="cs-title">{cs.title}</h1>
           <p className="cs-stand">{cs.standfirst}</p>
           <dl className="cs-meta">

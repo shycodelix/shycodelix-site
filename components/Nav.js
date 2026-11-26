@@ -4,19 +4,18 @@ import { useLenis } from "lenis/react";
 import { useEffect, useRef, useState } from "react";
 import { publishLenisVelocityOnScrollTick } from "./scrollTick";
 
-// Labels match the headings they jump to, so the active chip never names a
-// section the reader cannot see. Document order, not importance: a jump list
-// that sends you backwards reads as broken.
-const items = [["summary", "Profile"], ["work", "Work"], ["verified", "Verified"], ["experience", "Experience"], ["skills", "What I do"], ["avante", "Avante"], ["career", "Frames"], ["setup", "Setup"], ["contact", "Contact"]];
+const sectionIds = ["work", "about", "verified", "experience", "skills", "avante", "career", "setup", "lab", "contact"];
 
-// Three chips, in the order the mirror target uses: work, about, then lab —
-// the room. The other seven sections and the links page sit behind the
-// disclosure, so the dock is not an eleven-item strip that has to scroll.
-const PRIMARY = ["work", "summary"];
-const LABELS = { summary: "About" };
-const primary = items.filter(([id]) => PRIMARY.includes(id));
-const rest = items.filter(([id]) => !PRIMARY.includes(id));
+/* The rail: four labels pinned to the four corners of the viewport, the way the
+   mirror target does it — wordmark top-left, the work index top-right, the
+   person bottom-left, the room bottom-right. Nothing sits in a bar, so no
+   height is spent above the hero and the labels float over the page instead of
+   pushing it down. Secondary sections stay in the page's reading order rather
+   than competing with the three primary destinations.
 
+   The corner labels are anchors (`about` jumps to the about section) or routes
+   (`work`, `lab`), which is what makes the four corners read as a map of the
+   site rather than a scroll spy. */
 export default function Nav() {
   const [active, setActive] = useState("");
   const bar = useRef(null);
@@ -32,9 +31,6 @@ export default function Nav() {
   }, [lenis]);
 
   function go(e, id) {
-    // Picking a destination also closes the disclosure, which is absolutely
-    // positioned and would otherwise float open over the section we jumped to.
-    e.currentTarget.closest("details")?.removeAttribute("open");
     if (!lenis) return;
     e.preventDefault();
     lenis.scrollTo("#" + id, { duration: 1.6 });
@@ -49,27 +45,30 @@ export default function Nav() {
     onScroll();
     addEventListener("scroll", onScroll, { passive: true });
     const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && setActive(e.target.id)), { rootMargin: "-45% 0px -50% 0px" });
-    items.forEach(([id]) => { const el = document.getElementById(id); if (el) io.observe(el); });
+    sectionIds.forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
     return () => { removeEventListener("scroll", onScroll); io.disconnect(); };
   }, []);
 
   return (
     <>
       <div className="progress" ref={bar} aria-hidden="true" />
-      <nav className="dock" aria-label="Sections">
-        {primary.map(([id, label]) => (
-          <a key={id} href={`#${id}`} onClick={(e) => go(e, id)} aria-current={active === id ? "true" : undefined}>{LABELS[id] || label}</a>
-        ))}
-        <Link href="/os">Lab</Link>
-        <details className="dock-more">
-          <summary>All sections</summary>
-          <div className="dock-more-panel">
-            <Link href="/links">Links</Link>
-            {rest.map(([id, label]) => (
-              <a key={id} href={`#${id}`} onClick={(e) => go(e, id)} aria-current={active === id ? "true" : undefined}>{label}</a>
-            ))}
-          </div>
-        </details>
+      <nav className="dock" aria-label="Primary navigation">
+        <a className="dock-mark" href="#content" aria-label="shycodelix — top of the reader">
+          sc<span aria-hidden="true">*</span>
+        </a>
+
+        <div className="dock-corner" data-corner="work">
+          <Link href="/work" prefetch={false}>work</Link>
+        </div>
+
+        <div className="dock-corner" data-corner="about">
+          <a href="#about" onClick={(e) => go(e, "about")} aria-current={active === "about" ? "true" : undefined}>about</a>
+        </div>
+
+        <div className="dock-corner" data-corner="lab">
+          <Link href="/os" prefetch={false}>lab</Link>
+        </div>
+
       </nav>
     </>
   );

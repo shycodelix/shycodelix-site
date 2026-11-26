@@ -64,102 +64,84 @@
 .page.rd { background: var(--paper); color: var(--ink); }
 
 .page.rd[data-rd-theme="dark"] {
-  background: var(--rd-reader-bg, #15111f);
-  color: var(--rd-text, #f3ecf7);
+  background: var(--rd-reader-bg, #171716);
+  color: var(--rd-text, #f4f2ec);
 }
 .page.rd[data-rd-theme="sepia"] {
-  background: var(--rd-reader-bg, #ece3d2);
-  color: var(--rd-text, #3a2f22);
+  background: var(--rd-reader-bg, #e9e5dc);
+  color: var(--rd-text, #292824);
 }
 .page.rd[data-rd-theme="light"] {
-  background: var(--rd-reader-bg, #f6f3ea);
-  color: var(--rd-text, #1e1633);
+  background: var(--rd-reader-bg, #f7f7f4);
+  color: var(--rd-text, #1a1a18);
 }
 
 .page.rd[data-rd-theme="dark"] {
-  --rd-paper: #1a1525;
-  --rd-paper2: #231d32;
-  --rd-ink: #f3ecf7;
-  --rd-ink-soft: #c9c0da;
-  --rd-dusk: #8a82a8;
-  --rd-tang: #ff7a1a;
-  --rd-line: rgba(243, 236, 247, 0.14);
-  --rd-accent: #ff7a1a;
-  --rd-reader-bg: #15111f;
-  --rd-text: #f3ecf7;
-  --rd-text-soft: #c9c0da;
-  --rd-on-accent: #1a1525;
-  /* Section accents for the reader atmosphere. Each surface tunes its own set,
-     because a hue that glows on #15111f turns to mud on paper. The atmosphere
-     references these tokens; it never carries hex of its own. */
-  --rd-zone-cool: #7c6cff;
-  --rd-zone-blue: #3c7bff;
-  --rd-zone-green: #3ad39b;
-  --rd-zone-warm: #ff9a3c;
-  --rd-zone-gold: #ffb020;
-  --rd-zone-pink: #ff4fa3;
-  /* Accent for large display text. --rd-accent is a fill colour: #ff7a1a on
-     #f6f3ea is 2.35:1, fine behind ink but not as type. */
-  --rd-accent-ink: #ff7a1a;
-  /* Dark keeps the numeral translucent; a brighter source is what lets it
-     clear 3:1 through the 0.55 (the shared accent measured 2.78). */
-  --rd-accent-dim: #ffb066;
-  /* Same idea for the numerals, whose source is the dusk rather than the
-     accent: translucent dark numerals measured 2.40 against the paper. */
-  --rd-dusk-dim: #cfc8e2;
-  /* Opacity of not-yet-revealed words. 0.18 is a visible ghost on the dark
-     surface; warm paper swallows it, so those surfaces start higher. */
+  --rd-paper: #20201e;
+  --rd-paper2: #292826;
+  --rd-ink: #f4f2ec;
+  --rd-ink-soft: #d1cec5;
+  --rd-dusk: #a9a49a;
+  --rd-tang: #ef7042;
+  --rd-line: rgba(244, 242, 236, 0.16);
+  --rd-accent: #ef7042;
+  --rd-reader-bg: #171716;
+  --rd-text: #f4f2ec;
+  --rd-text-soft: #d1cec5;
+  --rd-on-accent: #1a1a18;
+  --rd-zone-cool: #a2a39d;
+  --rd-zone-blue: #858d8a;
+  --rd-zone-green: #8d9888;
+  --rd-zone-warm: #ef8052;
+  --rd-zone-gold: #d68b63;
+  --rd-zone-pink: #c9806b;
+  --rd-accent-ink: #ff9974;
+  --rd-accent-dim: #ffad8e;
+  --rd-dusk-dim: #d1cec5;
   --rd-ghost: 0.32;
 }
 .page.rd[data-rd-theme="sepia"] {
-  --rd-paper: #f1e9d6;
-  --rd-paper2: #f7f1e2;
-  --rd-ink: #3a2f22;
-  --rd-ink-soft: #6b5d47;
-  /* Deeper umber than the shared dusk: at #8a7a5e the section numeral sat at
-     3.28:1, below the 4.5:1 bar. Warm rather than grey so it stays distinct
-     from --rd-ink-soft. */
-  --rd-dusk: #75573a;
-  --rd-tang: #b8531a;
-  --rd-line: rgba(58, 47, 34, 0.18);
-  --rd-accent: #b8531a;
-  --rd-reader-bg: #ece3d2;
-  --rd-text: #3a2f22;
-  --rd-text-soft: #6b5d47;
-  --rd-on-accent: #ffffff;
-  --rd-zone-cool: #6b5f8c;
-  --rd-zone-blue: #4a7d94;
-  --rd-zone-green: #4f8a6b;
-  --rd-zone-warm: #c2722a;
-  --rd-zone-gold: #b9862a;
-  --rd-zone-pink: #a8557a;
-  /* 5.36:1 on --rd-paper, and dark enough for the small labels that use it. */
-  --rd-accent-ink: #9b4413;
+  --rd-paper: #f1eee6;
+  --rd-paper2: #f8f6ef;
+  --rd-ink: #292824;
+  --rd-ink-soft: #5f5b53;
+  --rd-dusk: #777268;
+  --rd-tang: #b9552f;
+  --rd-line: rgba(41, 40, 36, 0.18);
+  --rd-accent: #b9552f;
+  --rd-reader-bg: #e9e5dc;
+  --rd-text: #292824;
+  --rd-text-soft: #5f5b53;
+  --rd-on-accent: #fffaf1;
+  --rd-zone-cool: #aaa69c;
+  --rd-zone-blue: #959188;
+  --rd-zone-green: #93988a;
+  --rd-zone-warm: #c87550;
+  --rd-zone-gold: #b98262;
+  --rd-zone-pink: #ae7869;
+  --rd-accent-ink: #913c20;
   --rd-ghost: 0.38;
 }
 .page.rd[data-rd-theme="light"] {
-  --rd-paper: #f6f3ea;
-  --rd-paper2: #fbfaf5;
-  --rd-ink: #1e1633;
-  /* A step darker than the old #4a4366 / #6b6486: this surface's copy is what
-     pays for a visible field behind it, so the budget comes out of the ink. */
-  --rd-ink-soft: #3a3352;
-  --rd-dusk: #4b4664;
-  --rd-tang: #ff7a1a;
-  --rd-line: rgba(30, 22, 51, 0.18);
-  --rd-accent: #ff7a1a;
-  --rd-reader-bg: #f6f3ea;
-  --rd-text: #1e1633;
-  --rd-text-soft: #3a3352;
-  --rd-on-accent: #1e1633;
-  --rd-zone-cool: #6f63d6;
-  --rd-zone-blue: #3f7fbf;
-  --rd-zone-green: #2f9e77;
-  --rd-zone-warm: #e07a1f;
-  --rd-zone-gold: #c98a12;
-  --rd-zone-pink: #d94f8c;
-  /* 4.74:1 on --rd-paper, versus 2.35:1 for the fill accent. */
-  --rd-accent-ink: #b8490a;
+  --rd-paper: #f7f7f4;
+  --rd-paper2: #ffffff;
+  --rd-ink: #1a1a18;
+  --rd-ink-soft: #46443e;
+  --rd-dusk: #666259;
+  --rd-tang: #e56537;
+  --rd-line: rgba(26, 26, 24, 0.18);
+  --rd-accent: #e56537;
+  --rd-reader-bg: #f7f7f4;
+  --rd-text: #1a1a18;
+  --rd-text-soft: #46443e;
+  --rd-on-accent: #1a1a18;
+  --rd-zone-cool: #aaa69c;
+  --rd-zone-blue: #918d83;
+  --rd-zone-green: #909789;
+  --rd-zone-warm: #dc7247;
+  --rd-zone-gold: #bc785a;
+  --rd-zone-pink: #b87361;
+  --rd-accent-ink: #a74320;
   --rd-ghost: 0.42;
 }
 
@@ -1698,3 +1680,433 @@ body,
   padding-bottom: 1px;
 }
 .rd-ach-case:hover { color: var(--rd-accent-ink, var(--rd-accent)); }
+
+
+/* ==========================================================================
+   MIRROR PASS — the composition of the editorial reference this reader is set
+   against, applied to the structure that was already here:
+
+   - a four-corner rail instead of a bar, so no height is spent above the hero;
+   - full-bleed section heads at display size, so each band opens like a plate;
+   - one display-size statement between the hero and the first list;
+   - capability rows as label / description pairs;
+   - achievement rows closed by a circular arrow;
+   - the contact block opened by a question, and the page signed off by a
+     two-line wordmark.
+
+   Colour, type and the three reading surfaces are untouched. Nothing here
+   animates on its own — the only transitions are on the rail's hover state and
+   they are colour-only — so the reduced-motion tier needs no new branch.
+
+   Appended rather than woven in: these rules are all later overrides of the
+   rules above them, so the whole pass can be read, and reverted, in one block.
+   ========================================================================== */
+
+/* ---------- The rail: four corners, no bar ---------- */
+.page.rd {
+  --rd-rail: clamp(0.85rem, 2vw, 1.6rem);
+  --rd-rail-x: clamp(0.9rem, 2.6vw, 2.4rem);
+}
+
+.page.rd .dock {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: block;
+  width: auto;
+  max-width: none;
+  padding: 0;
+  overflow: visible;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  /* The box is the whole viewport, so only the labels inside it take a pointer. */
+  pointer-events: none;
+}
+.page.rd .dock > * { pointer-events: auto; }
+
+.page.rd .dock-mark,
+.page.rd .dock-corner a,
+.page.rd .dock-more > summary {
+  display: inline-block;
+  font-family: var(--font-grotesk), var(--font-display), Impact, sans-serif;
+  font-size: clamp(0.95rem, 1.5vw, 1.3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-transform: lowercase;
+  color: var(--rd-text);
+  padding: 0.45rem 0.7rem;
+  border: 0;
+  border-radius: 999px;
+  /* A plate, not a bare label: the rail floats over the canvas field and over
+     the photo bands, where ink straight on the image would not clear 3:1 on the
+     light and sepia surfaces. The tint is the surface's own paper, so on plain
+     text it reads as nothing at all. */
+  background: color-mix(in oklab, var(--rd-paper) 74%, transparent);
+  backdrop-filter: blur(10px);
+  transition: color 0.18s ease, background 0.18s ease;
+}
+
+.page.rd .dock-mark { position: absolute; top: var(--rd-rail); left: var(--rd-rail-x); }
+.page.rd .dock-mark span { color: var(--rd-accent); }
+.page.rd .dock-corner[data-corner="work"] { position: absolute; top: var(--rd-rail); right: var(--rd-rail-x); }
+.page.rd .dock-corner[data-corner="about"] { position: absolute; bottom: var(--rd-rail); left: var(--rd-rail-x); }
+.page.rd .dock-corner[data-corner="lab"] { position: absolute; bottom: var(--rd-rail); right: var(--rd-rail-x); }
+
+/* The index disclosure hangs under the wordmark: the one piece of the rail that
+   is neither a corner nor a route to another surface. */
+.page.rd .dock-more { position: absolute; top: calc(var(--rd-rail) + 2.2rem); left: var(--rd-rail-x); }
+.page.rd .dock-more > summary { font-size: clamp(0.78rem, 1.1vw, 0.95rem); }
+
+.page.rd .dock-mark:hover,
+.page.rd .dock-corner a:hover,
+.page.rd .dock-more > summary:hover,
+.page.rd .dock-more[open] > summary { background: var(--rd-paper2); color: var(--rd-ink); }
+.page.rd .dock-corner a[aria-current="true"] { background: var(--rd-ink); color: var(--rd-paper); }
+
+/* Nothing above the hero any more, so the first band needs its own clearance
+   for the two top corners. The hero's own wordmark stood where the rail's does
+   now, so it goes rather than printing the name twice. */
+.page.rd main { padding-top: clamp(3.2rem, 6.5vw, 5rem); }
+.page.rd .rd-hero-bar .rd-mark { display: none; }
+
+/* The reading controls become a floating pill at the foot of the page: with no
+   bar to sit under, the top belongs to the rail. */
+.page.rd .rd-theme-hud {
+  position: fixed;
+  left: 50%;
+  bottom: 0.9rem;
+  transform: translateX(-50%);
+  z-index: 44;
+  margin: 0;
+}
+
+/* ---------- Section plate: head above, content under, full measure ---------- */
+.page.rd .rd-sec {
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.1rem, 2.6vw, 2.2rem);
+}
+.page.rd .rd-sec > h2 {
+  position: static;
+  max-width: 14ch;
+  font-size: clamp(2.9rem, 10.5vw, 8rem);
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  text-transform: lowercase;
+}
+.page.rd .rd-sec > .rd-col { max-width: min(100%, 56rem); }
+
+/* ---------- Statement: display size, indented off the head's line ---------- */
+.page.rd .rd-statement { padding-inline-start: clamp(0rem, 7vw, 10rem); }
+.page.rd .rd-statement p {
+  max-width: 42ch;
+  font-size: clamp(1.5rem, 3.1vw, 2.6rem);
+  line-height: 1.34;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- What I do: label left, description right, hairline between ---------- */
+.page.rd .rd-caps {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+.page.rd .rd-caps > * {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(1rem, 3vw, 3.5rem);
+  padding: clamp(1.4rem, 2.6vw, 2.2rem) 0;
+  border-top: 1px solid var(--rd-line);
+}
+.page.rd .rd-caps > *:last-child { border-bottom: 1px solid var(--rd-line); }
+.page.rd .rd-caps h3 {
+  max-width: 16ch;
+  font-size: clamp(1.55rem, 3.3vw, 2.9rem);
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+}
+.page.rd .rd-caps p { max-width: 38ch; font-size: 0.95rem; }
+
+/* ---------- Achievement rows: place, body, circular arrow ---------- */
+.page.rd .rd-ach li {
+  grid-template-columns: clamp(3.4rem, 6vw, 5.4rem) minmax(0, 1fr) auto;
+  align-items: start;
+  gap: clamp(1rem, 2.4vw, 2rem);
+}
+.page.rd .rd-ach-arrow {
+  align-self: end;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background: var(--rd-ink);
+  color: var(--rd-paper);
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+/* ---------- Contact and sign-off ---------- */
+.page.rd .rd-contact-lead {
+  margin-top: clamp(1rem, 3vw, 2rem);
+  font-family: var(--font-grotesk), var(--font-display), Impact, sans-serif;
+  font-size: clamp(1.6rem, 3.6vw, 3rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.page.rd .rd-foot-mark {
+  margin: clamp(2.5rem, 7vw, 5rem) 0 0;
+  font-family: var(--font-grotesk), var(--font-display), Impact, sans-serif;
+  font-size: clamp(3rem, 16vw, 12rem);
+  font-weight: 800;
+  line-height: 0.84;
+  letter-spacing: -0.05em;
+  text-align: center;
+  text-transform: lowercase;
+}
+.page.rd .rd-foot-mark span { display: block; color: var(--rd-dusk); }
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 48rem) {
+  .page.rd .dock-mark,
+  .page.rd .dock-corner a { padding: 0.4rem 0.6rem; font-size: 0.95rem; }
+  /* Stack the bottom corners above the controls rather than beside them. */
+  .page.rd .dock-corner[data-corner="about"],
+  .page.rd .dock-corner[data-corner="lab"] { bottom: 4.6rem; }
+  .page.rd .rd-theme-hud { bottom: 0.7rem; }
+  .page.rd .rd-caps > * { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+  .page.rd .rd-ach li { grid-template-columns: clamp(3rem, 14vw, 4rem) minmax(0, 1fr); }
+  .page.rd .rd-ach-arrow { grid-column: 2; justify-self: end; margin-top: 0.6rem; }
+}
+
+@media print {
+  .page.rd .dock,
+  .page.rd .rd-theme-hud { display: none !important; }
+  .page.rd main { padding-top: 0; }
+  .page.rd .rd-foot-mark { font-size: 4rem; }
+}
+
+
+/* ==========================================================================
+   MIRROR PASS — corrections after looking at the rendered page.
+
+   What it fixes, in the order the defects showed up:
+
+   1. The corner plates sat on top of the copy, because the reading columns ran
+      to within ~24px of the edge and the plates reach ~130px. The reference
+      solves this with 128px page gutters, so the sections take one here.
+   2. On a phone there is no gutter wide enough for four corner plates, so the
+      rail becomes one fixed row at the top instead. Same labels, same order.
+   3. The reading controls were right-anchored (an earlier rule owned `right`)
+      and collided with the `lab` corner; centring is now set with left+right,
+      which no single edge override can defeat.
+   4. The index panel drew light ink on light paper: this theme set's `--rd-ink`
+      is the *light* token, so it was unreadable. It takes the dark paper.
+   5. The row arrow centred on the row instead of hugging its bottom line, the
+      place column was too narrow for "9–12th", and the sign-off wordmark was
+      centred inside a one-column-wide grid cell instead of the page.
+   ========================================================================== */
+
+/* 1 — page gutters wide enough for the corner plates. */
+@media (min-width: 48.001rem) {
+  .page.rd .rd-hero,
+  .page.rd .rd-sec,
+  .page.rd .rd-statement,
+  .page.rd .rd-contact,
+  .page.rd .rd-frames,
+  .page.rd .rd-foot { padding-inline: clamp(2rem, 9vw, 9rem); }
+}
+
+/* 3 — centre the reading controls, whatever edge the earlier rules claimed. */
+.page.rd .rd-theme-hud {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0.9rem;
+  margin-inline: auto;
+  width: fit-content;
+  transform: none;
+  z-index: 44;
+}
+
+/* 4 — the index panel, legible on every surface. */
+.page.rd .dock-more-panel {
+  background: var(--rd-paper2);
+  border: 1px solid var(--rd-line);
+  box-shadow: 4px 4px 0 var(--rd-text);
+}
+.page.rd .dock-more-panel a { color: var(--rd-text); }
+.page.rd .dock-more-panel a[aria-current="true"] { background: var(--rd-ink); color: var(--rd-paper); }
+
+/* 5 — row anatomy and sign-off alignment. */
+.page.rd .rd-ach li { grid-template-columns: clamp(4.4rem, 8vw, 7rem) minmax(0, 1fr) auto; }
+.page.rd .rd-ach-place { white-space: nowrap; }
+.page.rd .rd-ach-arrow { align-self: center; margin-top: 0; }
+
+.page.rd .rd-foot-mark {
+  grid-column: 1 / -1;
+  flex: 1 0 100%;
+  width: 100%;
+}
+
+/* 2 — phones get a rail row, not four plates in a 24px gutter. */
+@media (max-width: 48rem) {
+  .page.rd .dock {
+    inset: 0 0 auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.1rem;
+    height: auto;
+    padding: 0.4rem 0.55rem;
+    background: color-mix(in oklab, var(--rd-paper) 92%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rd-line);
+  }
+  .page.rd .dock-mark,
+  .page.rd .dock-corner,
+  .page.rd .dock-more { position: static; }
+  .page.rd .dock-mark,
+  .page.rd .dock-corner a,
+  .page.rd .dock-more > summary {
+    padding: 0.35rem 0.45rem;
+    font-size: 0.85rem;
+    background: none;
+    backdrop-filter: none;
+  }
+  .page.rd .dock-more-panel {
+    top: calc(100% + 0.4rem);
+    left: 0.4rem;
+    right: auto;
+    min-width: 12rem;
+  }
+  .page.rd main { padding-top: 3.2rem; }
+  .page.rd .rd-theme-hud { bottom: 0.6rem; }
+  .page.rd .rd-hero,
+  .page.rd .rd-sec,
+  .page.rd .rd-statement,
+  .page.rd .rd-contact,
+  .page.rd .rd-frames,
+  .page.rd .rd-foot { padding-inline: clamp(1.1rem, 5vw, 1.6rem); }
+}
+
+
+
+/* ---------- Editorial work rows and the Lab doorway ---------- */
+.page.rd .rd-case-index {
+  --cs-ink: var(--rd-text);
+  --cs-soft: var(--rd-text-soft);
+  --cs-muted: var(--rd-ink-soft);
+  --cs-accent: var(--rd-accent-ink);
+  --cs-line: var(--rd-line);
+  --cs-paper: var(--rd-paper);
+}
+.page.rd .rd-case-index .cs-index-item { color: var(--rd-text); }
+.page.rd .rd-case-index .cs-index-kicker { color: var(--rd-ink-soft); }
+.page.rd .rd-case-index .cs-index-title { color: var(--rd-text); }
+.page.rd .rd-case-index .cs-index-meta { color: var(--rd-ink-soft); }
+.page.rd .rd-work-results { margin-top: clamp(2.5rem, 6vw, 5rem); }
+.page.rd .rd-work-results > h3 {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-grotesk), var(--font-display), sans-serif;
+  font-size: clamp(1.7rem, 3.4vw, 2.7rem);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.page.rd .rd-lab-copy {
+  max-width: 54ch;
+  margin: 0;
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  line-height: 1.55;
+  color: var(--rd-text-soft);
+}
+.page.rd .rd-lab-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  border-top: 1px solid var(--rd-line);
+}
+.page.rd .rd-lab-links a {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 0.4rem;
+  min-height: 7rem;
+  padding: 1.2rem 3rem 1.2rem 0;
+  border-bottom: 1px solid var(--rd-line);
+  color: var(--rd-text);
+  text-decoration: none;
+}
+.page.rd .rd-lab-links a + a { padding-left: clamp(1.1rem, 3vw, 2.5rem); border-left: 1px solid var(--rd-line); }
+.page.rd .rd-lab-links b {
+  font-family: var(--font-grotesk), var(--font-display), sans-serif;
+  font-size: clamp(1.2rem, 2vw, 1.7rem);
+  line-height: 1.15;
+}
+.page.rd .rd-lab-links span { max-width: 34ch; color: var(--rd-ink-soft); font-size: 0.86rem; }
+.page.rd .rd-lab-links a::after {
+  content: "↗";
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+  background: var(--rd-ink);
+  color: var(--rd-paper);
+  transform: translateY(-50%);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.page.rd .rd-lab-links a:hover b { color: var(--rd-accent-ink); }
+.page.rd .rd-lab-links a:hover::after { background: var(--rd-accent); color: var(--rd-on-accent); transform: translateY(-50%) rotate(45deg); }
+.page.rd .rd-lab .rd-kit {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.page.rd .rd-lab .rd-kit img {
+  height: auto;
+  aspect-ratio: 1.6;
+  object-fit: cover;
+  border: 0;
+}
+.page.rd .rd-lab .rd-kit-body {
+  align-content: center;
+  gap: 0.7rem;
+  padding: clamp(1.1rem, 3vw, 2.5rem);
+  background: var(--rd-paper2);
+  color: var(--rd-text);
+}
+.page.rd .rd-lab .rd-kit-body > span { color: var(--rd-text-soft); }
+.page.rd .rd-lab .rd-kit:hover { transform: none; box-shadow: none; }
+.page.rd .rd-lab .rd-kit:hover img { opacity: 0.94; }
+
+/* The sign-off is the page's only full dark field, as in the reference. */
+.page.rd .rd-foot { background: #1a1a18; color: #f4f2ec; }
+.page.rd .rd-foot a { color: #d9d6ce; }
+.page.rd .rd-foot a:hover { color: #ffffff; }
+.page.rd .rd-foot-mark span { color: #e56537; }
+
+@media (max-width: 48rem) {
+  .page.rd .rd-lab-links { grid-template-columns: minmax(0, 1fr); }
+  .page.rd .rd-lab-links a + a { padding-left: 0; border-left: 0; }
+  .page.rd .rd-lab .rd-kit { grid-template-columns: minmax(0, 1fr); }
+  .page.rd .rd-lab .rd-kit img { height: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page.rd .rd-lab-links a::after { transition: none; }
+  .page.rd .rd-lab-links a:hover::after { transform: translateY(-50%); }
+}
+
+

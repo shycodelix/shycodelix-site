@@ -23,8 +23,8 @@ import { prefersReducedMotion } from "./gsapTick";
    prose section it drifts the whole column under the paragraph in front of you.
    --------------------------------------------------------------------------- */
 
-const LIFT = 22;   // px the blocks rise from
-const DRIFT = 3;   // percent of vertical drift for framed media
+const LIFT = 38;   // px the blocks rise from
+const DRIFT = 4.5; // percent of vertical drift for framed media
 
 export default function ReaderSectionScrub({ target }) {
   useEffect(() => {
@@ -34,11 +34,10 @@ export default function ReaderSectionScrub({ target }) {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      const blocks = el.querySelectorAll(":scope > :not(h2):not(.rd-frames-head)");
-      // Only framed media. `.pimg` clips its photo, so scaling it reads as a
-      // crop; the stream-kit card and the header badge have no clipping parent
-      // and would spill over their neighbours instead.
-      const media = el.querySelectorAll(".pimg img");
+      const blocks = el.querySelectorAll(":scope > :not(h2):not(.rd-frames-head):not(.rd-frames-strip)");
+      // Only framed media. Both selectors have clipping parents, so scaling
+      // reads as a crop instead of spilling over neighbouring content.
+      const media = el.querySelectorAll(".pimg img, .cs-index-image img");
 
       const tl = gsap.timeline({
         defaults: { ease: "none" },

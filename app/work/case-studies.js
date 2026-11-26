@@ -1,5 +1,7 @@
 import { clips } from "../videos";
 
+export const caseStudyOrder = ["ti11", "vcl-ph", "avante"];
+
 // Clips are looked up from the edits archive so the case studies never carry a
 // second copy of a Drive id. A missing id drops out rather than breaking a page.
 function pick(ids) {

@@ -8,6 +8,7 @@ import Reveal from "../components/Reveal";
 import PixelImg from "../components/PixelImg";
 import ReaderHero from "../components/ReaderHero";
 import ReaderTheme from "../components/ReaderTheme";
+import CaseStudyList from "./work/CaseStudyList";
 import ReaderTicker from "../components/ReaderTicker";
 import ReaderInterlude from "../components/ReaderInterlude";
 import ScrollWords from "../components/ScrollWords";
@@ -19,12 +20,16 @@ import ReaderVelocityLayer from "../components/ReaderVelocityLayer";
 import ReaderLiveLoop from "../components/ReaderLiveLoop";
 import ReaderScrollChoreo from "../components/ReaderScrollChoreo";
 import ReaderSectionScrub from "../components/ReaderSectionScrub";
+import ReaderHeroMotion from "../components/ReaderHeroMotion";
+import ReaderMotionTitle from "../components/ReaderMotionTitle";
 import Wordmark from "../components/Wordmark";
 import "./v2-reader.css";
+import "./work/case-study.css";
 import "./ReaderAmbient.css";
 import "./ReaderAtmosphere.css";
 import "./ReaderMorph.css";
 import "./ReaderChoreo.css";
+import "./ReaderMotion.css";
 import { profile, lookingFor, capabilities, roles, achievements, experience, photos, avante, avanteMail, sensitivity, sensitivityNote, gear, valorant } from "./data";
 
 const jsonLd = {
@@ -84,66 +89,108 @@ export default function Profile() {
           and the main landmark both start at the hero. */}
       <main id="content" data-skip-target tabIndex={-1}>
 
-      <ReaderVelocityLayer className="rd-hero" target=".rd-rider-container">
-        <div className="rd-rider-container" aria-hidden="true">
-          <ReaderAmbient />
-        </div>
+      <ReaderVelocityLayer className="rd-hero rd-hero-sequence" target=".rd-rider-container">
+        <div className="rd-hero-sticky">
+          <div className="rd-rider-container" aria-hidden="true">
+            <ReaderAmbient />
+          </div>
 
-        <div className="rd-hero-bar">
-          <span className="rd-status"><i aria-hidden="true" />{profile.status}</span>
-          <Wordmark className="rd-mono rd-mark" />
-        </div>
+          <div className="rd-hero-collage" aria-hidden="true">
+            <figure className="rd-hero-plate"><img src="/photos/archive/me-studio-01.webp" alt="" /></figure>
+            <figure className="rd-hero-plate"><img src="/photos/archive/team-boom-01.webp" alt="" /></figure>
+            <figure className="rd-hero-plate"><img src="/photos/lionne.jpg" alt="" /></figure>
+            <figure className="rd-hero-plate"><img src="/photos/archive/team-abaddon-02.webp" alt="" /></figure>
+            <figure className="rd-hero-plate"><img src="/photos/abaddon-solo.jpg" alt="" /></figure>
+          </div>
 
-        <ReaderScrollChoreo className="rd-hero-body" target=".rh" headerSkew={0} headerY={14}>
-          <ReaderHero
-            headline="operations,<br />production,<br />content"
-            subtitle="I run esports teams and tournaments, produce the broadcast around them, and have spent
-                     nine years leading customer-facing teams in the corporate world. Currently founding
-                     Avante Esports."
-            byline="Usually replies within a day · Philippine time"
-          />
+          <div className="rd-hero-bar">
+            <span className="rd-status"><i aria-hidden="true" />{profile.status}</span>
+            <Wordmark className="rd-mono rd-mark" />
+          </div>
 
-          <div className="rd-hero-ident">
-            <div className="rd-hero-actions">
-              <a className="rd-cta" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>
-                Email me <span aria-hidden="true">↗</span>
-              </a>
-              <a className="rd-link" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
-              <Link className="rd-link" href="/os">Creator room</Link>
-            </div>
-            <div className="rd-hero-note">
-              <figure className="rd-portrait">
-                <Image
-                  src="/photos/studio.jpg"
-                  alt="shycodelix, studio portrait in a black jacket"
-                  width={900}
-                  height={1160}
-                  priority
-                  sizes="8rem"
-                />
-              </figure>
-              <p className="rd-mono rd-portrait-cap">Cebu, PH</p>
+          <div className="rd-hero-copy">
+            <ReaderHero
+              headline="operations,<br />production,<br />content"
+              subtitle="I run esports teams and tournaments, produce the broadcast around them, and have spent
+                       nine years leading customer-facing teams in the corporate world. Currently founding
+                       Avante Esports."
+              byline="Usually replies within a day · Philippine time"
+            />
+
+            <div className="rd-hero-ident">
+              <div className="rd-hero-actions">
+                <a className="rd-cta" href={`mailto:${profile.email}?subject=Let%27s%20work%20together`}>
+                  Email me <span aria-hidden="true">↗</span>
+                </a>
+                <a className="rd-link" href="/resume.pdf" target="_blank" rel="noreferrer">Résumé (PDF)</a>
+                <Link className="rd-link" href="/os">Creator room</Link>
+              </div>
+              <div className="rd-hero-note">
+                <figure className="rd-portrait">
+                  <Image
+                    src="/photos/studio.jpg"
+                    alt="shycodelix, studio portrait in a black jacket"
+                    width={900}
+                    height={1160}
+                    priority
+                    sizes="8rem"
+                  />
+                </figure>
+                <p className="rd-mono rd-portrait-cap">Cebu, PH</p>
+              </div>
             </div>
           </div>
-        </ReaderScrollChoreo>
-
-        <div className="rd-hero-rule" aria-hidden="true" />
+          <div className="rd-hero-rule" aria-hidden="true" />
+        </div>
+        <ReaderHeroMotion />
       </ReaderVelocityLayer>
 
       <ReaderTicker />
 
-      {/* Statement band: the mirror target opens with one large idea before any
-          lists, so the reader gets the argument before the evidence. */}
+      {/* A short statement leads into the work, not a list of credentials. */}
       <section className="rd-statement" aria-label="Statement">
         <p>
           Nine years of getting other people's shows on air — then building the team
           that does it properly. Everything below is that work, in the order it happened.
         </p>
-        <span className="rd-mono">Cebu, PH · available from January</span>
+        <span className="rd-mono">Cebu, Philippines · open to work</span>
       </section>
 
-      <section id="summary" className="rd-sec">
-        <h2><Numeral>(01)</Numeral>Profile</h2>
+      <section id="work" className="rd-sec rd-work">
+        <h2 className="sr-only">Selected work</h2>
+        <ReaderMotionTitle text="selected work" />
+        <div className="rd-col">
+          <CaseStudyList className="cs-index rd-case-index" />
+          <div className="rd-work-results">
+            <h3>Recent results</h3>
+            <ol className="rd-ach">
+              {achievements.map((a, i) => (
+                <Reveal as="li" key={a.event} delay={i * 60}>
+                  <span className="rd-ach-place">{a.place}</span>
+                  <div className="rd-ach-body">
+                    <a href={a.href} target="_blank" rel="noreferrer">{a.event} <span aria-hidden="true">↗</span></a>
+                    <p className="rd-mono">{a.role} · {a.team} · {a.date}</p>
+                    <p className="rd-ach-note">{a.note}</p>
+                    {a.tags && (
+                      <ul className="rd-ach-tags">
+                        {a.tags.map((t) => <li key={t}>{t}</li>)}
+                      </ul>
+                    )}
+                    {a.slug && (
+                      <Link className="rd-ach-case" href={`/work/${a.slug}`} prefetch={false}>Case study</Link>
+                    )}
+                  </div>
+                  <span className="rd-ach-arrow" aria-hidden="true">↗</span>
+                </Reveal>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+      <ReaderSectionScrub target="work" />
+
+      <section id="about" className="rd-sec">
+        <h2><Numeral>(02)</Numeral>About</h2>
         <div className="rd-col">
           <dl className="rd-facts">
             <div><dt>Looking for</dt><dd>{lookingFor.role}</dd></div>
@@ -159,45 +206,6 @@ export default function Profile() {
           <p className="rd-note">{lookingFor.note}</p>
         </div>
       </section>
-      <section id="work" className="rd-sec">
-        <h2><Numeral>(02)</Numeral>Selected<br />work<ReaderLiveLoop><HeaderLoop src="/kit/on-air.gif" still="/kit/on-air.png" alt="On air" width={96} height={34} className="rd-loop-badge" /></ReaderLiveLoop></h2>
-        <div className="rd-col">
-        <ol className="rd-ach">
-          {achievements.map((a, i) => (
-            <Reveal as="li" key={a.event} delay={i * 60}>
-              <span className="rd-ach-place">{a.place}</span>
-              <div className="rd-ach-body">
-                <a href={a.href} target="_blank" rel="noreferrer">{a.event} <span aria-hidden="true">↗</span></a>
-                <p className="rd-mono">{a.role} · {a.team} · {a.date}</p>
-                <p className="rd-ach-note">{a.note}</p>
-                {a.tags && (
-                  <ul className="rd-ach-tags">
-                    {a.tags.map((t) => <li key={t}>{t}</li>)}
-                  </ul>
-                )}
-                {a.slug && (
-                  <Link className="rd-ach-case" href={`/work/${a.slug}`}>Case study <span aria-hidden="true">→</span></Link>
-                )}
-              </div>
-            </Reveal>
-          ))}
-        </ol>
-          {/* the index is a separate page and the static export ships no RSC
-              payload for it, so prefetching only earns a 404 in the console */}
-          <Link className="rd-viewall" href="/work" prefetch={false}>
-            View all work <span aria-hidden="true">→</span>
-          </Link>
-          <a className="rd-kit" href="/os">
-            <img src="/kit/scene-starting.webp" alt="Starting scene from the Pixels-3 stream overlay pack" width={1200} height={675} loading="lazy" />
-            <span className="rd-kit-body">
-              <em className="rd-mono">Stream kit</em>
-              <b>Pixels-3 overlay pack, plus a PNGTuber model</b>
-              <span>Five OBS scenes, a chat box, transitions, a Stream Deck profile and a model I can talk through — all running on the monitor in the creator room.</span>
-            </span>
-          </a>
-        </div>
-      </section>
-      <ReaderSectionScrub target="work" />
 
       <ReaderInterlude
         src="/kit/scene-starting.webp"
@@ -255,15 +263,15 @@ export default function Profile() {
       />
 
       <ReaderScrollChoreo>
-        <section id="skills" className="rd-sec">
-          {/* The rig is a portrait frame (232x265). The old 120x42 attributes
-              were the only size the bare <img> inside <picture> ever saw, so the
-              PNGTuber rendered squashed to a 2.86:1 sliver. */}
+        <section id="skills" className="rd-sec rd-capabilities">
           <h2><Numeral>(05)</Numeral>What<br />I do<ReaderLiveLoop><HeaderLoop src="/kit/cam-loop.gif" still="/kit/idle.webp" alt="The PNGTuber model blinking and talking" width={232} height={265} className="rd-loop-badge" /></ReaderLiveLoop></h2>
           <div className="rd-caps">
             {capabilities.map((c, i) => (
-              <Reveal key={c.k} delay={i * 60}>
-                <h3>{c.k}</h3>
+              <Reveal key={c.k} delay={i * 90}>
+                <div className="rd-cap-head">
+                  <span className="rd-cap-num">({String(i + 1).padStart(2, "0")})</span>
+                  <h3>{c.k}</h3>
+                </div>
                 <p>{c.v}</p>
               </Reveal>
             ))}
@@ -301,9 +309,10 @@ export default function Profile() {
 
       <section id="career" className="rd-frames">
         <div className="rd-frames-head">
-          <h2><Numeral>(06)</Numeral>Career<br />in frames</h2>
-          <p className="rd-mono">Lionne → BOOM → Abaddon → Avante · drag or scroll sideways</p>
+          <h2 className="sr-only">Career in frames</h2>
+          <p className="rd-mono">Lionne → BOOM → Abaddon → Avante · scroll to move the rail</p>
         </div>
+        <ReaderMotionTitle text="career in frames" />
         <FramesStrip>
           {photos.map((p) => (
             <figure key={p.src} className="rd-shot" style={{ "--ar": p.ar }}>
@@ -356,8 +365,37 @@ export default function Profile() {
         }}
       />
 
+      <section id="lab" className="rd-sec rd-lab">
+        <h2 className="sr-only">Lab</h2>
+        <ReaderMotionTitle text="lab" />
+        <div className="rd-col">
+          <p className="rd-lab-copy">
+            A hands-on side of the portfolio: stream scenes, a talking model, live chat and an aim trainer in a working creator room. The monitor opens its own Windows XP-style desktop.
+          </p>
+          <div className="rd-lab-links">
+            <Link href="/os" prefetch={false}>
+              <b>Content Creator Room</b>
+              <span>Enter the studio and explore the live setup.</span>
+            </Link>
+            <Link href="/os/desktop" prefetch={false}>
+              <b>Windows XP desktop</b>
+              <span>Open the nested desktop directly.</span>
+            </Link>
+          </div>
+          <a className="rd-kit" href="/os">
+            <img src="/kit/scene-starting.webp" alt="Starting scene from the Pixels-3 stream overlay pack" width={1200} height={675} loading="lazy" />
+            <span className="rd-kit-body">
+              <em className="rd-mono">Stream kit</em>
+              <b>Pixels-3 overlay pack, plus a PNGTuber model</b>
+              <span>Five OBS scenes, a chat box, transitions, a Stream Deck profile and a model I can talk through — all running on the monitor in the creator room.</span>
+            </span>
+          </a>
+        </div>
+      </section>
+
       <section id="contact" className="rd-contact">
         <p className="rd-mono">(08) — Contact</p>
+        <p className="rd-contact-lead">got a project in mind?</p>
         <a className="rd-big-mail" href={`mailto:${profile.email}`}>{profile.email}</a>
         <div className="rd-contact-links">
           {[...stream, ...social].map((l) => (
@@ -370,6 +408,9 @@ export default function Profile() {
       <footer className="rd-foot">
         <p>Gamer tag: {profile.tag} · reader mode of shycodelix OS</p>
         <p><Link href="/links">Links</Link> · <Link href="/os">My room</Link> · <a href={profile.source} target="_blank" rel="noreferrer">Konect</a></p>
+        {/* The mirror target signs off with a two-line wordmark rather than a
+            footer row. Decorative: the name is already the document heading. */}
+        <p className="rd-foot-mark" aria-hidden="true">shycodelix<span>/26</span></p>
       </footer>
       </main>
     </div>

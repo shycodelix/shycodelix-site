@@ -38,25 +38,24 @@
    the whole layer fixed the ratio but killed the motion, so the surfaces now
    keep the layer at full presence and instead lift the field's own colours
    toward the paper (--rd-field-lift) and clamp its alpha (--rd-field-amp). */
-.page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.5; }
-.page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.46; }
+.page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.4; }
+.page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.34; }
 
-.page.rd[data-rd-theme="dark"] { --rd-field-lift: 0; --rd-field-amp: 1; }
-.page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.7; --rd-field-amp: 0.92; --rd-field-tint: #fffdf4; }
-.page.rd[data-rd-theme="light"] { --rd-field-lift: 0.5; --rd-field-amp: 0.95; --rd-field-tint: #ffffff; }
+.page.rd[data-rd-theme="dark"] { --rd-field-lift: 0; --rd-field-amp: 0.72; }
+.page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.78; --rd-field-amp: 0.72; --rd-field-tint: #f8f6ef; }
+.page.rd[data-rd-theme="light"] { --rd-field-lift: 0.72; --rd-field-amp: 0.68; --rd-field-tint: #ffffff; }
 
 /* Contact's field is the warmest of the set, and its small mono line sat right
    on 4.5:1 over it; hold this zone back rather than dim every section. */
 .page.rd[data-rd-theme="dark"] .rd-atmos[data-zone="contact"] { opacity: 0.56; }
 
 @media (max-width: 48rem) {
-  .rd-atmos { opacity: 0.6; }
-  /* On a phone the field sits under wider copy, so it lifts further toward the
-     paper rather than disappearing. */
-  .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.46; }
-  .page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.42; }
-  .page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.76; --rd-field-amp: 0.9; --rd-field-tint: #fffdf4; }
-  .page.rd[data-rd-theme="light"] { --rd-field-lift: 0.62; --rd-field-amp: 0.96; --rd-field-tint: #ffffff; }
+  .rd-atmos { opacity: 0.52; }
+  /* Phone copy spans more of the screen, so the mesh lifts closer to paper. */
+  .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.36; }
+  .page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.3; }
+  .page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.82; --rd-field-amp: 0.68; --rd-field-tint: #f8f6ef; }
+  .page.rd[data-rd-theme="light"] { --rd-field-lift: 0.78; --rd-field-amp: 0.62; --rd-field-tint: #ffffff; }
 }
 
 @media (prefers-reduced-motion: reduce) {

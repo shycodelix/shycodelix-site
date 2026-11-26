@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /* The career photos already scroll with a wheel, a trackpad and a thumb; what
    they lacked was a mouse grab. This adds the grab and makes the release a
@@ -31,6 +33,37 @@ export default function FramesStrip({ children }) {
   const landing = useRef(null); // the pending snap restore of a throw in flight
 
   useEffect(() => () => landing.current && clearTimeout(landing.current.timer), []);
+
+  useEffect(() => {
+    const el = strip.current;
+    if (!el || window.matchMedia("(max-width: 48rem)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 1) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    el.classList.add("is-scroll-driven");
+    const ctx = gsap.context(() => {
+      gsap.to(el, {
+        scrollLeft: () => el.scrollWidth - el.clientWidth,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top top+=72",
+          end: () => `+=${Math.max(el.scrollWidth - el.clientWidth, window.innerHeight)}`,
+          pin: el,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+    }, el);
+    ScrollTrigger.refresh();
+
+    return () => {
+      ctx.revert();
+      el.classList.remove("is-scroll-driven");
+    };
+  }, []);
 
   // Snap comes back once the throw has landed: on scrollend, or on a timer for
   // browsers that never fire it. Grabbing again calls this first.

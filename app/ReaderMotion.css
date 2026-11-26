@@ -1,0 +1,287 @@
+/* Editorial scroll motion for the reader; all motion has a static layout fallback. */
+
+/* Sticky hero plate: photographs fan around the copy, then clear as the reader scrolls. */
+.page.rd .rd-hero-sequence {
+  position: relative;
+  display: block;
+  height: 180svh;
+  min-height: 0;
+  padding: 0;
+  overflow: visible;
+}
+.page.rd .rd-hero-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 34rem;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 1rem clamp(1.1rem, 5vw, 4rem);
+}
+.page.rd .rd-hero-collage {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+}
+.page.rd .rd-hero-plate {
+  position: absolute;
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  aspect-ratio: 1.38;
+  background: var(--rd-paper2);
+  box-shadow: 0 12px 34px rgba(20, 18, 15, 0.16);
+  will-change: transform, opacity;
+}
+.page.rd .rd-hero-plate img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.82);
+}
+.page.rd .rd-hero-plate:nth-child(1) { top: 15%; left: 8%; width: clamp(8rem, 20vw, 19rem); transform: rotate(-7deg); }
+.page.rd .rd-hero-plate:nth-child(2) { top: 13%; right: 8%; width: clamp(8rem, 19vw, 18rem); transform: rotate(6deg); }
+.page.rd .rd-hero-plate:nth-child(3) { bottom: 12%; left: 12%; width: clamp(8rem, 18vw, 17rem); transform: rotate(5deg); }
+.page.rd .rd-hero-plate:nth-child(4) { right: 9%; bottom: 10%; width: clamp(9rem, 23vw, 22rem); transform: rotate(-5deg); }
+.page.rd .rd-hero-plate:nth-child(5) { top: 34%; right: 28%; width: clamp(5rem, 12vw, 11rem); aspect-ratio: 0.82; transform: rotate(8deg); }
+.page.rd .rd-hero-bar {
+  position: absolute;
+  z-index: 3;
+  top: 1.1rem;
+  right: clamp(1.1rem, 5vw, 4rem);
+  left: clamp(1.1rem, 5vw, 4rem);
+  display: flex;
+  justify-content: flex-start;
+  width: max-content;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  color: var(--rd-text);
+}
+.page.rd .rd-hero-bar .rd-status { color: var(--rd-text); }
+.page.rd .rd-hero-bar .rd-status i { background: var(--rd-accent); }
+.page.rd .rd-hero-copy {
+  position: absolute;
+  z-index: 2;
+  inset: 10% clamp(1rem, 8vw, 8rem) 7%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.page.rd .rd-hero-copy .rh {
+  width: 100%;
+  max-width: 100%;
+  font-size: clamp(3.4rem, min(14vw, 18svh), 12rem);
+  line-height: 0.79;
+  letter-spacing: -0.075em;
+  text-align: center;
+  text-wrap: balance;
+}
+.page.rd .rd-hero-copy .rh-sub {
+  max-width: 49ch;
+  margin-inline: auto;
+  color: var(--rd-text);
+  font-size: clamp(0.95rem, 1.45vw, 1.2rem);
+}
+.page.rd .rd-hero-copy .rh-by { margin-inline: auto; }
+.page.rd .rd-hero-ident {
+  justify-content: center;
+  gap: 1rem 1.5rem;
+  width: 100%;
+  padding-bottom: 0;
+}
+.page.rd .rd-hero-actions { justify-content: center; }
+.page.rd .rd-hero-note { gap: 0.3rem; }
+.page.rd .rd-portrait { width: 4.5rem; height: 4.5rem; }
+.page.rd .rd-hero-rule {
+  position: absolute;
+  right: clamp(1.1rem, 5vw, 4rem);
+  bottom: 1.1rem;
+  left: clamp(1.1rem, 5vw, 4rem);
+  z-index: 3;
+  grid-column: auto;
+}
+.page.rd .rd-motion-anchor { display: none; }
+
+/* Oversized words travel across the image bands as they cross the viewport. */
+.page.rd .rd-motion-title {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  overflow: hidden;
+  color: var(--rd-text);
+  pointer-events: none;
+}
+.page.rd .rd-motion-title-text {
+  display: block;
+  width: max-content;
+  padding: 0.06em 0 0.12em;
+  font-family: var(--font-grotesk), var(--font-display), Impact, sans-serif;
+  font-size: clamp(5.5rem, 18vw, 16rem);
+  font-weight: 800;
+  letter-spacing: -0.085em;
+  line-height: 0.78;
+  white-space: nowrap;
+  text-transform: lowercase;
+  will-change: transform;
+}
+.page.rd #work > .rd-motion-title { margin-top: clamp(1.2rem, 3vw, 3rem); margin-bottom: clamp(1.5rem, 4vw, 4rem); }
+.page.rd .rd-frames .rd-motion-title { margin-block: clamp(1.8rem, 4vw, 4rem); }
+.page.rd .rd-lab > .rd-motion-title { margin-block: 0 clamp(1.4rem, 3vw, 2.8rem); }
+
+/* Let the work images lead each case study instead of being thumbnail-sized. */
+.page.rd #work > .rd-col { max-width: none; }
+.page.rd .rd-case-index .cs-index-item {
+  grid-template-columns: minmax(0, 1.3fr) minmax(15rem, 0.8fr);
+  gap: clamp(1.2rem, 4.5vw, 5rem);
+  padding-block: clamp(2rem, 5vw, 4.5rem);
+}
+.page.rd .rd-case-index .cs-index-image { aspect-ratio: 1.48; }
+.page.rd .rd-case-index .cs-index-title { font-size: clamp(2.5rem, 6.2vw, 6rem); }
+
+/* The capability list is the one saturated field in the reading sequence. */
+.page.rd .rd-capabilities {
+  --rd-line: rgba(26, 25, 22, 0.28);
+  position: relative;
+  width: 100vw;
+  max-width: none;
+  margin-inline: calc(50% - 50vw);
+  padding: clamp(4rem, 9vw, 8rem) clamp(1.2rem, 9vw, 9rem);
+  border: 0;
+  background: #e86b3e;
+  color: #1a1917;
+}
+.page.rd .rd-capabilities > h2 {
+  max-width: 9ch;
+  margin-bottom: clamp(2.5rem, 7vw, 6rem);
+  color: #1a1917;
+  font-size: clamp(4.5rem, 14vw, 11rem);
+  line-height: 0.78;
+  letter-spacing: -0.075em;
+}
+.page.rd .rd-capabilities > h2 em,
+.page.rd .rd-capabilities > h2 em span { color: #1a1917; opacity: 0.72; }
+.page.rd .rd-capabilities > h2::after { background: #1a1917; opacity: 0.7; }
+.page.rd .rd-capabilities .rd-caps > * { border-color: var(--rd-line); }
+.page.rd .rd-capabilities .rd-cap-num { color: #1a1917; opacity: 0.7; }
+.page.rd .rd-capabilities .rd-cap-head h3 { color: #1a1917; }
+.page.rd .rd-capabilities .rd-caps p { color: #292521; }
+
+/* A pinned horizontal picture rail on desktop; native touch/drag remains available. */
+.page.rd .rd-frames-strip.is-scroll-driven { scroll-snap-type: none; }
+.page.rd .rd-frames-strip.is-scroll-driven { cursor: grab; }
+
+/* Increase the scroll-linked entrance and image crop enough to read as movement. */
+.page.rd .rd-ticker .rd-track { animation-duration: 34s; }
+.page.rd .rd-track b { font-size: clamp(1.35rem, 3.6vw, 2.5rem); }
+
+/* Theme controls sit in the clear center of the top rail, not over body copy. */
+.page.rd .rd-theme-hud {
+  position: fixed;
+  top: 0.75rem;
+  right: auto;
+  bottom: auto;
+  left: 50%;
+  z-index: 46;
+  width: fit-content;
+  margin: 0;
+  padding: 0.2rem 0.35rem;
+  transform: translateX(-50%);
+  border: 1px solid var(--rd-line);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--rd-paper) 90%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+@media (min-width: 48.0625rem) and (prefers-reduced-motion: no-preference) {
+  .page.rd .rd-frames-strip { padding-inline: 6vw; gap: 1.5rem; }
+}
+
+@media (max-width: 48rem) {
+  .page.rd .rd-hero-sequence { height: 160svh; }
+  .page.rd .rd-hero-sticky {
+    top: 3rem;
+    height: calc(100svh - 3rem);
+    min-height: 30rem;
+    padding: 0.75rem 1rem;
+  }
+  .page.rd .rd-hero-collage { opacity: 0.56; }
+  .page.rd .rd-hero-plate:nth-child(1) { top: 13%; left: 2%; width: 31vw; }
+  .page.rd .rd-hero-plate:nth-child(2) { top: 15%; right: 2%; width: 29vw; }
+  .page.rd .rd-hero-plate:nth-child(3) { bottom: 11%; left: 2%; width: 30vw; }
+  .page.rd .rd-hero-plate:nth-child(4) { right: 2%; bottom: 10%; width: 34vw; }
+  .page.rd .rd-hero-plate:nth-child(5) { top: 32%; right: 23%; width: 17vw; }
+  .page.rd .rd-hero-bar { top: 0.7rem; right: 1rem; left: 1rem; }
+  .page.rd .rd-hero-copy { inset: 12% 0 6%; }
+  .page.rd .rd-hero-copy .rh {
+    font-size: clamp(3.5rem, 17vw, 7.2rem);
+    line-height: 0.82;
+  }
+  .page.rd .rd-hero-copy .rh-sub { max-width: 36ch; font-size: 0.94rem; }
+  .page.rd .rd-hero-ident { flex-direction: column; align-items: center; gap: 0.8rem; }
+  .page.rd .rd-hero-actions { gap: 0.55rem 0.8rem; }
+  .page.rd .rd-hero-note { display: none; }
+  .page.rd .rd-hero-rule { right: 1rem; bottom: 0.75rem; left: 1rem; }
+  .page.rd .rd-motion-title-text { font-size: clamp(5rem, 21vw, 9rem); }
+  .page.rd .rd-case-index .cs-index-item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.2rem;
+    padding-block: 1.8rem;
+  }
+  .page.rd .rd-case-index .cs-index-image { aspect-ratio: 1.38; }
+  .page.rd .rd-case-index .cs-index-title { font-size: clamp(2.5rem, 12vw, 4rem); }
+  .page.rd .rd-capabilities { padding-inline: clamp(1.1rem, 5vw, 1.6rem); }
+  .page.rd .rd-capabilities > h2 { font-size: clamp(4rem, 17vw, 7.2rem); }
+  .page.rd .rd-capabilities .rd-loop-badge { width: 3.4rem; }
+  .page.rd .rd-theme-hud {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    justify-content: center;
+    margin: 3.25rem 0 0;
+    padding: 0.25rem 0.45rem;
+    transform: none;
+    border-width: 0 0 1px;
+    border-radius: 0;
+    background: var(--rd-paper);
+    backdrop-filter: none;
+  }
+  .page.rd main { padding-top: 0.6rem; }
+  .page.rd .rd-theme-hud .rd-theme-group { gap: 0.2rem; }
+  .page.rd .rd-theme-btn,
+  .page.rd .rd-theme-chip { font-size: 0.66rem; padding: 0.25rem 0.42rem; }
+}
+
+@media (max-width: 22rem) {
+  .page.rd .rd-theme-hud { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page.rd .rd-hero-sequence { height: auto; min-height: calc(100svh - var(--rd-dock-h)); }
+  .page.rd .rd-hero-sticky { position: relative; top: auto; height: auto; min-height: inherit; }
+  .page.rd .rd-hero-copy,
+  .page.rd .rd-hero-plate,
+  .page.rd .rd-hero-bar { transform: none !important; opacity: 1 !important; }
+  .page.rd .rd-hero-plate { will-change: auto; }
+  .page.rd .rd-motion-title-text { will-change: auto; }
+  .page.rd .rd-ticker .rd-track { animation: none; }
+  .page.rd .rd-frames-strip.is-scroll-driven { scroll-snap-type: x mandatory; }
+}
+
+@media (scripting: none) {
+  .page.rd .rd-hero-sequence { height: auto; min-height: calc(100svh - var(--rd-dock-h)); }
+  .page.rd .rd-hero-sticky { position: relative; top: auto; height: auto; min-height: inherit; }
+  .page.rd .rd-hero-copy,
+  .page.rd .rd-hero-plate,
+  .page.rd .rd-hero-bar { transform: none; opacity: 1; }
+  .page.rd .rd-hero-plate { will-change: auto; }
+  .page.rd .rd-motion-title-text { will-change: auto; }
+}

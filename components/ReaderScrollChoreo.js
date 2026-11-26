@@ -26,8 +26,8 @@ export default function ReaderScrollChoreo({
   // and no choreography at all.
   target = "h2",
   scrub = 1.2,
-  headerSkew = 0.04,
-  headerY = 8,
+  headerSkew = 1.1,
+  headerY = 36,
   ...rest
 }) {
   const wrapper = useRef(null);
