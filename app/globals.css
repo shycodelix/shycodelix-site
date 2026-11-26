@@ -984,3 +984,42 @@ body { -webkit-tap-highlight-color: rgba(255, 122, 26, 0.22); }
 .rd-kit-body span:last-child { font-size: 0.86rem; color: #5C5C5C; }
 .rd-kit:hover b { color: var(--tang); }
 @media (max-width: 40rem) { .rd-kit { grid-template-columns: 1fr; } }
+
+
+
+/* Startup POST: quick firmware checks, then the XP desktop. */
+.boot { gap: 0.75rem; }
+.boot-firmware {
+  margin: 0;
+  color: #9fc4e8;
+  font-family: var(--font-micro), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+}
+.boot-checks {
+  display: grid;
+  gap: 0.3rem;
+  width: min(22rem, 88vw);
+  margin: 0;
+  padding: 0;
+  color: #8ba1b7;
+  font-family: var(--font-micro), monospace;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  list-style: none;
+  text-align: left;
+}
+.boot-checks li { display: grid; grid-template-columns: 3.6rem minmax(0, 1fr); gap: 0.35rem; }
+.boot-checks li[data-state="done"] { color: #c2e8d0; }
+.boot-checks li[data-state="running"] { color: #e8f4ff; }
+.boot .bar { overflow: hidden; }
+.boot .bar i { transition: width 55ms linear; }
+.boot .boot-skip {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+}
+.boot .boot-skip:focus-visible { outline: 2px solid #e8f4ff; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .boot .bar i { transition: none; }
+}

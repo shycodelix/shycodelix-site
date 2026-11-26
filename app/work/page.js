@@ -4,7 +4,7 @@ import { caseStudyOrder } from "./case-studies";
 import "./case-study.css";
 
 const description =
-  "Case studies from the work: BOOM Esports through The International 2022, Abaddon Esports through VCL Philippines, and Avante Esports, founded, absorbed and rebooted.";
+  "Selected case studies across live events, esports operations and creator campaigns: Red Bull Wings Cup, PUBG Mobile Esports, lilith, BOOM Esports, Abaddon Esports and Avante.";
 
 export const metadata = {
   title: "Work",
@@ -35,8 +35,8 @@ export default function Page() {
         <header className="cs-head">
           <h1 className="cs-title">Selected work</h1>
           <p className="cs-stand">
-            The long version of the work: what happened around the matches, what shipped, and who can
-            vouch for it.
+            Event operations, global short-form campaigns and creator edits, alongside the team and
+            production work behind them.
           </p>
         </header>
 

@@ -734,3 +734,29 @@
   .page.rd .rd-shot,
   .page.rd .rd-hero-plate { transform: none !important; }
 }
+
+
+
+/* Collaborator strip follows the case-study rows and stays part of the work zone. */
+.page.rd .rd-brands { margin: 0; padding: clamp(2.5rem, 5vw, 4.5rem) 0 0; }
+.page.rd .rd-brands-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0 clamp(1.2rem, 6vw, 5rem); }
+.page.rd .rd-brands-head h2 { margin: 0; font: 650 clamp(1rem, 1.5vw, 1.25rem)/1.1 var(--font-grotesk), var(--font-body), sans-serif; letter-spacing: -0.025em; }
+.page.rd .rd-brands-head p { margin: 0; color: var(--rd-ink-soft); font-size: 0.8rem; }
+.page.rd .rd-brands .rd-ticker { margin-top: 0.85rem; }
+.page.rd .rd-brands .rd-ticker .rd-track b { color: var(--rd-ink); opacity: 0.84; }
+.page.rd .rd-brands .rd-ticker .rd-track b:nth-child(3n) { color: var(--rd-reference-orange); }
+.page.rd .rd-case-index .cs-index-image { --spot-x: 50%; --spot-y: 50%; }
+.page.rd .rd-case-index .cs-index-hover { right: 0.6rem; bottom: 0.6rem; }
+.page.rd .rd-case-index .cs-index-details { padding-inline: 0; }
+.page.rd .rd-case-index .cs-index-details > div { padding-right: 2rem; }
+.page.rd .rd-case-index .cs-index-details summary { font-size: 0.7rem; }
+.page.rd .rd-case-index .cs-index-details p { color: var(--rd-text-soft); }
+.page.rd .rd-case-index .cs-index-details a { color: var(--rd-reference-orange); }
+
+@media (max-width: 48rem) {
+  .page.rd .rd-brands { padding-top: 2.5rem; }
+  .page.rd .rd-brands-head { display: grid; gap: 0.35rem; padding-inline: 6vw; }
+  .page.rd .rd-brands-head p { font-size: 0.72rem; }
+  .page.rd .rd-brands .rd-ticker .rd-track b { font-size: 0.95rem; }
+  .page.rd .rd-case-index .cs-index-details > div { padding-right: 0; }
+}

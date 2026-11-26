@@ -207,6 +207,19 @@ function ErrorBody({ close }) {
   return <div className="stack"><p className="pixel" style={{ fontSize: ".6rem", lineHeight: 1.8 }}>Task failed successfully.</p><button type="button" className="btn primary" onClick={close}>OK</button></div>;
 }
 
+function ClippyBody({ close, say }) {
+  return (
+    <div className="stack">
+      <p className="greet">It looks like you are building a portfolio.</p>
+      <p>Would you like help turning a finished project into a case study?</p>
+      <div className="row2">
+        <button type="button" className="btn primary" onClick={() => { say("Clippy found the project notes. They were under final-final."); close("clippy"); }}>Show me</button>
+        <button type="button" className="btn" onClick={() => close("clippy")}>Not now</button>
+      </div>
+    </div>
+  );
+}
+
 const DEFS = {
   links: { title: "Links.exe", icon: "link", w: 380, body: LinksBody },
   avante: { title: "Avante.exe", icon: "star", w: 660, body: AvanteStudy },
@@ -227,6 +240,7 @@ const DEFS = {
   dont: { title: "Do not open.exe", icon: "danger", w: 360, body: DontBody },
   bin: { title: "Recycle Bin", icon: "bin", w: 380, body: BinBody },
   error: { title: "Error", icon: "danger", w: 360, body: ErrorBody },
+  clippy: { title: "Clippy.exe", icon: "doc", w: 390, body: ClippyBody },
   racer: { title: "road_trip.exe", icon: "play", w: 660, body: Racer },
   tasks: { title: "Task Manager", icon: "gear", w: 460, body: TaskManagerBody },
 };
@@ -285,39 +299,54 @@ function loadLayout() {
   }
 }
 
-const BOOT_LINES = [
-  "Reticulating splines…",
-  "Rebuilding the overlay, again…",
-  "Syncing chat (47 unread)…",
-  "Buffering like it's 2012…",
-  "Skill issue not found.",
-  "Loading 47 unused overlays…",
-  "Loading personality.dll…",
-  "Rendering the clip nobody asked for…",
-  "Searching for a fifth teammate…",
-  "Unmuting the microphone…",
+const BOOT_CHECKS = [
+  "POST / BIOS v6.2.26",
+  "Memory test ............ 16 GB OK",
+  "Graphics adapter ....... RTX 2060 OK",
+  "Mounting C:\\ .......... OK",
+  "Stream stack ........... ready",
 ];
-
-function pickLines(n) {
-  const pool = [...BOOT_LINES];
-  const out = [];
-  for (let i = 0; i < n; i++) out.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
-  return out;
-}
 
 function Boot({ onDone }) {
   const [p, setP] = useState(0);
-  const [lines] = useState(() => pickLines(5));
-  useEffect(() => { const t = setInterval(() => setP((v) => Math.min(100, v + 7)), 60); return () => clearInterval(t); }, []);
-  useEffect(() => { if (p >= 100) { const t = setTimeout(onDone, 320); return () => clearTimeout(t); } }, [p, onDone]);
-  const line = lines[Math.min(lines.length - 1, Math.floor(p / (100 / lines.length)))];
+  useEffect(() => {
+    const t = setInterval(() => setP((v) => Math.min(100, v + 5)), 55);
+    return () => clearInterval(t);
+  }, []);
+  useEffect(() => {
+    if (p >= 100) {
+      const t = setTimeout(onDone, 260);
+      return () => clearTimeout(t);
+    }
+  }, [p, onDone]);
+  useEffect(() => {
+    const skip = (event) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      onDone();
+    };
+    window.addEventListener("keydown", skip);
+    return () => window.removeEventListener("keydown", skip);
+  }, [onDone]);
+
+  const completed = Math.floor(p / 20);
   return (
-    <div className="boot">
+    <div className="boot" role="dialog" aria-modal="true" aria-label="shycodelix OS startup">
       <Sprite art={mascot} size={96} />
+      <p className="boot-firmware">SHYCODELIX BIOS · POST 06.26</p>
       <h1>shycodelix OS</h1>
-      <div className="bar"><i style={{ width: `${p}%` }} /></div>
-      <p>{line}</p>
-      <button type="button" onClick={onDone}>Skip</button>
+      <ul className="boot-checks" aria-live="polite">
+        {BOOT_CHECKS.map((check, i) => (
+          <li key={check} data-state={i < completed ? "done" : i === completed ? "running" : "waiting"}>
+            <span aria-hidden="true">{i < completed ? "[ OK ]" : i === completed ? "[ ... ]" : "[ -- ]"}</span>
+            {check}
+          </li>
+        ))}
+      </ul>
+      <div className="bar" role="progressbar" aria-label="Startup progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={p}>
+        <i style={{ width: `${p}%` }} />
+      </div>
+      <button className="boot-skip" type="button" onClick={onDone}>Skip boot · Esc</button>
     </div>
   );
 }
@@ -509,16 +538,11 @@ export default function Desktop() {
   }, [say]);
 
   useEffect(() => {
-    let seen = false;
-    try { seen = !!sessionStorage.getItem("booted"); } catch {}
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (seen || reduce) setPhase("ready"); else setPhase("boot");
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const finishBoot = useCallback(() => {
-    try { sessionStorage.setItem("booted", "1"); } catch {}
-    setPhase("ready");
+    setPhase(reduce ? "ready" : "boot");
   }, []);
+
+  const finishBoot = useCallback(() => setPhase("ready"), []);
 
   useEffect(() => {
     const tick = () => {
@@ -561,6 +585,13 @@ export default function Desktop() {
   // Alt+1…9 jumps straight to the nth window.
   useEffect(() => {
     const h = (e) => {
+      const target = e.target;
+      const editing = target instanceof HTMLElement && target.closest("input, textarea, select, [contenteditable='true']");
+      if (e.key === "F1" && !editing) {
+        e.preventDefault();
+        open("clippy");
+        return;
+      }
       if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "escape") {
         e.preventDefault();
         open("tasks");
@@ -591,7 +622,7 @@ export default function Desktop() {
     };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
-  }, [activate, beep, close, cycle, startOpen]);
+  }, [activate, beep, close, cycle, open, startOpen]);
 
   // The Start menu is a menu, so the keyboard enters it and comes back to the button.
   const wasStartOpen = useRef(false);

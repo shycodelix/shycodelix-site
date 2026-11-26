@@ -197,6 +197,7 @@ export default function Profile() {
         </div>
       </section>
       <ReaderSectionScrub target="work" />
+      <ReaderTicker />
 
       <section id="about" className="rd-sec">
         <h2><Numeral>(02)</Numeral>About</h2>
@@ -349,7 +350,6 @@ export default function Profile() {
         </FramesStrip>
       </section>
       <ReaderSectionScrub target="career" />
-      <ReaderTicker />
 
       <section id="setup" className="rd-sec">
         <h2><Numeral>(07)</Numeral>Setup</h2>

@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const preview = (id) => `https://drive.google.com/file/d/${id}/preview`;
+const fileView = (id) => `https://drive.google.com/file/d/${id}/view`;
 const poster = (id) => `/thumbs/${id}.webp`;
 
 /* A filmstrip of the clips that already exist in the edits archive. Clicking a
@@ -108,7 +109,7 @@ export default function ClipGallery({ clips, label = "Clips" }) {
               aria-label={`Play ${c.title}, ${c.month}`}
             >
               <span className="cs-clip-shot">
-                <img src={poster(c.id)} alt="" loading="lazy" width="270" height="480" />
+                <img src={c.poster || poster(c.id)} alt="" loading="lazy" width="270" height="480" />
                 <span className="cs-clip-play" aria-hidden="true" />
               </span>
               <b>{c.title}</b>
@@ -150,6 +151,9 @@ export default function ClipGallery({ clips, label = "Clips" }) {
                 tabIndex={-1}
               />
             </div>
+            <a className="cs-modal-open" href={open.href || fileView(open.id)} target="_blank" rel="noreferrer">
+              If the player does not load, open this clip in Google Drive.
+            </a>
           </div>
         </div>
       )}
