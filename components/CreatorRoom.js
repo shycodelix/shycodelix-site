@@ -404,6 +404,7 @@ export default function CreatorRoom() {
       <div className="room-main">
         <section className="room-stage" aria-label="Creator room">
           <div className="room-wall" aria-hidden="true" />
+          <span className="room-atmos" aria-hidden="true" />
           <button type="button" className="prop prop-window" onPointerDown={(e) => open("window", "Cebu time, read from your clock.", e)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("window", "Cebu time, read from your clock.", e); } }}>
             <span className="win-fixture" aria-hidden="true"><i /><i /><i /><i /><i /><i /></span>
             <span className="prop-tag">Window</span>
@@ -456,7 +457,7 @@ export default function CreatorRoom() {
         </section>
 
         <aside className="room-panel" aria-live="polite" ref={panelRef} tabIndex={-1}>
-          <Panel id={pick} close={() => closePick()} award={award} eggs={{ coffee, sat, clock }} />
+          <Panel key={pick || "room"} id={pick} close={() => closePick()} award={award} eggs={{ coffee, sat, clock }} />
         </aside>
       </div>
       )}
@@ -479,7 +480,7 @@ export default function CreatorRoom() {
                 />
                 {pick === id && (
                   <div className="room-flat-panel" ref={panelRef} tabIndex={-1}>
-                    <Panel id={id} close={() => closePick()} award={award} eggs={{ coffee, sat, clock }} />
+                    <Panel key={id} id={id} close={() => closePick()} award={award} eggs={{ coffee, sat, clock }} />
                   </div>
                 )}
               </div>

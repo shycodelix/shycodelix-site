@@ -4,9 +4,9 @@ import AimTrainer from "./AimTrainer";
 import { achievements } from "../app/data";
 
 const SCENES = [
-  { id: "starting", src: "/kit/scene-starting.webp", label: "Starting" },
-  { id: "brb", src: "/kit/scene-brb.webp", label: "BRB" },
-  { id: "ending", src: "/kit/scene-ending.webp", label: "Ending" },
+  { id: "starting", src: "/kit/scene-starting.webp", label: "Starting", accent: "#ff7a1a" },
+  { id: "brb", src: "/kit/scene-brb.webp", label: "BRB", accent: "#58b9ff" },
+  { id: "ending", src: "/kit/scene-ending.webp", label: "Ending", accent: "#dca6ff" },
 ];
 
 // The character rig: the four webp frames already in public/kit. The room drives
@@ -117,11 +117,27 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
   }, [lower, reduce]);
 
   const a = achievements[lower];
+  const moveGraphics = (event) => {
+    if (event.pointerType !== "mouse") return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    event.currentTarget.style.setProperty("--lm-pointer-x", `${(x * 12).toFixed(1)}px`);
+    event.currentTarget.style.setProperty("--lm-pointer-y", `${(y * 8).toFixed(1)}px`);
+  };
+  const resetGraphics = (event) => {
+    event.currentTarget.style.removeProperty("--lm-pointer-x");
+    event.currentTarget.style.removeProperty("--lm-pointer-y");
+  };
 
   return (
     <div className="lm">
       <div
         className="lm-screen"
+        data-scene={SCENES[scene].id}
+        style={{ "--lm-accent": SCENES[scene].accent }}
+        onPointerMove={moveGraphics}
+        onPointerLeave={resetGraphics}
         role="group"
         aria-label={`Live stream monitor: ${SCENES[scene].label}`}
       >
@@ -137,6 +153,16 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
             />
           ))}
         </div>
+        <svg className="lm-vector" viewBox="0 0 1200 675" aria-hidden="true">
+          <path className="lm-vector-frame" d="M54 54h1092v567H54z" />
+          <path className="lm-vector-frame lm-vector-inner" d="M78 78h1044v519H78z" />
+          <path className="lm-vector-route" d="M108 470h155l38-38h108l38-38h110l38 38h148l42-42h116" />
+          <circle className="lm-vector-orbit lm-vector-orbit-a" cx="600" cy="338" r="154" />
+          <circle className="lm-vector-orbit lm-vector-orbit-b" cx="600" cy="338" r="188" />
+          <circle className="lm-vector-node" cx="428" cy="382" r="5" />
+          <circle className="lm-vector-node lm-vector-node-b" cx="790" cy="290" r="4" />
+          <path className="lm-vector-scan" d="M78 338h1044" />
+        </svg>
         <span className="lm-air">ON AIR</span>
         <span className="lm-count">live · 1.2k</span>
         {onBoot && (
@@ -159,6 +185,7 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
           decoding="async"
         />
         <button
+          key={lower}
           type="button"
           className="lm-lower"
           onClick={() => onShelf?.(lower)}
@@ -166,7 +193,7 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
         >
           <b>{a.place}</b>
           <span>{a.event}</span>
-          <small>{a.team} · {a.date}</small>
+          <small>{a.role} · {a.team} · {a.date}</small>
         </button>
         <ul className="lm-chat" aria-label="Canned chat">
           {chat.map(([who, msg]) => (

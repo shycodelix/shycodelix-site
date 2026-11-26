@@ -881,3 +881,126 @@
   .room-toast { animation: none; }
   .lm-scene { transition: none; }
 }
+
+
+
+/* Phase 3: turn the monitor into a small broadcast motion-graphics surface and
+   give the room its own slow, low-contrast light field. */
+.room-atmos {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(34% 54% at 15% 35%, rgba(255, 122, 26, 0.2), transparent 100%),
+    radial-gradient(32% 48% at 84% 29%, rgba(71, 137, 255, 0.17), transparent 100%),
+    radial-gradient(40% 26% at 50% 100%, rgba(191, 84, 255, 0.1), transparent 100%);
+  mix-blend-mode: screen;
+  opacity: 0.72;
+  animation: roomAtmos 18s ease-in-out infinite alternate;
+}
+
+.lm-scene-stack { z-index: 0; }
+.lm-scene[data-on="true"] {
+  animation: lmSceneWipe 0.82s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.lm-vector {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--lm-accent, #ff7a1a);
+  opacity: 0.78;
+  pointer-events: none;
+  transform: translate3d(var(--lm-pointer-x, 0), var(--lm-pointer-y, 0), 0);
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+  will-change: transform;
+  mix-blend-mode: screen;
+}
+.lm-vector-frame,
+.lm-vector-route,
+.lm-vector-orbit,
+.lm-vector-scan {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.lm-vector-frame { stroke-width: 1.5; opacity: 0.3; stroke-dasharray: 5 16; animation: lmDash 32s linear infinite; }
+.lm-vector-inner { opacity: 0.16; stroke-dasharray: 2 22; animation-direction: reverse; }
+.lm-vector-route { stroke-width: 2; opacity: 0.44; stroke-dasharray: 18 14; animation: lmDash 10s linear infinite; }
+.lm-vector-orbit { stroke-width: 1.5; opacity: 0.28; stroke-dasharray: 3 16; transform-box: fill-box; transform-origin: center; }
+.lm-vector-orbit-a { animation: lmOrbit 36s linear infinite; }
+.lm-vector-orbit-b { opacity: 0.16; stroke-dasharray: 2 12; animation: lmOrbit 52s linear infinite reverse; }
+.lm-vector-node { fill: currentColor; opacity: 0.9; transform-box: fill-box; transform-origin: center; animation: lmNode 2.8s ease-in-out infinite alternate; }
+.lm-vector-node-b { animation-delay: -1.3s; }
+.lm-vector-scan { stroke-width: 8; opacity: 0.14; stroke-dasharray: 2 1000; animation: lmScan 5.5s linear infinite; }
+.lm-cam { transform-origin: 50% 100%; animation: lmCamFloat 5.4s ease-in-out infinite alternate; }
+.lm-lower {
+  animation: lmLowerIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.lm-lower::before {
+  content: "";
+  position: absolute;
+  left: 0.35rem;
+  bottom: 0.45rem;
+  width: 2px;
+  height: 35%;
+  background: var(--lm-accent);
+  box-shadow: 0 0 12px var(--lm-accent);
+}
+.lm-lower b { background: var(--lm-accent); }
+.lm-boot-hint { transition: opacity 0.18s, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
+.lm:hover .lm-boot-hint,
+.lm-hit:focus-visible ~ .lm-boot-hint { transform: translate(-50%, -50%) scale(1.04); }
+
+.room-panel-in,
+.room-flat-panel { animation: roomPanelIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.aim-cell.on { box-shadow: inset 0 0 0 1px #e5484d, 0 0 10px rgba(229, 72, 77, 0.18); }
+.aim-cell.on i { animation: aimLock 0.84s ease-in-out infinite; }
+
+@keyframes roomAtmos {
+  from { transform: translate3d(-1.5%, 0.5%, 0) scale(1); }
+  to { transform: translate3d(1.5%, -1%, 0) scale(1.04); }
+}
+@keyframes lmSceneWipe {
+  from { clip-path: inset(0 0 0 100%); filter: blur(8px) saturate(0.7); }
+  to { clip-path: inset(0); filter: blur(0) saturate(1); }
+}
+@keyframes lmDash { to { stroke-dashoffset: -640; } }
+@keyframes lmOrbit { to { transform: rotate(360deg); } }
+@keyframes lmNode { from { opacity: 0.35; transform: scale(0.68); } to { opacity: 1; transform: scale(1.25); } }
+@keyframes lmScan { to { stroke-dashoffset: -1044; } }
+@keyframes lmCamFloat { from { transform: translateY(0); } to { transform: translateY(-4px); } }
+@keyframes lmLowerIn {
+  from { opacity: 0.2; clip-path: inset(0 100% 0 0); filter: blur(5px); transform: translateY(7px); }
+  to { opacity: 1; clip-path: inset(0); filter: blur(0); transform: translateY(0); }
+}
+@keyframes roomPanelIn {
+  from { opacity: 0; filter: blur(6px); transform: translateY(12px); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+@keyframes aimLock {
+  0%, 100% { opacity: 0.72; transform: scale(0.82); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-atmos,
+  .lm-scene[data-on="true"],
+  .lm-vector-frame,
+  .lm-vector-route,
+  .lm-vector-orbit,
+  .lm-vector-node,
+  .lm-vector-scan,
+  .lm-cam,
+  .lm-lower,
+  .room-panel-in,
+  .room-flat-panel,
+  .aim-cell.on i { animation: none; }
+  .lm-vector { transition: none; transform: none; will-change: auto; }
+  .lm-boot-hint { transition: none; }
+}
