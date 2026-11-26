@@ -398,3 +398,49 @@
   .cs-index-item:hover .cs-index-arrow,
   .cs-index-item:focus-visible .cs-index-arrow { transform: none; }
 }
+
+
+
+/* Discipline filters are shared by the reader and the standalone work index. */
+.cs .rd-work-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 1rem;
+}
+.cs .rd-work-filter button {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--cs-line);
+  background: transparent;
+  color: var(--cs-ink);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+.cs .rd-work-filter button:hover { transform: translateY(-2px); border-color: var(--cs-accent); }
+.cs .rd-work-filter button[aria-pressed="true"] { background: var(--cs-ink); color: var(--cs-paper); }
+.cs .rd-work-filter-count {
+  margin-left: auto;
+  color: var(--cs-muted);
+  font-family: var(--font-micro), monospace;
+  font-size: 0.7rem;
+}
+.cs .rd-study-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.cs .rd-study-tags span {
+  padding: 0.14rem 0.44rem;
+  border: 1px solid var(--cs-line);
+  color: var(--cs-muted);
+  font-family: var(--font-micro), monospace;
+  font-size: 0.65rem;
+  line-height: 1.35;
+}
+@media (max-width: 48rem) {
+  .cs .rd-work-filter-count { flex-basis: 100%; margin: 0.2rem 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs .rd-work-filter button { transition: none; }
+  .cs .rd-work-filter button:hover { transform: none; }
+}

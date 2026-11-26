@@ -22,6 +22,8 @@ import ReaderScrollChoreo from "../components/ReaderScrollChoreo";
 import ReaderSectionScrub from "../components/ReaderSectionScrub";
 import ReaderHeroMotion from "../components/ReaderHeroMotion";
 import ReaderMotionTitle from "../components/ReaderMotionTitle";
+import ReaderStatement from "../components/ReaderStatement";
+import ReaderShowreel from "../components/ReaderShowreel";
 import Wordmark from "../components/Wordmark";
 import "./v2-reader.css";
 import "./work/case-study.css";
@@ -148,13 +150,7 @@ export default function Profile() {
       <ReaderTicker />
 
       {/* A short statement leads into the work, not a list of credentials. */}
-      <section className="rd-statement" aria-label="Statement">
-        <p>
-          Nine years of getting other people's shows on air — then building the team
-          that does it properly. Everything below is that work, in the order it happened.
-        </p>
-        <span className="rd-mono">Cebu, Philippines · open to work</span>
-      </section>
+      <ReaderStatement />
 
       <section id="work" className="rd-sec rd-work">
         <h2 className="sr-only">Selected work</h2>
@@ -188,6 +184,7 @@ export default function Profile() {
         </div>
       </section>
       <ReaderSectionScrub target="work" />
+      <ReaderShowreel />
 
       <section id="about" className="rd-sec">
         <h2><Numeral>(02)</Numeral>About</h2>

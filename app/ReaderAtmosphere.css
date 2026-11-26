@@ -16,7 +16,7 @@
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  opacity: 0.72;
+  opacity: 0.8;
   contain: strict;
   transition: opacity 0.6s ease;
 }
@@ -38,8 +38,8 @@
    the whole layer fixed the ratio but killed the motion, so the surfaces now
    keep the layer at full presence and instead lift the field's own colours
    toward the paper (--rd-field-lift) and clamp its alpha (--rd-field-amp). */
-.page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.4; }
-.page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.34; }
+.page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.46; }
+.page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.4; }
 
 .page.rd[data-rd-theme="dark"] { --rd-field-lift: 0; --rd-field-amp: 0.72; }
 .page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.78; --rd-field-amp: 0.72; --rd-field-tint: #f8f6ef; }
@@ -50,10 +50,10 @@
 .page.rd[data-rd-theme="dark"] .rd-atmos[data-zone="contact"] { opacity: 0.56; }
 
 @media (max-width: 48rem) {
-  .rd-atmos { opacity: 0.52; }
+  .rd-atmos { opacity: 0.62; }
   /* Phone copy spans more of the screen, so the mesh lifts closer to paper. */
-  .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.36; }
-  .page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.3; }
+  .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.4; }
+  .page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.35; }
   .page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.82; --rd-field-amp: 0.68; --rd-field-tint: #f8f6ef; }
   .page.rd[data-rd-theme="light"] { --rd-field-lift: 0.78; --rd-field-amp: 0.62; --rd-field-tint: #ffffff; }
 }

@@ -14,6 +14,7 @@ function pick(ids) {
 export const caseStudies = {
   ti11: {
     slug: "ti11",
+    disciplines: ["Operations"],
     kicker: "BOOM Esports — Assistant Manager",
     title: "The International 2022",
     standfirst:
@@ -67,6 +68,7 @@ export const caseStudies = {
 
   "vcl-ph": {
     slug: "vcl-ph",
+    disciplines: ["Operations", "Brand & social"],
     kicker: "Abaddon Esports — Operations Director / Head of Socials",
     title: "VCL Philippines",
     standfirst:
@@ -120,6 +122,7 @@ export const caseStudies = {
 
   avante: {
     slug: "avante",
+    disciplines: ["Production", "Brand & social"],
     kicker: "Avante Esports — Founder & CEO",
     title: "Avante, twice",
     standfirst:

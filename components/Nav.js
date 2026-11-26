@@ -44,7 +44,12 @@ export default function Nav() {
     };
     onScroll();
     addEventListener("scroll", onScroll, { passive: true });
-    const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && setActive(e.target.id)), { rootMargin: "-45% 0px -50% 0px" });
+    const seen = new Map();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => seen.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0));
+      const current = [...seen.entries()].filter(([, ratio]) => ratio > 0).sort((a, b) => b[1] - a[1])[0];
+      if (current) setActive(current[0]);
+    }, { rootMargin: "-42% 0px -42% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] });
     sectionIds.forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
     return () => { removeEventListener("scroll", onScroll); io.disconnect(); };
   }, []);
@@ -52,13 +57,13 @@ export default function Nav() {
   return (
     <>
       <div className="progress" ref={bar} aria-hidden="true" />
-      <nav className="dock" aria-label="Primary navigation">
+      <nav className="dock" data-active={active} aria-label="Primary navigation">
         <a className="dock-mark" href="#content" aria-label="shycodelix — top of the reader">
           sc<span aria-hidden="true">*</span>
         </a>
 
         <div className="dock-corner" data-corner="work">
-          <Link href="/work" prefetch={false}>work</Link>
+          <Link href="/work" prefetch={false} aria-current={active === "work" ? "true" : undefined}>work</Link>
         </div>
 
         <div className="dock-corner" data-corner="about">
@@ -66,7 +71,7 @@ export default function Nav() {
         </div>
 
         <div className="dock-corner" data-corner="lab">
-          <Link href="/os" prefetch={false}>lab</Link>
+          <Link href="/os" prefetch={false} aria-current={active === "lab" ? "true" : undefined}>lab</Link>
         </div>
 
       </nav>

@@ -13,14 +13,15 @@ export default function ReaderMotionTitle({ text }) {
 
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
-      gsap.fromTo(title, { x: "8vw" }, {
-        x: "-8vw",
+      gsap.fromTo(title, { x: 0 }, {
+        x: () => -Math.max(0, title.scrollWidth - root.clientWidth),
         ease: "none",
         scrollTrigger: {
           trigger: root,
           start: "top bottom",
           end: "bottom top",
-          scrub: 0.8,
+          scrub: 1,
+          invalidateOnRefresh: true,
         },
       });
     }, root);
@@ -30,7 +31,14 @@ export default function ReaderMotionTitle({ text }) {
 
   return (
     <div className="rd-motion-title" ref={ref} aria-hidden="true">
-      <span className="rd-motion-title-text">{text}</span>
+      <span className="rd-motion-title-text">
+        {[0, 1, 2].map((copy) => (
+          <span className="rd-motion-title-copy" key={copy}>
+            {copy > 0 && <span className="rd-motion-title-sep">*</span>}
+            {text}
+          </span>
+        ))}
+      </span>
     </div>
   );
 }

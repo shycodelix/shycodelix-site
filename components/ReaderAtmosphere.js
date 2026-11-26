@@ -87,11 +87,11 @@ export default function ReaderAtmosphere() {
     const seen = new Map();
     const io = new IntersectionObserver(
       (entries) => {
-        entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
-        const active = ids.find((id) => seen.get(id));
-        if (active) setZone(active);
+        entries.forEach((entry) => seen.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0));
+        const active = [...seen.entries()].filter(([, ratio]) => ratio > 0).sort((a, b) => b[1] - a[1])[0];
+        if (active) setZone(active[0]);
       },
-      { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
+      { rootMargin: "-42% 0px -42% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
     );
     sections.forEach((s) => io.observe(s));
 
@@ -217,15 +217,15 @@ export default function ReaderAtmosphere() {
     };
 
     const drawMesh = (wgt) => {
-      pool(w * (0.24 + 0.1 * Math.sin(t * 0.11 * cur.speed)), h * (0.2 + 0.1 * Math.cos(t * 0.09 * cur.speed)), Math.max(w, h) * 0.62, cur.a, (0.2 + strength * 0.06) * amp * wgt);
-      pool(w * (0.78 + 0.08 * Math.cos(t * 0.07)), h * (0.74 + 0.09 * Math.sin(t * 0.1)), Math.max(w, h) * 0.58, cur.b, (0.16 + cur.lift * 0.1) * cur.motes * amp * wgt);
-      pool(w * (0.5 + 0.26 * Math.sin(t * 0.05 + 1.7)), h * (0.5 + 0.24 * Math.cos(t * 0.06)), Math.max(w, h) * 0.42, cur.a, (0.1 + strength * 0.05) * amp * wgt);
+      pool(w * (0.24 + 0.1 * Math.sin(t * 0.11 * cur.speed)), h * (0.2 + 0.1 * Math.cos(t * 0.09 * cur.speed)), Math.max(w, h) * 0.62, cur.a, (0.25 + strength * 0.08) * amp * wgt);
+      pool(w * (0.78 + 0.08 * Math.cos(t * 0.07)), h * (0.74 + 0.09 * Math.sin(t * 0.1)), Math.max(w, h) * 0.58, cur.b, (0.21 + cur.lift * 0.12) * cur.motes * amp * wgt);
+      pool(w * (0.5 + 0.26 * Math.sin(t * 0.05 + 1.7)), h * (0.5 + 0.24 * Math.cos(t * 0.06)), Math.max(w, h) * 0.42, cur.a, (0.15 + strength * 0.07) * amp * wgt);
     };
 
     // Drafting grid: verticals and horizontals scroll with velocity; three
     // contour curves ride across them like ink on a technical drawing.
     const drawGrid = (wgt) => {
-      const alpha = 0.14 * amp * wgt;
+      const alpha = 0.19 * amp * wgt;
       if (alpha <= 0.002) return;
       const step = Math.max(44, Math.round(w / 22));
       const shift = ((t * 0.18 + drift.y * 1.6 + drift.x * 0.5) % step + step) % step;
@@ -257,20 +257,20 @@ export default function ReaderAtmosphere() {
 
     // Constellation: nodes breathe, hairlines link the near pairs.
     const drawNodes = (wgt) => {
-      const alpha = 0.5 * amp * wgt;
+      const alpha = 0.62 * amp * wgt;
       if (alpha <= 0.002) return;
       const pts = nodes.map((n, i) => ({
         x: n.ax * w + Math.sin(t * 0.006 + n.ph) * 26 + lean.x * 0.5,
         y: n.ay * h + Math.cos(t * 0.005 + n.ph) * 22 + lean.y * 0.5,
         r: n.r * (1 + 0.25 * Math.sin(t * 0.012 + i)),
       }));
-      ctx.strokeStyle = rgba(cur.b, alpha * 0.35);
-      ctx.lineWidth = 0.8;
+      ctx.strokeStyle = rgba(cur.b, alpha * 0.46);
+      ctx.lineWidth = 1;
       ctx.beginPath();
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
           const d = Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y);
-          if (d < 200) {
+          if (d < 240) {
             ctx.moveTo(pts[i].x, pts[i].y);
             ctx.lineTo(pts[j].x, pts[j].y);
           }
@@ -287,7 +287,7 @@ export default function ReaderAtmosphere() {
 
     // Signal lines + pixel shimmer for the lab-adjacent bands.
     const drawWave = (wgt) => {
-      const alpha = 0.2 * amp * wgt;
+      const alpha = 0.27 * amp * wgt;
       if (alpha <= 0.002) return;
       ctx.strokeStyle = rgba(cur.a, alpha);
       ctx.lineWidth = 1;
@@ -350,7 +350,7 @@ export default function ReaderAtmosphere() {
         if (m.y > h + 30) m.y = -30;
         if (still) continue;
         const len = m.len * (0.5 + strength * 3.4);
-        ctx.strokeStyle = rgba(cur.a, (0.16 + m.p * 0.16) * amp);
+        ctx.strokeStyle = rgba(cur.a, (0.2 + m.p * 0.2) * amp);
         ctx.lineWidth = 0.7 + m.p * 0.8;
         ctx.beginPath();
         ctx.moveTo(m.x, m.y);
