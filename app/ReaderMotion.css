@@ -41,6 +41,45 @@
   object-fit: cover;
   filter: saturate(0.82);
 }
+.page.rd .rd-hero-graphic {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--rd-accent-ink, var(--rd-accent));
+  opacity: 0.72;
+}
+.page.rd .rd-hero-frame,
+.page.rd .rd-hero-route {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.page.rd .rd-hero-frame { stroke-width: 1; opacity: 0.2; }
+.page.rd .rd-hero-route {
+  stroke-width: 1.15;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  opacity: 0.46;
+}
+.page.rd .rd-hero-route-secondary { opacity: 0.28; }
+.page.rd .rd-hero-node {
+  color: currentColor;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.page.rd .rd-hero-node > circle:first-child {
+  fill: var(--rd-paper);
+  fill-opacity: 0.76;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+.page.rd .rd-hero-node-core { fill: currentColor; }
 .page.rd .rd-hero-plate:nth-child(1) { top: 15%; left: 8%; width: clamp(8rem, 20vw, 19rem); transform: rotate(-7deg); }
 .page.rd .rd-hero-plate:nth-child(2) { top: 13%; right: 8%; width: clamp(8rem, 19vw, 18rem); transform: rotate(6deg); }
 .page.rd .rd-hero-plate:nth-child(3) { bottom: 12%; left: 12%; width: clamp(8rem, 18vw, 17rem); transform: rotate(5deg); }

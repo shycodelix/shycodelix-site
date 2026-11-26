@@ -103,6 +103,17 @@ export default function Profile() {
             <figure className="rd-hero-plate"><img src="/photos/lionne.jpg" alt="" /></figure>
             <figure className="rd-hero-plate"><img src="/photos/archive/team-abaddon-02.webp" alt="" /></figure>
             <figure className="rd-hero-plate"><img src="/photos/abaddon-solo.jpg" alt="" /></figure>
+            <svg className="rd-hero-graphic" viewBox="0 0 1600 1000" preserveAspectRatio="none" aria-hidden="true">
+              <path className="rd-hero-frame" d="M72 120V72h136M1392 72h136v136M72 880v48h136m1200 0h136v-48" />
+              <path className="rd-hero-route" data-route d="M112 236C280 114 384 348 560 260S822 208 1010 250s270-58 480 42" pathLength="1" />
+              <path className="rd-hero-route rd-hero-route-secondary" data-route d="M112 756c184 94 276-136 453-56s261 129 479 40 266-48 446 34" pathLength="1" />
+              {[[356, 278], [1185, 230], [404, 714], [1285, 700]].map(([x, y]) => (
+                <g className="rd-hero-node" data-node key={`${x}-${y}`} transform={`translate(${x} ${y})`}>
+                  <circle r="8" />
+                  <circle className="rd-hero-node-core" r="1.8" />
+                </g>
+              ))}
+            </svg>
           </div>
 
           <div className="rd-hero-bar">
