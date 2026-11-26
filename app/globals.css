@@ -531,6 +531,17 @@ h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
   .wall { transition: none; }
 }
 
+/* Task Manager: one live row per open desktop window. */
+.taskmgr { display: grid; gap: 0.45rem; }
+.taskmgr > .lab { margin: 0 0 0.15rem; }
+.taskmgr-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 0.55rem; padding: 0.4rem 0.5rem; border: 1px solid var(--line); background: #fffdf8; }
+.taskmgr-row > b,
+.taskmgr-row > span { display: grid; gap: 0.08rem; min-width: 0; }
+.taskmgr-row small { color: var(--dusk); font-size: 0.7rem; }
+.taskmgr-row .btn { width: auto; padding: 0.35rem 0.55rem; font-size: 0.76rem; }
+.taskmgr-row .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.taskmgr-update { background: #f2efe5; }
+
 /* ==========================================================================
    LINKS PAGE (/links)
    ========================================================================== */

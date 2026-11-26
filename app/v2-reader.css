@@ -2110,3 +2110,72 @@ body,
 }
 
 
+
+
+
+/* A dark archive plate gathers the third-party record before the contact close. */
+.page.rd #verified,
+.page.rd .rd-contact {
+  --rd-text: #f4f2ec;
+  --rd-text-soft: #d1cec5;
+  --rd-ink: #f4f2ec;
+  --rd-ink-soft: #d1cec5;
+  --rd-dusk: #b4b0a7;
+  --rd-paper: #20201e;
+  --rd-paper2: #292826;
+  --rd-line: rgba(244, 242, 236, 0.18);
+  --rd-accent: #ef7042;
+  --rd-accent-ink: #ff9974;
+  --rd-on-accent: #1a1a18;
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  padding: clamp(3.5rem, 8vw, 7rem) clamp(1.1rem, 9vw, 9rem);
+  background: rgba(23, 23, 22, 0.96);
+  color: #f4f2ec;
+}
+.page.rd #verified { border-top: 0; }
+.page.rd #verified .rd-verified {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+.page.rd #verified .rd-verified li:first-child { grid-column: span 2; }
+.page.rd #verified .rd-verified a {
+  min-height: 8rem;
+  align-content: space-between;
+  padding: 1rem 1.15rem;
+  background: rgba(37, 37, 35, 0.92);
+  border: 1px solid var(--rd-line);
+  box-shadow: none;
+}
+.page.rd #verified .rd-verified li:first-child a { min-height: 11rem; }
+.page.rd #verified .rd-verified a:hover { background: #30302d; transform: translateY(-2px); }
+.page.rd #verified .rd-verified b { font-size: clamp(1.2rem, 3vw, 2.6rem); letter-spacing: -0.04em; }
+.page.rd #verified .rd-verified span,
+.page.rd #verified .rd-verified i { color: #d1cec5; }
+.page.rd #verified .rd-mono,
+.page.rd #verified .rd-note { color: #d1cec5; }
+.page.rd .rd-contact { text-align: left; align-items: start; justify-items: start; }
+.page.rd .rd-contact-links { justify-content: flex-start; }
+.page.rd .rd-contact .rd-big-mail {
+  max-width: 100%;
+  font-size: clamp(1.25rem, 3.2vw, 2.8rem);
+  overflow-wrap: anywhere;
+}
+.page.rd .rd-contact .rd-mono,
+.page.rd .rd-contact-links a { color: #d1cec5; }
+.page.rd .rd-contact-links a { border-color: rgba(244, 242, 236, 0.28); }
+
+/* Scroll-masked signature swap: the older full name resolves into the shy* mark. */
+.page.rd .rd-foot-mark { position: relative; display: grid; }
+.page.rd .rd-foot-mark-old,
+.page.rd .rd-foot-mark-next { grid-area: 1 / 1; width: 100%; line-height: 0.84; }
+.page.rd .rd-foot-mark-old { color: #f4f2ec; clip-path: inset(0 0 0 0); }
+.page.rd .rd-foot-mark-old > span { color: #e56537; }
+.page.rd .rd-foot-mark-next { color: #f4f2ec; clip-path: inset(100% 0 0 0); }
+
+@media (max-width: 48rem) {
+  .page.rd #verified .rd-verified { grid-template-columns: minmax(0, 1fr); }
+  .page.rd #verified .rd-verified li:first-child { grid-column: auto; }
+  .page.rd #verified .rd-verified li:first-child a { min-height: 8rem; }
+}

@@ -1,9 +1,10 @@
 import Desktop from "../../../components/Desktop";
+import "../../racer.css";
 
 export const metadata = {
   title: "Desktop",
   description:
-    "shycodelix OS, kept as it was: a windows desktop with the terminal, notepad, minesweeper, the stream kit walkthrough and the day-job record.",
+    "shycodelix OS: a Windows XP desktop with a working terminal, notepad, Minesweeper, stream kit, Task Manager and a playable racing game.",
 };
 
 export default function OldDesktop() {

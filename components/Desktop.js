@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Racer from "./Racer";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Sprite from "./Sprite";
 import PixelImg from "./PixelImg";
@@ -226,10 +227,33 @@ const DEFS = {
   dont: { title: "Do not open.exe", icon: "danger", w: 360, body: DontBody },
   bin: { title: "Recycle Bin", icon: "bin", w: 380, body: BinBody },
   error: { title: "Error", icon: "danger", w: 360, body: ErrorBody },
+  racer: { title: "road_trip.exe", icon: "play", w: 660, body: Racer },
+  tasks: { title: "Task Manager", icon: "gear", w: 460, body: TaskManagerBody },
 };
+
+function TaskManagerBody({ close, wins = [] }) {
+  const apps = wins.filter((w) => w.id !== "tasks" && !w.hid && !w.out);
+  return (
+    <div className="taskmgr">
+      <p className="lab">Applications · {apps.length} running</p>
+      {apps.length ? apps.map((w) => (
+        <div className="taskmgr-row" key={w.id}>
+          <b>{DEFS[w.id].title}</b>
+          <button type="button" className="btn" onClick={() => close(w.id)}>End task</button>
+        </div>
+      )) : <p className="note">No applications are running.</p>}
+      <div className="taskmgr-row taskmgr-update">
+        <span><b>Windows Update</b><small>Not responding · 3% CPU</small></span>
+        <button type="button" className="btn" disabled>End task</button>
+      </div>
+      <p className="note">Ctrl+Shift+Esc opens Task Manager. Some processes are immortal.</p>
+    </div>
+  );
+}
+
 // The rig first: what I stream with, and what comes out of it.
-const ICON_IDS = ["about", "kit", "clips", "player", "schedule", "photos", "avante", "links"];
-const START_ONLY = ["work", "wins", "setup", "term", "notepad", "mines", "drive", "dont", "bin"];
+const ICON_IDS = ["about", "kit", "clips", "player", "schedule", "photos", "avante", "links", "racer"];
+const START_ONLY = ["work", "wins", "setup", "term", "notepad", "mines", "drive", "dont", "bin", "tasks"];
 
 // A returning visitor's desktop is where they left it: the same windows in the
 // same spots, in the same stacking order. A saved spot can be off-screen on a
@@ -537,6 +561,11 @@ export default function Desktop() {
   // Alt+1…9 jumps straight to the nth window.
   useEffect(() => {
     const h = (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "escape") {
+        e.preventDefault();
+        open("tasks");
+        return;
+      }
       if (e.key === "Escape") {
         if (startOpen) { setStartOpen(false); return; }
         const focused = document.activeElement && document.activeElement.closest(".win");
@@ -621,7 +650,7 @@ export default function Desktop() {
     wall.current.style.transform = `translate3d(${nx}px, ${ny}px, 0)`;
   }
 
-  const ctx = { open, close, say, party, beep };
+  const ctx = { open, close, say, party, beep, wins };
 
   // Esc from anywhere inside a window closes it; this keeps that true while focus is in the frame.
   const frameKeys = (e, w) => {

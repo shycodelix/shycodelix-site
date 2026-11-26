@@ -12,18 +12,20 @@ Live: [shy-jble.freemilk.app](https://shy-jble.freemilk.app) — the canonical h
 | `/work` | **Work index.** The three case studies in reading order, linking through to each. |
 | `/work/ti11`, `/work/vcl-ph`, `/work/avante` | **Case studies.** Kicker, facts row, lead photo, numbered story, clips from the edits archive, the third-party link that verifies the result. |
 | `/os` | **The lab.** The creator room: desk props, a live monitor running the Pixels-3 scenes with the PNGTuber rig, a canned chat rail, lower thirds from the verified record, and a playable aim trainer. The monitor boots the desktop. |
-| `/os/desktop` | **The old OS.** The Windows XP desktop, built around the stream: draggable windows, wallpaper with day/night palette, taskbar, Start menu. Opens on the wallpaper, with a welcome note the first time per session. |
+| `/os/desktop` | **The old OS.** The Windows XP desktop, built around the stream: draggable windows, wallpaper with day/night palette, taskbar, Start menu, Task Manager shortcut and a playable racer. Opens on the wallpaper, with a welcome note the first time per session. |
 | `/links` | **Links page.** Streams (Twitch / TikTok / Kick / YouTube), socials, Avante, tips, verified profiles. Built to be pasted in a bio. |
 | `/profile` | 308 redirect to `/`, so older résumé links keep working. |
 | `/not-found` | The 404, as an XP error dialog. |
 
 ## Windows on the desktop (`/os`)
 
-`about_me.txt` · `stream_kit.exe` (OBS scenes, chat box, PNGTuber model) · `it_was_lag.mp4` · `Media Player` · `Stream.cal` · `definitely_not_homework` (photos, split into **Me** and **Team**) · `Avante.exe` · `Links.exe` on the desktop. The rest — `Work.exe`, `GG.exe`, `Setup.ini`, `cmd.exe`, Notepad, Minesweeper, `(C:)`, `Do not open.exe`, Recycle Bin — live in the Start menu.
+`about_me.txt` · `stream_kit.exe` (OBS scenes, chat box, PNGTuber model) · `it_was_lag.mp4` · `Media Player` · `Stream.cal` · `definitely_not_homework` (photos, split into **Me** and **Team**) · `Avante.exe` · `Links.exe` · `road_trip.exe` on the desktop. The rest — `Work.exe`, `GG.exe`, `Setup.ini`, `cmd.exe`, Notepad, Minesweeper, Task Manager, `(C:)`, `Do not open.exe`, Recycle Bin — live in the Start menu.
 
 - **Avante.exe** — the organisation, what it does, how it works, and where it's going.
 - **Media Player** — 63 clips from the edits archive, grouped by month, played through Drive's preview embed. Nothing is bundled into the repo.
 - **cmd.exe** — a working terminal: `help`, `open avante`, `neofetch`, `sudo hire-me`, and history.
+- **road_trip.exe** — a local pseudo-3D racer with keyboard and touch controls; the window links out to WMMTD.xyz because the original blocks embedding.
+- **Task Manager** — open windows can be ended from the Start menu, or with Ctrl+Shift+Esc; Windows Update cannot.
 
 ## Editing content
 
@@ -38,7 +40,7 @@ Everything hangs off `app/data.js`:
 
 Clips live in `app/videos.js` (generated from the Drive edits archive: `{ month, title, id }`).
 
-Reader-only structure lives in `app/reader.js` (the page body), `components/ReaderHero.js`, `ReaderTheme.js` (floating HUD), `ReaderTicker.js` and `ReaderInterlude.js`. All reader styling is `app/v2-reader.css`, imported only by the reader.
+Reader-only structure lives in `app/reader.js` (the page body), `components/ReaderHero.js`, `ReaderTheme.js` (floating HUD), `ReaderTicker.js`, `ReaderInterlude.js` and `ReaderFooterMark.js`. All reader styling is `app/v2-reader.css`, imported only by the reader.
 
 ## Dev
 

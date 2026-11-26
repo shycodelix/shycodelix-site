@@ -24,6 +24,7 @@ import ReaderHeroMotion from "../components/ReaderHeroMotion";
 import ReaderMotionTitle from "../components/ReaderMotionTitle";
 import ReaderStatement from "../components/ReaderStatement";
 import ReaderShowreel from "../components/ReaderShowreel";
+import ReaderFooterMark from "../components/ReaderFooterMark";
 import Wordmark from "../components/Wordmark";
 import "./v2-reader.css";
 import "./work/case-study.css";
@@ -389,6 +390,14 @@ export default function Profile() {
               <b>Windows XP desktop</b>
               <span>Open the nested desktop directly.</span>
             </Link>
+            <Link href="/os/desktop" prefetch={false}>
+              <b>Shy Racing</b>
+              <span>A playable road racer inside the XP desktop, with touch controls.</span>
+            </Link>
+            <a href="https://wmmtd.xyz" target="_blank" rel="noreferrer">
+              <b>WMMTD.xyz</b>
+              <span>Open the original in a new tab; the site blocks embedded play.</span>
+            </a>
           </div>
           <a className="rd-kit" href="/os">
             <img src="/kit/scene-starting.webp" alt="Starting scene from the Pixels-3 stream overlay pack" width={1200} height={675} loading="lazy" />
@@ -416,9 +425,8 @@ export default function Profile() {
       <footer className="rd-foot">
         <p>Gamer tag: {profile.tag} · reader mode of shycodelix OS</p>
         <p><Link href="/links">Links</Link> · <Link href="/os">My room</Link> · <a href={profile.source} target="_blank" rel="noreferrer">Konect</a></p>
-        {/* The mirror target signs off with a two-line wordmark rather than a
-            footer row. Decorative: the name is already the document heading. */}
-        <p className="rd-foot-mark" aria-hidden="true">shycodelix<span>/26</span></p>
+        {/* Decorative: the name is already the document heading. */}
+        <ReaderFooterMark />
       </footer>
       </main>
     </div>
