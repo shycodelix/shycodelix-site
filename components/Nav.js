@@ -59,7 +59,7 @@ export default function Nav() {
       <div className="progress" ref={bar} aria-hidden="true" />
       <nav className="dock" data-active={active} aria-label="Primary navigation">
         <a className="dock-mark" href="#content" aria-label="shycodelix — top of the reader">
-          sc<span aria-hidden="true">*</span>
+          shy<span aria-hidden="true">*</span>
         </a>
 
         <div className="dock-corner" data-corner="work">
