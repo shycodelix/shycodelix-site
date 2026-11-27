@@ -164,30 +164,6 @@
   background: #d6d6d6;
   object-fit: cover;
 }
-.page.rd .rd-showreel-play {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 2;
-  min-width: 6.5rem;
-  padding: 0.45rem 1rem 0.55rem;
-  transform: translate(-50%, -50%);
-  border: 2px solid #111;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  color: #111;
-  font-family: var(--font-grotesk), var(--font-body), sans-serif;
-  font-size: clamp(1.25rem, 3vw, 2.3rem);
-  font-weight: 700;
-  line-height: 1;
-  cursor: pointer;
-  transition: opacity 180ms ease, background 180ms ease;
-}
-.page.rd .rd-showreel-play:hover { background: rgba(255, 255, 255, 0.8); }
-.page.rd .rd-showreel-frame[data-playing="true"] .rd-showreel-play {
-  opacity: 0;
-  pointer-events: none;
-}
 .page.rd .rd-showreel-frame figcaption {
   padding: 0.65rem 0.9rem;
   background: #fff;
@@ -759,4 +735,172 @@
   .page.rd .rd-brands-head p { font-size: 0.72rem; }
   .page.rd .rd-brands .rd-ticker .rd-track b { font-size: 0.95rem; }
   .page.rd .rd-case-index .cs-index-details > div { padding-right: 0; }
+}
+
+
+
+/* Phone composition: keep navigation in one legible rail and let content own
+   the viewport instead of pinning labels over it. */
+@media (max-width: 48rem) {
+  .page.rd .dock {
+    position: fixed;
+    inset: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.1rem;
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+    padding: calc(0.25rem + env(safe-area-inset-top, 0px)) max(0.65rem, env(safe-area-inset-right, 0px)) 0.25rem max(0.65rem, env(safe-area-inset-left, 0px));
+    overflow: visible;
+    border: 0;
+    border-bottom: 1px solid var(--rd-line);
+    background: color-mix(in oklab, var(--rd-paper) 94%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 46;
+  }
+  .page.rd .dock-mark,
+  .page.rd .dock-corner {
+    position: static;
+  }
+  .page.rd .dock-mark,
+  .page.rd .dock-corner a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.35rem 0.45rem;
+    background: transparent;
+    color: var(--rd-ink);
+    font-size: 0.9rem;
+    mix-blend-mode: normal;
+    text-shadow: none;
+  }
+  .page.rd .dock-mark:hover,
+  .page.rd .dock-corner a:hover,
+  .page.rd .dock-corner a[aria-current="true"] {
+    background: transparent;
+    color: var(--rd-ink);
+  }
+  .page.rd main { padding-top: calc(3rem + env(safe-area-inset-top, 0px)); }
+  .page.rd .rd-hero-sequence { height: 112svh; }
+  .page.rd .rd-statement { margin-top: 2.5rem; }
+
+  .page.rd .rd-case-index .cs-index-item {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 0.85rem;
+    padding-block: 1.15rem;
+  }
+  .page.rd .rd-case-index .cs-index-image {
+    width: 100%;
+    aspect-ratio: 1.55;
+  }
+  .page.rd .rd-case-index .cs-index-in {
+    width: 100%;
+    min-width: 0;
+    align-content: start;
+    gap: 0.35rem;
+    padding: 0 3rem 0.35rem 0;
+  }
+  .page.rd .rd-case-index .cs-index-title {
+    font-size: clamp(1.15rem, 5.5vw, 1.55rem);
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+  .page.rd .rd-case-index .cs-index-stand {
+    -webkit-line-clamp: 3;
+    font-size: 0.72rem;
+  }
+  .page.rd .rd-case-index .cs-index-arrow {
+    right: 0.15rem;
+    bottom: 0.8rem;
+  }
+
+  .page.rd .rd-ach li {
+    grid-template-columns: minmax(6rem, auto) minmax(0, 1fr) 2.6rem;
+    align-items: start;
+    gap: 0.55rem;
+  }
+  .page.rd .rd-ach-place {
+    font-size: clamp(1.8rem, 8vw, 2.3rem);
+    letter-spacing: -0.045em;
+    white-space: nowrap;
+  }
+  .page.rd .rd-ach-body { min-width: 0; }
+  .page.rd .rd-ach-body > a { overflow-wrap: anywhere; }
+  .page.rd .rd-ach-arrow {
+    grid-column: 3;
+    align-self: start;
+    justify-self: end;
+    width: 2.3rem;
+    height: 2.3rem;
+    margin: 0;
+  }
+
+  .page.rd .rd-frames-strip {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 clamp(1rem, 6vw, 1.5rem) 1rem;
+  }
+  .page.rd .rd-shot {
+    width: 100%;
+    max-width: 27rem;
+    height: auto;
+    margin-inline: auto;
+    aspect-ratio: 1.32;
+    transform: none !important;
+  }
+  .page.rd .rd-shot figcaption {
+    inset: auto 0 0;
+    align-items: flex-start;
+    justify-content: end;
+    gap: 0.2rem;
+    padding: 0.75rem 0.85rem;
+    background: rgba(0, 0, 0, 0.84);
+    text-align: left;
+  }
+  .page.rd .rd-shot figcaption b { line-height: 1.05; }
+  .page.rd .rd-shot figcaption span {
+    color: #fff;
+    opacity: 1;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .page.rd .rd-inter-cap {
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 1.5rem 1rem 0.65rem;
+    font-size: 0.67rem;
+    line-height: 1.35;
+    letter-spacing: 0.025em;
+    text-transform: none;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .page.rd .rd-setup { grid-template-columns: minmax(0, 1fr); width: 100%; }
+  .page.rd .rd-setup > div,
+  .page.rd .rd-rows { min-width: 0; }
+  .page.rd .rd-rows div {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, 0.75fr) minmax(0, 1.25fr);
+    align-items: start;
+    gap: 0.6rem;
+  }
+  .page.rd .rd-rows dt,
+  .page.rd .rd-rows dd {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .page.rd .rd-rows dd { text-align: right; line-height: 1.35; }
+  .page.rd .rd-theme-scale {
+    min-width: 1.2rem;
+    padding-inline: 0.3rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-align: center;
+  }
 }
