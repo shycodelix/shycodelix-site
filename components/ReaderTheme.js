@@ -70,12 +70,12 @@ const THEMES = {
 /** The floating HUD: reading surface, text size. Section navigation lives in
  *  the dock, so it is not duplicated here. */
 export default function ReaderTheme() {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
   const [size, setSize] = useState("default");
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("rd-theme");
+      const stored = localStorage.getItem("rd-theme-v2");
       if (stored && THEMES[stored]) setTheme(stored);
       const sizeStored = localStorage.getItem("rd-size");
       if (sizeStored === "minus" || sizeStored === "plus" || sizeStored === "default") {
@@ -103,7 +103,7 @@ export default function ReaderTheme() {
 
   useEffect(() => {
     try {
-      localStorage.setItem("rd-theme", theme);
+      localStorage.setItem("rd-theme-v2", theme);
       localStorage.setItem("rd-size", size);
     } catch {}
   }, [theme, size]);

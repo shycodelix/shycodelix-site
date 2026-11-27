@@ -85,12 +85,11 @@ export default function Profile() {
     <div className="page rd">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Nav />
-      <ReaderTheme />
       <ReaderAtmosphere />
       <h1 className="sr-only">shycodelix — operations, production, content</h1>
 
-      {/* The document itself, after the dock and the theme HUD, so the skip link
-          and the main landmark both start at the hero. */}
+      {/* The corner dock overlays the opening viewport without consuming space;
+          this landmark therefore starts at the hero and remains the skip target. */}
       <main id="content" data-skip-target tabIndex={-1}>
 
       <ReaderVelocityLayer className="rd-hero rd-hero-sequence" target=".rd-rider-container">
@@ -162,6 +161,7 @@ export default function Profile() {
 
       {/* A short statement leads into the work, not a list of credentials. */}
       <ReaderStatement />
+      <ReaderTheme />
       <ReaderShowreel />
 
       <section id="work" className="rd-sec rd-work">

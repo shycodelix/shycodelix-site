@@ -65,7 +65,7 @@ html.has-cursor, html.has-cursor a, html.has-cursor button, html.has-cursor summ
   transform: translateY(-120%);
   transition: transform 0.12s;
 }
-.skip-link:focus {
+.skip-link:focus-visible {
   transform: translateY(0);
   outline: none;
 }
@@ -766,7 +766,7 @@ h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
   text-decoration: none; transform: translateY(-250%);
   transition: transform 0.15s ease;
 }
-.skip-link:focus { transform: none; }
+.skip-link:focus-visible { transform: none; }
 
 /* Programmatic focus lands on a region, not a control: no ring is wanted, but
    the region still takes focus so the next Tab continues from inside it. */
@@ -896,8 +896,8 @@ body { -webkit-tap-highlight-color: rgba(255, 122, 26, 0.22); }
 .rd-roles span { font-size: 0.9rem; color: #525252; }
 
 .rd-ach { list-style: none; padding: 0; }
-.rd-ach li { display: grid; grid-template-columns: clamp(3.6rem, 6vw, 5.4rem) minmax(0, 1fr); gap: 1.2rem; padding: 1.25rem 0; border-bottom: 1px solid rgba(0, 0, 0, 0.14); }
-.rd-ach li:first-child { border-top: 1px solid rgba(0, 0, 0, 0.14); }
+.rd-ach > li { display: grid; grid-template-columns: clamp(3.6rem, 6vw, 5.4rem) minmax(0, 1fr); gap: 1.2rem; padding: 1.25rem 0; border-bottom: 1px solid rgba(0, 0, 0, 0.14); }
+.rd-ach > li:first-child { border-top: 1px solid rgba(0, 0, 0, 0.14); }
 .rd-ach-place { font-size: clamp(1.5rem, 2.8vw, 2.3rem); line-height: 1; color: var(--tang); font-weight: 500; letter-spacing: -0.04em; }
 .rd-ach-body a { font-size: clamp(1.05rem, 1.7vw, 1.35rem); font-weight: 500; letter-spacing: -0.02em; text-decoration: none; color: inherit; }
 .rd-ach-body a:hover { color: var(--tang); }

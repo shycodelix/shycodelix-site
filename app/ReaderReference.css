@@ -186,8 +186,21 @@
   align-items: stretch;
   padding-block: clamp(1.4rem, 3vw, 2.6rem);
 }
+.page.rd .rd-case-index .cs-index-image { grid-area: image; }
+.page.rd .rd-case-index .cs-index-in { grid-area: copy; min-width: 0; }
+@media (min-width: 48.0625rem) {
+  .page.rd .rd-case-index .cs-index-item { grid-template-areas: "image copy"; }
+  .page.rd .rd-case-index li:nth-child(even) .cs-index-item {
+    grid-template-columns: minmax(14rem, 0.85fr) minmax(0, 1.55fr);
+    grid-template-areas: "copy image";
+  }
+  .page.rd .rd-case-index li:nth-child(even) .cs-index-image { order: 0; }
+}
 .page.rd .rd-case-index .cs-index-image {
   position: relative;
+  width: 100%;
+  min-width: 0;
+  align-self: start;
   aspect-ratio: 1.62;
   border-radius: 14px;
   background: #d6d6d6;
@@ -364,7 +377,7 @@
   gap: 0.45rem;
 }
 .page.rd .rd-capabilities .rd-cap-num {
-  color: var(--rd-reference-blue);
+  color: #111;
   font-family: var(--font-grotesk), var(--font-body), sans-serif;
   font-size: 0.9rem;
   font-weight: 800;
@@ -818,7 +831,7 @@
     bottom: 0.8rem;
   }
 
-  .page.rd .rd-ach li {
+  .page.rd .rd-ach > li {
     grid-template-columns: minmax(6rem, auto) minmax(0, 1fr) 2.6rem;
     align-items: start;
     gap: 0.55rem;
@@ -903,4 +916,331 @@
     font-weight: 700;
     text-align: center;
   }
+}
+
+
+
+/* Dark is the first paint before ReaderTheme hydrates. The same tokens are set
+   on [data-rd-theme="dark"] once the controls are ready. */
+.page.rd:not([data-rd-theme]) {
+  --rd-paper: #20201e;
+  --rd-paper2: #292826;
+  --rd-ink: #f4f2ec;
+  --rd-ink-soft: #d1cec5;
+  --rd-dusk: #a9a49a;
+  --rd-tang: #ef7042;
+  --rd-line: rgba(244, 242, 236, 0.16);
+  --rd-accent: #ef7042;
+  --rd-accent-ink: #ff9974;
+  --rd-reader-bg: #171716;
+  --rd-text: #f4f2ec;
+  --rd-text-soft: #d1cec5;
+  --rd-on-accent: #1a1a18;
+  background: #171716;
+  color: #f4f2ec;
+}
+.page.rd { --rd-dock-h: 0px; }
+
+/* Keep the reference's four-corner map, but use the active paper and ink so
+   each label remains legible over photographs, the marquee and dark surfaces. */
+.page.rd .dock-mark,
+.page.rd .dock-corner a {
+  min-height: 44px;
+  padding: 0.4rem 0.55rem;
+  border: 0;
+  border-radius: 0;
+  background: color-mix(in oklab, var(--rd-paper) 96%, transparent);
+  color: var(--rd-ink);
+  font-size: clamp(1.2rem, 2.1vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: lowercase;
+  mix-blend-mode: normal;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.page.rd .dock-mark span { color: inherit; }
+.page.rd .dock-mark:hover,
+.page.rd .dock-corner a:hover,
+.page.rd .dock-corner a[aria-current="true"] {
+  background: color-mix(in oklab, var(--rd-paper) 96%, transparent);
+  color: var(--rd-ink);
+  box-shadow: none;
+}
+.page.rd .dock-mark:focus-visible,
+.page.rd .dock-corner a:focus-visible {
+  outline: 2px solid var(--rd-accent-ink);
+  outline-offset: 2px;
+}
+
+/* Match every band to the selected reading surface instead of leaving white
+   slabs behind the dark hero and the lower-thirds reel. */
+.page.rd .rd-hero-sequence {
+  height: 115svh;
+  min-height: 46rem;
+  min-height: max(46rem, 100vh);
+}
+.page.rd .rd-hero-sticky {
+  height: 100svh;
+  min-height: 34rem;
+  min-height: max(34rem, 100vh);
+  background: var(--rd-reader-bg, var(--rd-paper));
+}
+.page.rd .rd-hero-plate:nth-child(1) { top: 12%; }
+.page.rd .rd-hero-plate:nth-child(2) { top: 11%; }
+.page.rd .rd-hero-copy .rh {
+  width: 100%;
+  max-width: none;
+  font-size: clamp(4.5rem, 9.2vw, 9rem);
+  line-height: 0.84;
+  letter-spacing: -0.04em;
+}
+.page.rd .rd-hero-bar .rd-status {
+  font-size: 0.68rem;
+  letter-spacing: 0.035em;
+}
+.page.rd .rd-showreel { color: var(--rd-text); }
+.page.rd .rd-showreel-frame,
+.page.rd .rd-showreel-frame video { background: var(--rd-paper2); }
+.page.rd .rd-showreel-frame figcaption {
+  padding-left: clamp(5rem, 8vw, 7rem);
+  background: var(--rd-paper2);
+  color: var(--rd-text-soft);
+}
+.page.rd .rd-viewall { border-color: var(--rd-text); color: var(--rd-text); }
+.page.rd .rd-cta { border-color: var(--rd-ink); }
+.page.rd .rd-link { border-bottom-color: var(--rd-line); }
+.page.rd .rd-hero-rule { background: var(--rd-line); }
+.page.rd .rd-case-index .rd-study-tags span { color: var(--rd-ink-soft); }
+.page.rd .rd-work { padding-top: clamp(2rem, 4vw, 3.5rem); }
+.page.rd #work > .rd-motion-title { margin-top: 0; }
+.page.rd .rd-motion-title { padding-block: 0.25rem; }
+.page.rd .rd-motion-title-text {
+  padding-block: 0.12em;
+  font-size: clamp(4.5rem, 12.5vw, 10rem);
+  line-height: 0.84;
+  letter-spacing: -0.04em;
+}
+
+/* Captions sit over photographs, so retain their light ink in every surface. */
+.page.rd .rd-inter-cap { color: #f6f3ea; }
+
+/* The reader controls live in the document flow, never over a title or result. */
+.page.rd .rd-theme-hud {
+  position: relative;
+  inset: auto;
+  transform: none;
+  z-index: 20;
+  width: fit-content;
+  max-width: 100%;
+  margin: clamp(1.25rem, 3vw, 2rem) auto;
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--rd-line);
+  border-radius: 999px;
+  background: var(--rd-paper2);
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@media (max-width: 48rem) {
+  /* Four independent corner targets, as in the reference — no mobile bar. */
+  .page.rd .dock {
+    position: fixed;
+    inset: 0;
+    display: block;
+    pointer-events: none;
+    width: auto;
+    height: auto;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .page.rd .dock-mark,
+  .page.rd .dock-corner { position: absolute; }
+  .page.rd .dock-mark { top: calc(0.45rem + env(safe-area-inset-top, 0px)); left: calc(0.45rem + env(safe-area-inset-left, 0px)); }
+  .page.rd .dock-corner[data-corner="work"] { top: calc(0.45rem + env(safe-area-inset-top, 0px)); right: calc(0.45rem + env(safe-area-inset-right, 0px)); }
+  .page.rd .dock-corner[data-corner="about"] { bottom: calc(0.45rem + env(safe-area-inset-bottom, 0px)); left: calc(0.45rem + env(safe-area-inset-left, 0px)); }
+  .page.rd .dock-corner[data-corner="lab"] { right: calc(0.45rem + env(safe-area-inset-right, 0px)); bottom: calc(0.45rem + env(safe-area-inset-bottom, 0px)); }
+  .page.rd .dock-mark,
+  .page.rd .dock-corner a {
+    pointer-events: auto;
+    min-height: 44px;
+    padding: 0.2rem 0.1rem;
+    background: transparent;
+    color: #fff;
+    font-size: clamp(0.9rem, 3.8vw, 1rem);
+    font-weight: 800;
+    mix-blend-mode: difference;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .page.rd .dock-mark:hover,
+  .page.rd .dock-corner a:hover,
+  .page.rd .dock-corner a[aria-current="true"] {
+    background: transparent;
+    color: #fff;
+  }
+  .page.rd main { padding-top: 0; }
+  .page.rd .rd-hero-sequence { height: 112svh; min-height: 0; }
+  .page.rd .rd-hero-sticky {
+    height: 100svh;
+    min-height: max(30rem, 100vh);
+  }
+  .page.rd .rd-case-index .cs-index-item { grid-template-areas: "image" "copy"; }
+  .page.rd .rd-showreel-frame figcaption { padding-left: clamp(4.5rem, 8vw, 5rem); }
+  .page.rd .rd-hero-copy .rh {
+    max-width: 100%;
+    font-size: clamp(2.6rem, 12vw, 4.25rem);
+    line-height: 0.84;
+    letter-spacing: -0.04em;
+  }
+  .page.rd #work .rd-motion-title-text,
+  .page.rd .rd-frames .rd-motion-title-text,
+  .page.rd .rd-lab .rd-motion-title-text {
+    font-size: clamp(2.8rem, 11.5vw, 4rem);
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+  }
+  .page.rd .rd-frames .rd-motion-title-text {
+    font-size: clamp(2rem, 8vw, 2.75rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .page.rd .rd-statement { margin-block: clamp(2.5rem, 7vw, 4rem); }
+}
+
+@media (max-width: 48rem) and (max-height: 42rem) {
+  .page.rd .rd-hero-bar { bottom: 3.75rem; }
+}
+
+@media (max-width: 48rem) and (prefers-reduced-motion: reduce) {
+  .page.rd .rd-hero-sequence { height: auto; min-height: 100svh; }
+  .page.rd .rd-hero-sticky { position: relative; top: auto; height: auto; min-height: 100svh; }
+}
+
+
+
+@media (min-width: 48.0625rem) {
+  .page.rd .rd-hero-copy {
+    top: 8%;
+    right: 25%;
+    bottom: 8%;
+    left: 25%;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .page.rd .rd-hero-copy .rh {
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    text-align: left;
+  }
+  .page.rd .rd-hero-copy .rh-sub,
+  .page.rd .rd-hero-copy .rh-by { margin-inline: 0; }
+  .page.rd .rd-hero-ident,
+  .page.rd .rd-hero-actions { justify-content: flex-start; }
+  .page.rd .rd-hero-plate:nth-child(1) { top: 7%; left: 2%; width: clamp(8rem, 16vw, 13rem); }
+  .page.rd .rd-hero-plate:nth-child(2) { top: 7%; right: 4%; width: clamp(9rem, 16vw, 14rem); }
+  .page.rd .rd-hero-plate:nth-child(3) { bottom: 7%; left: 2%; width: clamp(8rem, 16vw, 13rem); }
+  .page.rd .rd-hero-plate:nth-child(4) { right: 4%; bottom: 7%; width: clamp(8rem, 15vw, 13rem); }
+  .page.rd .rd-hero-plate:nth-child(5) { right: 5%; width: clamp(6rem, 12vw, 10rem); }
+  .page.rd .rd-hero-bar { right: clamp(5rem, 9vw, 8rem); }
+}
+
+
+
+/* Final visual fixes: keep the corner map on the opening plate, not over copy. */
+.page.rd .dock {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 100svh;
+}
+.page.rd #work > .rd-col,
+.page.rd #work .rd-case-index,
+.page.rd #work .rd-case-index .cs-index-item { width: 100%; }
+.page.rd .rd-hero-plate:nth-child(1) img,
+.page.rd .rd-hero-plate:nth-child(3) img,
+.page.rd .rd-hero-plate:nth-child(4) img,
+.page.rd .rd-hero-plate:nth-child(5) img { object-position: center 22%; }
+
+@media (max-width: 48rem) {
+  .page.rd .rd-hero-plate:nth-child(5) { display: none; }
+  .page.rd .rd-capabilities .rd-caps > * {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.55rem;
+  }
+  .page.rd .rd-shot figcaption {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.68) 58%, transparent);
+  }
+  .page.rd .rd-ach > li {
+    grid-template-columns: minmax(4.4rem, auto) minmax(0, 1fr) 2.3rem;
+    gap: 0.45rem;
+  }
+  .page.rd .rd-ach-arrow { width: 2.3rem; height: 2.3rem; }
+  .page.rd .rd-foot { min-height: 75svh; }
+}
+
+@media (max-width: 48rem) and (max-height: 42rem) {
+  .page.rd .rd-hero-plate { display: none; }
+  .page.rd .rd-hero-sequence { height: auto; min-height: 100svh; }
+  .page.rd .rd-hero-sticky {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 100svh;
+    padding: 4rem 0.7rem 5rem;
+  }
+  .page.rd .rd-hero-copy {
+    position: relative;
+    inset: auto;
+    z-index: 3;
+    justify-content: center;
+    padding-block: 1rem;
+  }
+  .page.rd .rd-hero-copy .rh { font-size: clamp(2.6rem, 12vw, 3.4rem); }
+  .page.rd .rd-hero-copy .rh-sub { font-size: 0.9rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page.rd .rd-brands .rd-ticker {
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .page.rd .rd-brands .rd-track {
+    display: block;
+    width: auto;
+    animation: none;
+  }
+  .page.rd .rd-brands .rd-track > span {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem 0.85rem;
+    padding: 0.75rem 1rem;
+  }
+  .page.rd .rd-brands .rd-track > span:nth-child(2) { display: none; }
+  .page.rd .rd-brands .rd-track b { padding: 0; font-size: 0.9rem; }
+  .page.rd .rd-brands .rd-track b::after { margin-left: 0.45rem; }
+}
+
+
+
+/* Keep both work lists on the same measure as the filter strip, and align the
+   result copy even when its placement label is the unusually long “9–12th”. */
+.page.rd #work.rd-sec > .rd-col { width: 100%; max-width: none; }
+.page.rd #work .rd-case-index,
+.page.rd #work .rd-case-index > li,
+.page.rd #work .rd-case-index .cs-index-item,
+.page.rd #work .rd-work-results,
+.page.rd #work .rd-ach,
+.page.rd #work .rd-ach > li { width: 100%; max-width: none; }
+.page.rd .rd-ach > li { grid-template-columns: 14rem minmax(0, 1fr) auto; }
+
+@media (max-width: 48rem) {
+  .page.rd .rd-ach > li { grid-template-columns: 7rem minmax(0, 1fr) 2.3rem; }
 }

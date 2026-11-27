@@ -209,7 +209,7 @@
 .page.rd .rd-facts,
 .page.rd .rd-roles,
 .page.rd .rd-jobs li,
-.page.rd .rd-ach li,
+.page.rd .rd-ach > li,
 .page.rd .rm-verified-grid a,
 .page.rd .rm-caps {
   border-color: var(--rd-line);
@@ -876,7 +876,7 @@
   display: grid;
   gap: 0;
 }
-.rd-ach li {
+.rd-ach > li {
   display: grid;
   grid-template-columns: clamp(4.5rem, 9vw, 7rem) 1fr;
   gap: 1.25rem;
@@ -885,8 +885,8 @@
   border-top: 2px solid var(--rd-text);
   transition: background 0.2s;
 }
-.rd-ach li:last-child { border-bottom: 2px solid var(--rd-text); }
-.rd-ach li:hover { background: var(--rd-paper2); }
+.rd-ach > li:last-child { border-bottom: 2px solid var(--rd-text); }
+.rd-ach > li:hover { background: var(--rd-paper2); }
 .rd-ach-place {
   font-family: var(--font-grotesk), var(--font-display), Impact, sans-serif;
   font-weight: 900;
@@ -1830,7 +1830,7 @@ body,
 .page.rd .rd-caps p { max-width: 38ch; font-size: 0.95rem; }
 
 /* ---------- Achievement rows: place, body, circular arrow ---------- */
-.page.rd .rd-ach li {
+.page.rd .rd-ach > li {
   grid-template-columns: clamp(3.4rem, 6vw, 5.4rem) minmax(0, 1fr) auto;
   align-items: start;
   gap: clamp(1rem, 2.4vw, 2rem);
@@ -1878,7 +1878,7 @@ body,
   .page.rd .dock-corner[data-corner="lab"] { bottom: 4.6rem; }
   .page.rd .rd-theme-hud { bottom: 0.7rem; }
   .page.rd .rd-caps > * { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
-  .page.rd .rd-ach li { grid-template-columns: clamp(3rem, 14vw, 4rem) minmax(0, 1fr); }
+  .page.rd .rd-ach > li { grid-template-columns: clamp(3rem, 14vw, 4rem) minmax(0, 1fr); }
   .page.rd .rd-ach-arrow { grid-column: 2; justify-self: end; margin-top: 0.6rem; }
 }
 
@@ -1942,7 +1942,7 @@ body,
 .page.rd .dock-more-panel a[aria-current="true"] { background: var(--rd-ink); color: var(--rd-paper); }
 
 /* 5 — row anatomy and sign-off alignment. */
-.page.rd .rd-ach li { grid-template-columns: clamp(4.4rem, 8vw, 7rem) minmax(0, 1fr) auto; }
+.page.rd .rd-ach > li { grid-template-columns: clamp(4.4rem, 8vw, 7rem) minmax(0, 1fr) auto; }
 .page.rd .rd-ach-place { white-space: nowrap; }
 .page.rd .rd-ach-arrow { align-self: center; margin-top: 0; }
 
