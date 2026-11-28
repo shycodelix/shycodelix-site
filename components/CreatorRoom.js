@@ -36,7 +36,7 @@ function Rows({ rows }) {
   );
 }
 
-function Panel({ id, close, award, eggs }) {
+function Panel({ id, close, eggs }) {
   if (!id) {
     return (
       <div className="room-panel-in">
@@ -45,7 +45,7 @@ function Panel({ id, close, award, eggs }) {
         <p>
           This is where the streams happen: a desk, one monitor doing the show, and a shelf
           of things that actually happened. Every prop opens something real — the rig I run,
-          the record behind the lower thirds, the deck that runs the scenes.
+          the verified record on the shelf, the deck that runs the scenes.
         </p>
         <p className="room-note">
           Monitor boots the old OS. The tower shows what is inside the case. Everything is a
@@ -94,15 +94,14 @@ function Panel({ id, close, award, eggs }) {
         <h2>The record</h2>
         <p>Four results that are on somebody else&rsquo;s website, not just mine.</p>
         <ul className="room-wins">
-          {achievements.map((w, i) => (
-            <li key={w.event} className={i === award ? "is-award" : undefined}>
+          {achievements.map((w) => (
+            <li key={w.event}>
               <b>{w.place}</b>
               <a href={w.href} target="_blank" rel="noreferrer">{w.event}</a>
               <small>{w.team} · {w.role} · {w.date}</small>
             </li>
           ))}
         </ul>
-        {award != null && <p className="room-note">Highlighted is the result the monitor was showing.</p>}
         <Link className="room-cta" href="/#verified">Reader mode: verified record &rarr;</Link>
       </div>
     );
@@ -215,8 +214,6 @@ function PropCard({ label, hint, pressed, expanded, onClick }) {
 
 export default function CreatorRoom() {
   const [pick, setPick] = useState(null);
-  // Which shelf row the monitor's lower third pointed at, if any.
-  const [award, setAward] = useState(null);
   // Easter eggs: coffees this session, the 90-second posture nudge, the clock.
   const [coffee, setCoffee] = useState(0);
   const [sat, setSat] = useState(false);
@@ -229,9 +226,7 @@ export default function CreatorRoom() {
   // rendering a second, hidden LiveMonitor with its own timers.
   const [flat, setFlat] = useState(false);
   const router = useRouter();
-  const shelfRef = useRef(null);
   const panelRef = useRef(null);
-  const fromMonitor = useRef(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 40rem)");
@@ -277,8 +272,7 @@ export default function CreatorRoom() {
   }, [sat, say]);
 
   // Move focus to the panel only for keyboard users. A mouse click on the prop
-  // should keep the pointer on the thing the visitor actually touched; dragging
-  // the shelf card into view with the keyboard should not jump the page.
+  // should keep the pointer on the thing the visitor actually touched.
   useEffect(() => {
     if (!pick) return;
     if (lastTrigger.current === "pointer") { lastTrigger.current = null; return; }
@@ -303,14 +297,13 @@ export default function CreatorRoom() {
       boot();
       return;
     }
-    setAward(null);
     if (id === "mug") setCoffee((n) => n + 1);
     // An open tab should not still say 1am at noon.
     if (id === "window") setClock(cebuNow(new Date()));
     setPick(id);
     if (quip) say(quip);
-    // Track pointer vs keyboard for the panel-focus effect and the shelf scroll
-    // jump, so a mouse click does not steal focus and does not scroll the page.
+    // Track pointer vs keyboard for the panel-focus effect, so a mouse click
+    // does not steal focus from the prop the visitor touched.
     if (e) {
       if (e.type === "pointerdown") lastTrigger.current = "pointer";
       else if (e.type === "keydown" && (e.key === "Enter" || e.key === " ")) lastTrigger.current = "keyboard";
@@ -350,28 +343,6 @@ export default function CreatorRoom() {
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [pick]);
-
-  // The lower third is a real button on the monitor: it opens the shelf on the
-  // result it was showing. The panel-focus effect above still lands the shelf on
-  // the keyboard; this just records whether the monitor itself was pressed by
-  // pointer or keyboard so the phone scroll jump stays keyboard-only.
-  const openShelf = useCallback((index) => {
-    setAward(index);
-    setPick("shelf");
-    fromMonitor.current = flat;
-    if (lastTrigger.current === "pointer") { /* leave lastTrigger alone */ }
-    else if (!lastTrigger.current) lastTrigger.current = "keyboard";
-  }, [flat]);
-
-  // On a phone the shelf card sits well below the monitor, so bring its panel
-  // into view — only when the monitor sent you there, not when you tapped it.
-  // Keep the jump keyboard-only: a tap on the monitor should keep focus on the
-  // monitor, and the panel still gets focus by the effect above.
-  useEffect(() => {
-    if (!flat || pick !== "shelf" || !fromMonitor.current || lastTrigger.current === "pointer") return;
-    fromMonitor.current = false;
-    shelfRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
-  }, [flat, pick]);
 
   const props = [
     ["monitor", "Monitor", "The live stream, the character rig and the mini-game."],
@@ -432,7 +403,7 @@ export default function CreatorRoom() {
           </button>
 
           <div className="monitor-wrap">
-            <LiveMonitor say={say} onBoot={boot} onShelf={openShelf} />
+            <LiveMonitor say={say} onBoot={boot} />
             <Link className="monitor-boot" href="/os/desktop">Boot shycodelix OS</Link>
             <span className="monitor-neck" aria-hidden="true" />
           </div>
@@ -457,7 +428,7 @@ export default function CreatorRoom() {
         </section>
 
         <aside className="room-panel" aria-live="polite" ref={panelRef} tabIndex={-1}>
-          <Panel key={pick || "room"} id={pick} close={() => closePick()} award={award} eggs={{ coffee, sat, clock }} />
+          <Panel key={pick || "room"} id={pick} close={() => closePick()} eggs={{ coffee, sat, clock }} />
         </aside>
       </div>
       )}
@@ -465,12 +436,12 @@ export default function CreatorRoom() {
       {flat ? (
         <div className="room-flat">
           <div className="monitor-wrap room-flat-monitor">
-            <LiveMonitor say={say} onBoot={boot} onShelf={openShelf} />
+            <LiveMonitor say={say} onBoot={boot} />
           </div>
           <Link className="room-flat-boot" href="/os/desktop">Boot shycodelix OS</Link>
           <div className="room-flat-list" role="group" aria-label="Room props">
             {props.map(([id, label, hint]) => (
-              <div key={id} className="room-flat-item" ref={id === "shelf" ? shelfRef : undefined}>
+              <div key={id} className="room-flat-item">
                 <PropCard
                   label={label}
                   hint={hint}
@@ -480,7 +451,7 @@ export default function CreatorRoom() {
                 />
                 {pick === id && (
                   <div className="room-flat-panel" ref={panelRef} tabIndex={-1}>
-                    <Panel key={id} id={id} close={() => closePick()} award={award} eggs={{ coffee, sat, clock }} />
+                    <Panel key={id} id={id} close={() => closePick()} eggs={{ coffee, sat, clock }} />
                   </div>
                 )}
               </div>

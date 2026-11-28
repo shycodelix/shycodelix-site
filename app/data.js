@@ -48,7 +48,7 @@ export const capabilities = [
   },
   {
     k: "Production & content",
-    v: "Short-form editing at volume, show packaging and production direction. Broadcast assets and lower thirds come from our creative director; I run the pipeline and the deliverable.",
+    v: "Short-form editing at volume, show packaging and production direction. Broadcast graphics come from our creative director; I run the pipeline and the deliverable.",
     services: ["Short-form editing", "Show packaging", "Production direction", "Deliverable management"],
   },
   {
@@ -268,7 +268,7 @@ export const avante = {
   ],
   credit: {
     role: "Creative direction",
-    note: "Broadcast assets, lower thirds and the Avante visual system are made by our creative director, credited on request.",
+    note: "Broadcast graphics and the Avante visual system are made by our creative director, credited on request.",
   },
   cta: {
     label: "Work with Avante",

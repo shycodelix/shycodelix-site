@@ -310,12 +310,14 @@ const BOOT_CHECKS = [
 function Boot({ onDone }) {
   const [p, setP] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setP((v) => Math.min(100, v + 10)), 50);
+    // Ten steps of 120 ms plus the hold: a boot that is readable at a glance and
+    // still over in about a second and a half. Escape skips it entirely.
+    const t = setInterval(() => setP((v) => Math.min(100, v + 10)), 120);
     return () => clearInterval(t);
   }, []);
   useEffect(() => {
     if (p >= 100) {
-      const t = setTimeout(onDone, 180);
+      const t = setTimeout(onDone, 340);
       return () => clearTimeout(t);
     }
   }, [p, onDone]);

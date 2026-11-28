@@ -478,46 +478,6 @@
   height: auto;
   filter: drop-shadow(0 0 14px rgba(255, 122, 26, 0.25));
 }
-/* A button: clicking the on-screen result opens the shelf on that row. It
-   sits above `.lm-hit`, whose full-screen box is the boot target. */
-.lm-lower {
-  position: absolute; left: 0; bottom: 0; z-index: 6;
-  appearance: none;
-  display: grid; gap: 0.12rem;
-  max-width: 66%;
-  margin: 0;
-  border: 0;
-  padding: 1.5rem 0.6rem 0.45rem;
-  background: linear-gradient(transparent, rgba(10, 8, 18, 0.92));
-  font-family: inherit;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-  font-size: clamp(0.42rem, 0.95vw, 0.66rem);
-  line-height: 1.25;
-}
-.lm-lower b {
-  justify-self: start;
-  background: #ff7a1a; color: #1e1633;
-  font-family: var(--font-micro), monospace;
-  font-size: 0.86em;
-  padding: 0 0.22rem;
-}
-.lm-lower span { color: #f6f3ea; font-weight: 600; }
-.lm-lower small {
-  color: #c9c0da;
-  font-family: var(--font-micro), monospace;
-  font-size: 0.8em;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.lm-lower:hover span,
-.lm-lower:focus-visible span {
-  text-decoration: underline;
-  text-decoration-color: var(--tang);
-  text-underline-offset: 2px;
-}
-.lm-lower:focus-visible { outline: 2px solid var(--tang); outline-offset: -2px; }
 .lm-chat {
   position: absolute; top: 13%; right: 2.5%; z-index: 2;
   width: 33%;
@@ -791,7 +751,6 @@
   .monitor-wrap { width: 94%; bottom: 31%; }
   .monitor-neck { height: 0.6rem; }
   .lm-chat { display: none; }
-  .lm-lower { max-width: 100%; font-size: 0.48rem; padding-top: 1.1rem; }
   .lm-cam { width: 30%; }
   .lm-boot-hint { font-size: 0.44rem; }
   .monitor-boot { bottom: -1.15rem; font-size: 0.44rem; }
@@ -939,20 +898,6 @@
 .lm-vector-node-b { animation-delay: -1.3s; }
 .lm-vector-scan { stroke-width: 8; opacity: 0.14; stroke-dasharray: 2 1000; animation: lmScan 5.5s linear infinite; }
 .lm-cam { transform-origin: 50% 100%; animation: lmCamFloat 5.4s ease-in-out infinite alternate; }
-.lm-lower {
-  animation: lmLowerIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-.lm-lower::before {
-  content: "";
-  position: absolute;
-  left: 0.35rem;
-  bottom: 0.45rem;
-  width: 2px;
-  height: 35%;
-  background: var(--lm-accent);
-  box-shadow: 0 0 12px var(--lm-accent);
-}
-.lm-lower b { background: var(--lm-accent); }
 .lm-boot-hint { transition: opacity 0.18s, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
 .lm:hover .lm-boot-hint,
 .lm-hit:focus-visible ~ .lm-boot-hint { transform: translate(-50%, -50%) scale(1.04); }
@@ -975,10 +920,6 @@
 @keyframes lmNode { from { opacity: 0.35; transform: scale(0.68); } to { opacity: 1; transform: scale(1.25); } }
 @keyframes lmScan { to { stroke-dashoffset: -1044; } }
 @keyframes lmCamFloat { from { transform: translateY(0); } to { transform: translateY(-4px); } }
-@keyframes lmLowerIn {
-  from { opacity: 0.2; clip-path: inset(0 100% 0 0); filter: blur(5px); transform: translateY(7px); }
-  to { opacity: 1; clip-path: inset(0); filter: blur(0); transform: translateY(0); }
-}
 @keyframes roomPanelIn {
   from { opacity: 0; filter: blur(6px); transform: translateY(12px); }
   to { opacity: 1; filter: blur(0); transform: translateY(0); }
@@ -997,7 +938,6 @@
   .lm-vector-node,
   .lm-vector-scan,
   .lm-cam,
-  .lm-lower,
   .room-panel-in,
   .room-flat-panel,
   .aim-cell.on i { animation: none; }

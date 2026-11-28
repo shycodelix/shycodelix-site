@@ -11,9 +11,9 @@ Live: [shy-jble.freemilk.app](https://shy-jble.freemilk.app) — the canonical h
 | `/` | **Reader mode.** The serious CV: summary card, verified profiles, selected work, experience, capabilities, Avante, career strip, setup, contact. Three reading surfaces (dark/sepia/light), A-/A+ text size, section dock, interludes, print-friendly. |
 | `/work` | **Work index.** Six case studies in reading order, linking through to each. |
 | `/work/red-bull-wings-cup`, `/work/pubg-mobile`, `/work/lilith`, `/work/ti11`, `/work/vcl-ph`, `/work/avante` | **Case studies.** Event operations, campaign editing and creator reels, alongside the existing team and production work. Includes local WebP media, source folders and embedded clip previews where available. |
-| `/os` | **The lab.** The creator room: desk props, a live monitor running the Pixels-3 scenes with the PNGTuber rig, a canned chat rail, lower thirds from the verified record, and a playable aim trainer. The monitor boots the desktop. |
+| `/os` | **The lab.** The creator room: desk props, a live monitor running the Pixels-3 scenes with the PNGTuber rig, a canned chat rail, and a playable aim trainer. The monitor boots the desktop. |
 | `/os/desktop` | **The old OS.** The Windows XP desktop, built around the stream: draggable windows, wallpaper with day/night palette, taskbar, Start menu, Task Manager shortcut and a playable racer. Shows the POST boot sequence on launch unless reduced motion is enabled. |
-| `/racer` | **Shy Racing.** The local pseudo-3D road game, playable directly with keyboard or touch controls and separate from the XP desktop. |
+| `/racer` | **Shy Racing.** The local pseudo-3D road game, playable directly and separate from the XP desktop: drift to refill boost, spend it on a speed run, score points and laps. Keyboard or touch controls. |
 | `/links` | **Links page.** Streams (Twitch / TikTok / Kick / YouTube), socials, Avante, tips, verified profiles. Built to be pasted in a bio. |
 | `/profile` | 308 redirect to `/`, so older résumé links keep working. |
 | `/not-found` | The 404, as an XP error dialog. |
@@ -25,7 +25,7 @@ Live: [shy-jble.freemilk.app](https://shy-jble.freemilk.app) — the canonical h
 - **Avante.exe** — the organisation, what it does, how it works, and where it's going.
 - **Media Player** — 63 clips from the edits archive, grouped by month, played through Drive's preview embed. Nothing is bundled into the repo.
 - **cmd.exe** — a working terminal: `help`, `open avante`, `neofetch`, `sudo hire-me`, and history.
-- **road_trip.exe** — a local pseudo-3D racer with keyboard and touch controls. Open it in its XP window or launch the standalone game at `/racer`.
+- **road_trip.exe** — a local pseudo-3D racer with drift, boost, lap scoring and keyboard or touch controls. Open it in its XP window or launch the standalone game at `/racer`.
 - **F1** — opens the hidden Clippy.exe helper. The desktop also has the Konami-code confetti, a recurring Windows Update alert, and a quick POST boot screen.
 - **Task Manager** — open windows can be ended from the Start menu, or with Ctrl+Shift+Esc; Windows Update cannot.
 

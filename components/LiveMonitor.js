@@ -1,7 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import AimTrainer from "./AimTrainer";
-import { achievements } from "../app/data";
 
 const SCENES = [
   { id: "starting", src: "/kit/scene-starting.webp", label: "Starting", accent: "#ff7a1a" },
@@ -20,7 +19,7 @@ const FRAMES = {
 };
 
 const CHAT = [
-  ["pixelpanda", "the lower third is doing numbers"],
+  ["pixelpanda", "the overlay pack is doing numbers"],
   ["kuya_boost", "TI11 clip again? never gets old"],
   ["lag_wizard", "chat is this real"],
   ["mika.mp4", "scene 3 next pls"],
@@ -31,13 +30,12 @@ const CHAT = [
   ["gg_no_re", "aim trainer high score attempt"],
 ];
 
-export default function LiveMonitor({ say, onBoot, onShelf }) {
+export default function LiveMonitor({ say, onBoot }) {
   const [scene, setScene] = useState(0);
   const [mood, setMood] = useState("idle");
   const [blink, setBlink] = useState(false);
   const [chat, setChat] = useState(CHAT.slice(0, 4));
   const [next, setNext] = useState(4);
-  const [lower, setLower] = useState(0);
   const [game, setGame] = useState(false);
   const [reduce, setReduce] = useState(false);
   const moodTimer = useRef(0);
@@ -109,14 +107,6 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
     return () => clearTimeout(t);
   }, [next, reduce, react]);
 
-  // Lower thirds: the real record, rotating like a broadcast package would.
-  useEffect(() => {
-    if (reduce) return;
-    const t = setTimeout(() => setLower((i) => (i + 1) % achievements.length), 6800);
-    return () => clearTimeout(t);
-  }, [lower, reduce]);
-
-  const a = achievements[lower];
   const moveGraphics = (event) => {
     if (event.pointerType !== "mouse") return;
     const bounds = event.currentTarget.getBoundingClientRect();
@@ -184,17 +174,6 @@ export default function LiveMonitor({ say, onBoot, onShelf }) {
           height={732}
           decoding="async"
         />
-        <button
-          key={lower}
-          type="button"
-          className="lm-lower"
-          onClick={() => onShelf?.(lower)}
-          aria-label={`Shelf — ${a.place}, ${a.event}`}
-        >
-          <b>{a.place}</b>
-          <span>{a.event}</span>
-          <small>{a.role} · {a.team} · {a.date}</small>
-        </button>
         <ul className="lm-chat" aria-label="Canned chat">
           {chat.map(([who, msg]) => (
             <li key={`${who}-${msg}`}><b>{who}</b> {msg}</li>
