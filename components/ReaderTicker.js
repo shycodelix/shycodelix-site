@@ -5,15 +5,16 @@ import { useEffect, useRef, useState } from "react";
 // array, so a role can never drift out of sync with the logo above it.
 const ITEMS = [
   { label: "Red Bull", note: "Wings Cup 2026 · league operations & live production", logo: "/brands/red-bull.svg", width: 225, height: 36 },
-  { label: "Mineski Philippines", note: "Wings Cup · event partner" },
+  { label: "Mineski Philippines", note: "Wings Cup · event partner", logo: "/brands/mineski-philippines.png", width: 1707, height: 1707 },
   { label: "PUBG Mobile Esports", note: "Short-form video editor · global social campaign", logo: "/brands/pubg-mobile.png", width: 455, height: 268 },
   { label: "Tencent Games", note: "Campaign partner", logo: "/brands/tencent-games.png", width: 174, height: 82 },
   { label: "VNG Corporation", note: "Editing · Mar 2023 – Mar 2024", logo: "/brands/vng-corporation.png", width: 1441, height: 285 },
-  { label: "lilith", note: "Creator edits", logo: "/brands/lilith.png", width: 166, height: 70 },
+  // lilith has no logo of her own, so the strip sets her name as text.
+  { label: "lilith", note: "Creator edits" },
   { label: "Avante Esports", note: "Founder & CEO", logo: "/avante/logo-white.svg", width: 1920, height: 1080 },
   { label: "Ascendant Group", note: "Co-founder" },
-  { label: "Drippy Lab", note: "VALORANT team manager" },
-  { label: "BOOM Esports", note: "Assistant manager · Dota 2 · TI11", logo: "/brands/boom-esports.webp", width: 366, height: 366 },
+  { label: "Drippy Lab", note: "VALORANT team manager", logo: "/brands/drippy-lab.png", width: 2551, height: 681 },
+  { label: "BOOM Esports", note: "Assistant manager · Dota 2 · TI11", logo: "/brands/boom-esports.png", width: 600, height: 802 },
   { label: "AcadArena", note: "Senior event marshal", logo: "/brands/acadarena.png", width: 183, height: 66 },
 ];
 

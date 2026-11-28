@@ -732,7 +732,7 @@
   border-top: 1px solid var(--rd-line);
 }
 .page.rd .rd-credit-brand { flex: none; display: flex; align-items: center; width: 7.5rem; }
-.page.rd .rd-credit-brand .rd-brand-logo { height: 1.3rem; max-width: 7.5rem; opacity: 0.9; }
+.page.rd .rd-credit-brand .rd-brand-logo { height: 1.75rem; max-width: 7.5rem; opacity: 0.9; }
 .page.rd .rd-credit-brand b {
   color: var(--rd-ink);
   font: 650 0.82rem/1.1 var(--font-grotesk), var(--font-body), sans-serif;
@@ -758,7 +758,7 @@
   .page.rd .rd-credits { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .page.rd .rd-credits li { gap: 0.6rem; min-height: 2.5rem; padding: 0.4rem 0; }
   .page.rd .rd-credit-brand { width: 6.5rem; }
-  .page.rd .rd-credit-brand .rd-brand-logo { height: 1.15rem; max-width: 6.5rem; }
+  .page.rd .rd-credit-brand .rd-brand-logo { height: 1.4rem; max-width: 6.5rem; }
   .page.rd .rd-credit-brand b { font-size: 0.76rem; }
   .page.rd .rd-credit-role { font-size: 0.7rem; }
   .page.rd .rd-case-index .cs-index-details > div { padding-right: 0; }
