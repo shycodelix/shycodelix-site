@@ -699,14 +699,14 @@
   min-height: 3.3rem;
   padding-inline: 0.85rem;
   color: var(--rd-ink);
-  opacity: 0.84;
+  opacity: 0.9;
 }
 .page.rd .rd-brands .rd-ticker .rd-track b::after { margin-left: 1rem; color: currentColor; }
 .page.rd .rd-brand-logo {
   display: block;
   width: auto;
-  max-width: 9rem;
-  height: 2.35rem;
+  max-width: 11rem;
+  height: 2.8rem;
   object-fit: contain;
   filter: grayscale(1) brightness(0) invert(1);
 }
@@ -731,8 +731,8 @@
   padding: 0.45rem 0;
   border-top: 1px solid var(--rd-line);
 }
-.page.rd .rd-credit-brand { flex: none; display: flex; align-items: center; width: 7.5rem; }
-.page.rd .rd-credit-brand .rd-brand-logo { height: 1.75rem; max-width: 7.5rem; opacity: 0.9; }
+.page.rd .rd-credit-brand { flex: none; display: flex; align-items: center; width: 8.5rem; }
+.page.rd .rd-credit-brand .rd-brand-logo { height: 2rem; max-width: 8.5rem; opacity: 0.9; }
 .page.rd .rd-credit-brand b {
   color: var(--rd-ink);
   font: 650 0.82rem/1.1 var(--font-grotesk), var(--font-body), sans-serif;
@@ -754,11 +754,11 @@
   .page.rd .rd-brands-head { display: grid; gap: 0.35rem; padding-inline: 6vw; }
   .page.rd .rd-brands-head p { font-size: 0.72rem; }
   .page.rd .rd-brands .rd-ticker .rd-track b { font-size: 0.95rem; }
-  .page.rd .rd-brand-logo { max-width: 7rem; height: 1.9rem; }
+  .page.rd .rd-brand-logo { max-width: 8.5rem; height: 2.4rem; }
   .page.rd .rd-credits { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .page.rd .rd-credits li { gap: 0.6rem; min-height: 2.5rem; padding: 0.4rem 0; }
-  .page.rd .rd-credit-brand { width: 6.5rem; }
-  .page.rd .rd-credit-brand .rd-brand-logo { height: 1.4rem; max-width: 6.5rem; }
+  .page.rd .rd-credit-brand { width: 7.5rem; }
+  .page.rd .rd-credit-brand .rd-brand-logo { height: 1.8rem; max-width: 7.5rem; }
   .page.rd .rd-credit-brand b { font-size: 0.76rem; }
   .page.rd .rd-credit-role { font-size: 0.7rem; }
   .page.rd .rd-case-index .cs-index-details > div { padding-right: 0; }
