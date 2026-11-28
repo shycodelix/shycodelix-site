@@ -1,0 +1,137 @@
+/* Reader motion, outline and section tokens. The existing canvas and GSAP
+   choreography supply the movement; these shared values keep their surfaces
+   and type treatments in one visual system. */
+.page.rd {
+  --rd-motion-fast: 180ms;
+  --rd-motion-settle: 420ms;
+  --rd-motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --rd-copy-measure: 56rem;
+  --rd-outline-width: 0.45px;
+  --rd-outline-color: var(--rd-halo, rgba(18, 18, 17, 0.55));
+  --rd-outline-glow: var(--rd-halo-soft, rgba(18, 18, 17, 0.32));
+  --rd-outline-blur: 16px;
+}
+
+/* These three destinations share a page measure and section cadence while the
+   atmosphere gives each one its own palette and drawing language. */
+.page.rd #work,
+.page.rd #about,
+.page.rd #lab {
+  padding-inline: clamp(1.1rem, 6vw, 5rem);
+  padding-block: clamp(4rem, 8vw, 7rem);
+  border-top: 1px solid var(--rd-line);
+  scroll-margin-top: 2rem;
+}
+.page.rd #work > .rd-motion-title,
+.page.rd #lab > .rd-motion-title {
+  margin-top: 0;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+.page.rd #about > h2 {
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+.page.rd #about > .rd-col,
+.page.rd #lab > .rd-col {
+  width: min(100%, var(--rd-copy-measure));
+  margin-inline: auto;
+}
+.page.rd #work.rd-sec > .rd-col {
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+}
+
+/* The Lab stays a dark room, but no longer paints an opaque wall over its live
+   section-reactive canvas. */
+.page.rd #lab {
+  --rd-outline-color: rgba(8, 8, 8, 0.72);
+  --rd-outline-glow: rgba(0, 0, 0, 0.52);
+  background: color-mix(in oklab, #111 84%, transparent);
+}
+.page.rd .rd-contact {
+  --rd-outline-color: rgba(8, 8, 8, 0.72);
+  --rd-outline-glow: rgba(0, 0, 0, 0.5);
+}
+
+/* Text outline is tuned once per reading surface, then reused by each display
+   treatment. The Lab and contact set their own dark-field override above. */
+.page.rd .rd-hero-copy .rh-lines,
+.page.rd .rd-motion-title-text,
+.page.rd .rd-contact-lead,
+.page.rd .rd-contact-line,
+.page.rd .rd-foot-mark {
+  -webkit-text-stroke: var(--rd-outline-width) var(--rd-outline-color);
+  paint-order: stroke fill;
+  text-shadow: 0 0 var(--rd-outline-blur) var(--rd-outline-glow);
+  transition:
+    -webkit-text-stroke-color var(--rd-motion-settle) var(--rd-motion-ease),
+    text-shadow var(--rd-motion-settle) var(--rd-motion-ease);
+}
+
+/* The same field changes shape, pace and colour as the active section changes.
+   Canvas palette transitions remain in ReaderAtmosphere; this is its soft halo. */
+.page.rd .rd-atmos::before {
+  animation-duration: var(--rd-atmosphere-cycle, 52s);
+}
+.page.rd .rd-atmos[data-zone="work"] {
+  --rd-field-pool-a: 16% 28%;
+  --rd-field-pool-b: 82% 73%;
+  --rd-field-pool-c: 62% 18%;
+  --rd-atmosphere-cycle: 42s;
+}
+.page.rd .rd-atmos[data-zone="about"] {
+  --rd-field-pool-a: 78% 24%;
+  --rd-field-pool-b: 22% 74%;
+  --rd-field-pool-c: 52% 48%;
+  --rd-atmosphere-cycle: 58s;
+}
+.page.rd .rd-atmos[data-zone="lab"] {
+  --rd-field-pool-a: 28% 72%;
+  --rd-field-pool-b: 76% 30%;
+  --rd-field-pool-c: 50% 52%;
+  --rd-atmosphere-cycle: 34s;
+}
+
+.page.rd .rd-lab-links {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.page.rd .rd-lab-links a::after {
+  transition-duration: var(--rd-motion-fast);
+  transition-timing-function: var(--rd-motion-ease);
+}
+
+@media (max-width: 48rem) {
+  .page.rd #work,
+  .page.rd #about,
+  .page.rd #lab {
+    padding-inline: clamp(1.1rem, 5vw, 1.6rem);
+    padding-block: 3.5rem;
+  }
+  .page.rd #work.rd-sec > .rd-col { width: 100%; }
+  .page.rd .rd-lab-links { grid-template-columns: minmax(0, 1fr); }
+  .page.rd .rd-lab-links a + a { padding-left: 0; border-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page.rd .rd-motion-title-text,
+  .page.rd .rd-hero-copy .rh-lines,
+  .page.rd .rd-contact-lead,
+  .page.rd .rd-contact-line,
+  .page.rd .rd-foot-mark,
+  .page.rd .rd-lab-links a::after {
+    transition: none;
+  }
+}
+
+
+@media print {
+  .page.rd .rd-hero-copy .rh-lines,
+  .page.rd .rd-motion-title-text,
+  .page.rd .rd-contact-lead,
+  .page.rd .rd-contact-line,
+  .page.rd .rd-foot-mark {
+    -webkit-text-stroke: 0;
+    text-shadow: none;
+    transition: none;
+  }
+}
