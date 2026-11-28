@@ -1249,3 +1249,146 @@
 @media (max-width: 48rem) {
   .page.rd .rd-ach > li { grid-template-columns: 7rem minmax(0, 1fr) 2.3rem; }
 }
+
+
+
+/* ---------------------------------------------------------------------------
+   Minimal text outline.
+
+   One hairline edge and a halo exactly as wide as a glyph edge, so display
+   type keeps its silhouette over the living canvas, the hero collage plates
+   and the stream stills without becoming a poster. The halo follows the
+   reading surface: light ink takes a dark edge on the dark paper, dark ink
+   takes a light one on sepia and white. Small copy gets the halo only — a
+   stroke at 0.7rem is what makes type look broken.
+   --------------------------------------------------------------------------- */
+.page.rd {
+  --rd-halo: rgba(18, 18, 17, 0.55);
+  --rd-halo-soft: rgba(18, 18, 17, 0.32);
+}
+.page.rd:not([data-rd-theme]),
+.page.rd[data-rd-theme="dark"] {
+  --rd-halo: rgba(18, 18, 17, 0.6);
+  --rd-halo-soft: rgba(18, 18, 17, 0.36);
+}
+.page.rd[data-rd-theme="sepia"] {
+  --rd-halo: rgba(250, 247, 238, 0.8);
+  --rd-halo-soft: rgba(250, 247, 238, 0.5);
+}
+.page.rd[data-rd-theme="light"] {
+  --rd-halo: rgba(255, 253, 247, 0.85);
+  --rd-halo-soft: rgba(255, 253, 247, 0.55);
+}
+
+.page.rd .rd-hero-copy .rh,
+.page.rd .rd-motion-title-text,
+.page.rd .rd-contact-lead,
+.page.rd .rd-contact-line,
+.page.rd .rd-foot-mark {
+  -webkit-text-stroke: 0.45px var(--rd-halo);
+  paint-order: stroke fill;
+  text-shadow: 0 0 16px var(--rd-halo-soft);
+}
+
+.page.rd .rd-hero-bar,
+.page.rd .rd-hero-copy .rh-sub,
+.page.rd .rd-hero-copy .rh-by,
+.page.rd .rd-inter-cap,
+.page.rd .rd-shot figcaption,
+.page.rd .rd-lab-copy,
+.page.rd .rd-kit-body b {
+  text-shadow: 0 1px 3px var(--rd-halo-soft), 0 0 12px var(--rd-halo-soft);
+}
+
+/* The contact band is dark on every reading surface, so its ink keeps a dark
+   edge even when the rest of the page has flipped to sepia or white. */
+.page.rd .rd-contact-lead,
+.page.rd .rd-contact-line {
+  --rd-halo: rgba(13, 13, 13, 0.7);
+  --rd-halo-soft: rgba(13, 13, 13, 0.45);
+}
+
+@media print {
+  .page.rd .rd-hero-copy .rh,
+  .page.rd .rd-motion-title-text,
+  .page.rd .rd-contact-lead,
+  .page.rd .rd-contact-line,
+  .page.rd .rd-foot-mark,
+  .page.rd .rd-hero-bar,
+  .page.rd .rd-hero-copy .rh-sub,
+  .page.rd .rd-hero-copy .rh-by,
+  .page.rd .rd-inter-cap,
+  .page.rd .rd-shot figcaption {
+    -webkit-text-stroke: 0;
+    text-shadow: none;
+  }
+}
+
+
+
+/* ---------------------------------------------------------------------------
+   "What I do" — the one saturated band in the reading sequence.
+
+   It carried dark copy on a mid orange, which sat around 5.8:1: legible, but
+   the first place the eye works rather than reads. The band moves up to the
+   brightest step of the brand orange, the ink goes to near-black, the panel
+   behind each discipline lifts it slightly further, and the body copy and the
+   services list both grow. Same layout, same orange field — just no squinting.
+   --------------------------------------------------------------------------- */
+.page.rd .rd-capabilities {
+  --rd-line: rgba(16, 13, 10, 0.3);
+  background: #f0794a;
+  color: #100e0b;
+}
+.page.rd .rd-capabilities > h2 { color: #0f0d0a; }
+.page.rd .rd-capabilities > h2 em,
+.page.rd .rd-capabilities > h2 em span { color: #0f0d0a; opacity: 0.84; }
+.page.rd .rd-capabilities > h2::after { background: #0f0d0a; opacity: 0.82; }
+
+.page.rd .rd-cap-intro {
+  max-width: 58ch;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  color: #131009;
+  font-size: clamp(1.02rem, 1.5vw, 1.26rem);
+  line-height: 1.5;
+}
+
+.page.rd .rd-capabilities .rd-caps > * {
+  padding: clamp(1rem, 2vw, 1.4rem);
+  border: 1px solid var(--rd-line);
+  background: rgba(255, 255, 255, 0.17);
+}
+.page.rd .rd-capabilities .rd-cap-head { gap: 0.4rem; }
+.page.rd .rd-capabilities .rd-cap-head h3 { color: #0f0d0a; font-weight: 650; }
+.page.rd .rd-capabilities .rd-cap-num {
+  color: #0f0d0a;
+  opacity: 0.9;
+  font-weight: 700;
+}
+.page.rd .rd-capabilities .rd-cap-details p {
+  color: #14110c;
+  font-size: clamp(0.95rem, 1.1vw, 1.06rem);
+  line-height: 1.55;
+}
+.page.rd .rd-capabilities .rd-cap-details ol {
+  color: #1e1811;
+  font-size: clamp(0.84rem, 0.95vw, 0.93rem);
+  line-height: 1.5;
+}
+.page.rd .rd-capabilities .rd-cap-details ol li span {
+  color: #2a211a;
+  opacity: 1;
+  font-weight: 700;
+}
+.page.rd .rd-capabilities .rd-cap-plate figcaption { color: #0f0d0a; }
+
+/* Reduced motion keeps the field still, so the band can afford its full warm
+   value without competing with anything. */
+@media (prefers-reduced-motion: reduce) {
+  .page.rd .rd-capabilities .rd-caps > * { transition: none; }
+}
+
+@media print {
+  .page.rd .rd-capabilities { background: #fff; color: #000; }
+  .page.rd .rd-capabilities .rd-caps > * { background: #fff; }
+}

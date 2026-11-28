@@ -5,9 +5,11 @@
    always paints above it; sections keep transparent backgrounds, so the field
    reads through the page instead of sitting on it.
 
-   The field itself is drawn in ReaderAtmosphere.js. This file only owns the
-   frame: stacking, per-surface opacity (the same pool that glows on the dark
-   surface would dull the sepia and light ones) and the mobile/motion guards.
+   Under the canvas sits one slow aurora: three pools of the section's own ink
+   that never stop travelling, retinted per zone with a hue rotation. The canvas
+   reacts to the pointer and the scroll velocity; the aurora answers the page
+   even where the canvas is holding a quiet frame, so the background is always
+   moving without ever being the thing you are reading.
    --------------------------------------------------------------------------- */
 
 .rd-atmos {
@@ -16,12 +18,48 @@
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  opacity: 0.8;
+  opacity: 0.92;
   contain: strict;
   transition: opacity 0.6s ease;
 }
 
+.rd-atmos::before {
+  content: "";
+  position: absolute;
+  inset: -22%;
+  z-index: 0;
+  background:
+    radial-gradient(40% 44% at 24% 26%, rgba(239, 112, 66, 0.55), transparent 68%),
+    radial-gradient(44% 48% at 76% 70%, rgba(88, 185, 255, 0.42), transparent 70%),
+    radial-gradient(34% 38% at 58% 16%, rgba(210, 174, 55, 0.36), transparent 72%);
+  filter: blur(30px) saturate(1.08) hue-rotate(var(--rd-field-hue, 0deg));
+  animation: rdAurora 52s ease-in-out infinite alternate;
+  will-change: transform;
+  transition: filter 1.1s ease, opacity 1.1s ease;
+}
+
+/* The hue per zone is the whole point of the layer: the same three pools, read
+   warm on the work bands, cool on the record, and warmed again for the lab. */
+.rd-atmos[data-zone="work"] { --rd-field-hue: 0deg; }
+.rd-atmos[data-zone="about"] { --rd-field-hue: -18deg; }
+.rd-atmos[data-zone="verified"] { --rd-field-hue: -34deg; }
+.rd-atmos[data-zone="experience"] { --rd-field-hue: -12deg; }
+.rd-atmos[data-zone="skills"] { --rd-field-hue: 9deg; }
+.rd-atmos[data-zone="avante"] { --rd-field-hue: 16deg; }
+.rd-atmos[data-zone="career"] { --rd-field-hue: -21deg; }
+.rd-atmos[data-zone="setup"] { --rd-field-hue: -29deg; }
+.rd-atmos[data-zone="lab"] { --rd-field-hue: 22deg; }
+.rd-atmos[data-zone="contact"] { --rd-field-hue: 28deg; }
+
+@keyframes rdAurora {
+  0% { transform: translate3d(-4%, -3%, 0) scale(1.04) rotate(-1deg); }
+  45% { transform: translate3d(4%, 2%, 0) scale(1.16) rotate(2.5deg); }
+  100% { transform: translate3d(-2%, 5%, 0) scale(1.08) rotate(-2.5deg); }
+}
+
 .rd-atmos canvas {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
@@ -38,26 +76,34 @@
    the whole layer fixed the ratio but killed the motion, so the surfaces now
    keep the layer at full presence and instead lift the field's own colours
    toward the paper (--rd-field-lift) and clamp its alpha (--rd-field-amp). */
-.page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.46; }
-.page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.4; }
+.page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.58; }
+.page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.52; }
 
-.page.rd[data-rd-theme="dark"] { --rd-field-lift: 0; --rd-field-amp: 0.72; }
-.page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.78; --rd-field-amp: 0.72; --rd-field-tint: #f8f6ef; }
-.page.rd[data-rd-theme="light"] { --rd-field-lift: 0.72; --rd-field-amp: 0.68; --rd-field-tint: #ffffff; }
+.page.rd[data-rd-theme="dark"] { --rd-field-lift: 0; --rd-field-amp: 0.95; }
+.page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.78; --rd-field-amp: 0.84; --rd-field-tint: #f8f6ef; }
+.page.rd[data-rd-theme="light"] { --rd-field-lift: 0.72; --rd-field-amp: 0.8; --rd-field-tint: #ffffff; }
+
+/* The aurora is not on the lift gradient, so the warm surfaces hold it back
+   on its own opacity instead. */
+.page.rd[data-rd-theme="sepia"] .rd-atmos::before { opacity: 0.6; }
+.page.rd[data-rd-theme="light"] .rd-atmos::before { opacity: 0.45; filter: blur(30px) saturate(0.82) hue-rotate(var(--rd-field-hue, 0deg)); }
 
 /* Contact's field is the warmest of the set, and its small mono line sat right
    on 4.5:1 over it; hold this zone back rather than dim every section. */
-.page.rd[data-rd-theme="dark"] .rd-atmos[data-zone="contact"] { opacity: 0.56; }
+.page.rd[data-rd-theme="dark"] .rd-atmos[data-zone="contact"] { opacity: 0.62; }
 
 @media (max-width: 48rem) {
-  .rd-atmos { opacity: 0.62; }
+  .rd-atmos { opacity: 0.78; }
   /* Phone copy spans more of the screen, so the mesh lifts closer to paper. */
-  .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.4; }
-  .page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.35; }
-  .page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.82; --rd-field-amp: 0.68; --rd-field-tint: #f8f6ef; }
-  .page.rd[data-rd-theme="light"] { --rd-field-lift: 0.78; --rd-field-amp: 0.62; --rd-field-tint: #ffffff; }
+  .page.rd[data-rd-theme="sepia"] .rd-atmos { opacity: 0.5; }
+  .page.rd[data-rd-theme="light"] .rd-atmos { opacity: 0.46; }
+  .page.rd[data-rd-theme="sepia"] { --rd-field-lift: 0.82; --rd-field-amp: 0.78; --rd-field-tint: #f8f6ef; }
+  .page.rd[data-rd-theme="light"] { --rd-field-lift: 0.78; --rd-field-amp: 0.74; --rd-field-tint: #ffffff; }
+  .page.rd[data-rd-theme="sepia"] .rd-atmos::before { opacity: 0.5; }
+  .page.rd[data-rd-theme="light"] .rd-atmos::before { opacity: 0.38; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .rd-atmos { transition: none !important; }
+  .rd-atmos::before { animation: none; transition: none; }
 }

@@ -26,7 +26,7 @@ Live: [shy-jble.freemilk.app](https://shy-jble.freemilk.app) — the canonical h
 - **Media Player** — 63 clips from the edits archive, grouped by month, played through Drive's preview embed. Nothing is bundled into the repo.
 - **cmd.exe** — a working terminal: `help`, `open avante`, `neofetch`, `sudo hire-me`, and history.
 - **road_trip.exe** — a local pseudo-3D racer with drift, boost, lap scoring and keyboard or touch controls. Open it in its XP window or launch the standalone game at `/racer`.
-- **F1** — opens the hidden Clippy.exe helper. The desktop also has the Konami-code confetti, a recurring Windows Update alert, and a quick POST boot screen.
+- **F1** — opens the hidden Clippy.exe helper. The desktop also has the Konami-code confetti, a recurring Windows Update alert, a quick POST boot screen, and Ctrl+Alt+Del, which still stops the machine.
 - **Task Manager** — open windows can be ended from the Start menu, or with Ctrl+Shift+Esc; Windows Update cannot.
 
 ## Editing content

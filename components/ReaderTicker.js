@@ -4,18 +4,18 @@ import { useEffect, useRef, useState } from "react";
 // The marquee is the impression; the credits list below it is the record. Same
 // array, so a role can never drift out of sync with the logo above it.
 const ITEMS = [
-  { label: "Red Bull", note: "Wings Cup 2026 · league operations & live production", logo: "/brands/red-bull.svg", width: 225, height: 36 },
-  { label: "Mineski Philippines", note: "Wings Cup · event partner", logo: "/brands/mineski-philippines.png", width: 1707, height: 1707 },
+  { label: "Red Bull", note: "League operations, logistics & events producer · Wings Cup 2026", logo: "/brands/red-bull.svg", width: 225, height: 36 },
+  { label: "Mineski Philippines", note: "League operations, logistics & events producer · Wings Cup 2026", logo: "/brands/mineski-philippines.png", width: 1707, height: 1707 },
   { label: "PUBG Mobile Esports", note: "Short-form video editor · global social campaign", logo: "/brands/pubg-mobile.png", width: 455, height: 268 },
   { label: "Tencent Games", note: "Campaign partner", logo: "/brands/tencent-games.png", width: 174, height: 82 },
   { label: "VNG Corporation", note: "Editing · Mar 2023 – Mar 2024", logo: "/brands/vng-corporation.png", width: 1441, height: 285 },
   // lilith has no logo of her own, so the strip sets her name as text.
   { label: "lilith", note: "Creator edits" },
-  { label: "Avante Esports", note: "Founder & CEO", logo: "/avante/logo-white.svg", width: 1920, height: 1080 },
-  { label: "Ascendant Group", note: "Co-founder" },
+  { label: "Avante Esports", note: "Founder & CEO · brand systems, media & esports organisation", logo: "/avante/logo-white.svg", width: 1920, height: 1080 },
+  { label: "Ascendant Group", note: "Co-founder · sports, esports & events production" },
   { label: "Drippy Lab", note: "VALORANT team manager", logo: "/brands/drippy-lab.png", width: 2551, height: 681 },
-  { label: "BOOM Esports", note: "Assistant manager · Dota 2 · TI11", logo: "/brands/boom-esports.png", width: 600, height: 802 },
-  { label: "AcadArena", note: "Senior event marshal", logo: "/brands/acadarena.png", width: 183, height: 66 },
+  { label: "BOOM Esports", note: "Assistant team manager, Dota 2 · The International 2022", logo: "/brands/boom-esports.png", width: 600, height: 802 },
+  { label: "AcadArena", note: "Senior event marshal · CONQuest / Campus ACES", logo: "/brands/acadarena.png", width: 183, height: 66 },
 ];
 
 // The marquee only moves while visible. The credits list underneath carries the

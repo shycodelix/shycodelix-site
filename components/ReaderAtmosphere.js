@@ -194,6 +194,16 @@ export default function ReaderAtmosphere() {
       drift = { x, y, vy };
     });
 
+    // Scroll progress drives the sweep band, so the field answers the page moving
+    // under it and not only the pointer. Read off a listener rather than every
+    // frame, which would force layout each tick.
+    let scrollP = 0;
+    const readScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      scrollP = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    };
+    readScroll();
+
     const field = (x, y, curl, move) => {
       const nx = x * 0.0022;
       const ny = y * 0.0019;
@@ -217,15 +227,31 @@ export default function ReaderAtmosphere() {
     };
 
     const drawMesh = (wgt) => {
-      pool(w * (0.24 + 0.1 * Math.sin(t * 0.11 * cur.speed)), h * (0.2 + 0.1 * Math.cos(t * 0.09 * cur.speed)), Math.max(w, h) * 0.62, cur.a, (0.25 + strength * 0.08) * amp * wgt);
-      pool(w * (0.78 + 0.08 * Math.cos(t * 0.07)), h * (0.74 + 0.09 * Math.sin(t * 0.1)), Math.max(w, h) * 0.58, cur.b, (0.21 + cur.lift * 0.12) * cur.motes * amp * wgt);
-      pool(w * (0.5 + 0.26 * Math.sin(t * 0.05 + 1.7)), h * (0.5 + 0.24 * Math.cos(t * 0.06)), Math.max(w, h) * 0.42, cur.a, (0.15 + strength * 0.07) * amp * wgt);
+      pool(w * (0.24 + 0.1 * Math.sin(t * 0.11 * cur.speed)), h * (0.2 + 0.1 * Math.cos(t * 0.09 * cur.speed)), Math.max(w, h) * 0.62, cur.a, (0.3 + strength * 0.08) * amp * wgt);
+      pool(w * (0.78 + 0.08 * Math.cos(t * 0.07)), h * (0.74 + 0.09 * Math.sin(t * 0.1)), Math.max(w, h) * 0.58, cur.b, (0.25 + cur.lift * 0.12) * cur.motes * amp * wgt);
+      pool(w * (0.5 + 0.26 * Math.sin(t * 0.05 + 1.7)), h * (0.5 + 0.24 * Math.cos(t * 0.06)), Math.max(w, h) * 0.42, cur.a, (0.18 + strength * 0.07) * amp * wgt);
+    };
+
+    // A wide diagonal band of the section's own ink, travelling with scroll: the
+    // page reads as a lit surface rather than a printed one.
+    const drawSweep = (wgt) => {
+      const alpha = 0.17 * amp * wgt;
+      if (alpha <= 0.002) return;
+      const y0 = h * (0.92 - scrollP * 0.86);
+      const y1 = h * (0.1 + scrollP * 0.8);
+      const g = ctx.createLinearGradient(w * -0.15, y0, w * 1.15, y1);
+      g.addColorStop(0, rgba(cur.a, 0));
+      g.addColorStop(0.42, rgba(cur.b, alpha));
+      g.addColorStop(0.58, rgba(cur.a, alpha * 0.8));
+      g.addColorStop(1, rgba(cur.b, 0));
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
     };
 
     // Drafting grid: verticals and horizontals scroll with velocity; three
     // contour curves ride across them like ink on a technical drawing.
     const drawGrid = (wgt) => {
-      const alpha = 0.19 * amp * wgt;
+      const alpha = 0.24 * amp * wgt;
       if (alpha <= 0.002) return;
       const step = Math.max(44, Math.round(w / 22));
       const shift = ((t * 0.18 + drift.y * 1.6 + drift.x * 0.5) % step + step) % step;
@@ -257,7 +283,7 @@ export default function ReaderAtmosphere() {
 
     // Constellation: nodes breathe, hairlines link the near pairs.
     const drawNodes = (wgt) => {
-      const alpha = 0.62 * amp * wgt;
+      const alpha = 0.7 * amp * wgt;
       if (alpha <= 0.002) return;
       const pts = nodes.map((n, i) => ({
         x: n.ax * w + Math.sin(t * 0.006 + n.ph) * 26 + lean.x * 0.5,
@@ -287,7 +313,7 @@ export default function ReaderAtmosphere() {
 
     // Signal lines + pixel shimmer for the lab-adjacent bands.
     const drawWave = (wgt) => {
-      const alpha = 0.27 * amp * wgt;
+      const alpha = 0.33 * amp * wgt;
       if (alpha <= 0.002) return;
       ctx.strokeStyle = rgba(cur.a, alpha);
       ctx.lineWidth = 1;
@@ -329,6 +355,7 @@ export default function ReaderAtmosphere() {
       ctx.clearRect(0, 0, w, h);
       ctx.globalCompositeOperation = "source-over";
       drawMesh(curMode.mesh);
+      drawSweep(0.35 + curMode.mesh * 0.65);
       drawGrid(curMode.grid);
       drawNodes(curMode.nodes);
       drawWave(curMode.wave);
@@ -376,6 +403,7 @@ export default function ReaderAtmosphere() {
 
     const onResize = () => {
       size();
+      readScroll();
       if (reduced) draw(true);
     };
     const onVisibility = () => {
@@ -396,6 +424,7 @@ export default function ReaderAtmosphere() {
     io.observe(canvas);
 
     addEventListener("resize", onResize);
+    addEventListener("scroll", readScroll, { passive: true });
     document.addEventListener("visibilitychange", onVisibility);
 
     applyZone.current = () => {
@@ -414,6 +443,7 @@ export default function ReaderAtmosphere() {
       stopDrift();
       io.disconnect();
       removeEventListener("resize", onResize);
+      removeEventListener("scroll", readScroll);
       document.removeEventListener("visibilitychange", onVisibility);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     };

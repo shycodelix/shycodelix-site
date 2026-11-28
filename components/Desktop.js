@@ -59,7 +59,7 @@ function AboutBody() {
       <div>
         <p>Hi, I&rsquo;m <b>shycodelix</b>. I stream on four platforms, cut the clips afterwards, and build the overlays and the org that pay for the hardware. Nine years of day jobs in between, mostly leading customer-facing teams.</p>
         <p className="chips"><span>{profile.status}</span><span>{profile.country}</span><span>{avante.role}, Avante Esports</span></p>
-        <p className="note">Hover the photo to un-pixelate me. Psst: the Konami code works here, <b>cmd.exe</b> is a real terminal with a model behind it, and <b>notepad</b> actually saves.</p>
+        <p className="note">Hover the photo to un-pixelate me. Psst: the Konami code works here, <b>cmd.exe</b> is a real terminal with a model behind it, <b>notepad</b> actually saves, and Ctrl+Alt+Del is still Ctrl+Alt+Del.</p>
       </div>
     </div>
   );
@@ -353,6 +353,33 @@ function Boot({ onDone }) {
   );
 }
 
+// The stop screen. Not a window: it covers the desktop the way it did in 2001,
+// and its stop code spells the name in hex.
+function Bsod({ onRestart }) {
+  return (
+    <div className="bsod" role="alertdialog" aria-modal="true" aria-label="shycodelix OS stopped">
+      <p className="bsod-lead">
+        A problem has been detected and shycodelix OS has been shut down to prevent damage
+        to your desktop.
+      </p>
+      <p>The stream is still live. That is the problem.</p>
+      <p className="bsod-tech">
+        If this is the first time you have seen this stop error screen, keep it that way.
+        Press Ctrl+Alt+Del again later if it happens during a render.
+      </p>
+      <p className="bsod-tech">Technical information:</p>
+      <p className="bsod-tech">
+        *** STOP: 0x000000CE (0x53485943, 0x4F44454C, 0x49580000, 0x000000CE)
+        <br />
+        *** shycodelix.sys — Address F7A1C0DE base at F7A1C000, DateStamp 06262026
+      </p>
+      <p className="bsod-tech">Beginning dump of physical memory … 3% (it will not finish)</p>
+      <button type="button" className="bsod-restart" onClick={onRestart}>Restart shycodelix OS</button>
+      <p className="bsod-skip">Esc, Enter, or the button above.</p>
+    </div>
+  );
+}
+
 export default function Desktop() {
   const [phase, setPhase] = useState("check");
   const deskRef = useRef(null);
@@ -372,6 +399,7 @@ export default function Desktop() {
   const [night, setNight] = useState(false);
   const [toast, setToast] = useState("");
   const [conf, setConf] = useState([]);
+  const [bsod, setBsod] = useState(false);
   const [bubble, setBubble] = useState(false);
   const [bubbleRound, setBubbleRound] = useState(0);
   const z = useRef(10);
@@ -585,10 +613,33 @@ export default function Desktop() {
 
   // Esc closes the window that has focus (or the top one), Alt+Tab cycles the stack,
   // Alt+1…9 jumps straight to the nth window.
+  // Ctrl+Alt+Del still does what it did in 2001. The button (or any of Esc,
+  // Enter, Space) reboots through the real boot sequence rather than hiding the
+  // screen, so the easter egg costs nothing when it fires.
+  const restart = useCallback(() => {
+    setBsod(false);
+    setStartOpen(false);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setPhase(reduce ? "ready" : "boot");
+  }, []);
+
   useEffect(() => {
     const h = (e) => {
+      if (bsod) {
+        if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          restart();
+        }
+        return;
+      }
       const target = e.target;
       const editing = target instanceof HTMLElement && target.closest("input, textarea, select, [contenteditable='true']");
+      if (e.ctrlKey && e.altKey && !e.metaKey && (e.key === "Delete" || e.key === "Backspace" || e.key.toLowerCase() === "b")) {
+        e.preventDefault();
+        beep(180);
+        setBsod(true);
+        return;
+      }
       if (e.key === "F1" && !editing) {
         e.preventDefault();
         open("clippy");
@@ -624,7 +675,7 @@ export default function Desktop() {
     };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
-  }, [activate, beep, close, cycle, open, startOpen]);
+  }, [activate, beep, bsod, close, cycle, open, restart, startOpen]);
 
   // The Start menu is a menu, so the keyboard enters it and comes back to the button.
   const wasStartOpen = useRef(false);
@@ -829,6 +880,7 @@ export default function Desktop() {
 
       {toast && <div className="toast" role="status">{toast}</div>}
       {conf.map((c, i) => <i key={i} className="conf" style={{ left: `${c.l}%`, animationDelay: `${c.d}s`, background: c.c }} />)}
+      {bsod && <Bsod onRestart={restart} />}
       {phase === "boot" && <Boot onDone={finishBoot} />}
       <div className="crt" aria-hidden="true" />
     </div>
