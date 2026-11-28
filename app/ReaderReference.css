@@ -1392,3 +1392,90 @@
   .page.rd .rd-capabilities { background: #fff; color: #000; }
   .page.rd .rd-capabilities .rd-caps > * { background: #fff; }
 }
+
+
+
+/* ---------------------------------------------------------------------------
+   The corner map travels.
+
+   The four labels used to sit on the opening plate and scroll away with it.
+   They are a position rather than a header, so they are pinned to the viewport
+   corners for the whole document — wordmark top-left, work top-right, about
+   bottom-left, lab bottom-right — each on its own paper chip, which keeps it
+   legible over the hero photographs, the orange band and the dark bands alike
+   without depending on a blend mode. The rail itself is click-through: only the
+   labels take pointer events, so nothing underneath is blocked.
+   --------------------------------------------------------------------------- */
+.page.rd .dock {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: block;
+  width: auto;
+  height: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  pointer-events: none;
+}
+.page.rd .dock-mark,
+.page.rd .dock-corner {
+  position: absolute;
+  margin: 0;
+  pointer-events: none;
+}
+.page.rd .dock-mark,
+.page.rd .dock-corner a { pointer-events: auto; }
+
+.page.rd .dock-mark {
+  top: max(0.7rem, env(safe-area-inset-top, 0px));
+  left: clamp(0.8rem, 3vw, 2.2rem);
+}
+.page.rd .dock-corner[data-corner="work"] {
+  top: max(0.7rem, env(safe-area-inset-top, 0px));
+  right: clamp(0.8rem, 3vw, 2.2rem);
+}
+.page.rd .dock-corner[data-corner="about"] {
+  bottom: max(0.8rem, env(safe-area-inset-bottom, 0px));
+  left: clamp(0.8rem, 3vw, 2.2rem);
+}
+.page.rd .dock-corner[data-corner="lab"] {
+  right: clamp(0.8rem, 3vw, 2.2rem);
+  bottom: max(0.8rem, env(safe-area-inset-bottom, 0px));
+}
+
+/* Sticky section headings drop a step, so they never pass behind the wordmark
+   sitting at the top of the viewport. */
+.page.rd .rd-sec > h2 { top: clamp(2.9rem, 4.4vw, 3.6rem); }
+
+@media (max-width: 48rem) {
+  .page.rd .dock-mark,
+  .page.rd .dock-corner a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0.34rem 0.5rem;
+    background: color-mix(in oklab, var(--rd-paper) 94%, transparent);
+    color: var(--rd-ink);
+    font-size: 0.88rem;
+    mix-blend-mode: normal;
+    text-shadow: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .page.rd .dock-mark:hover,
+  .page.rd .dock-corner a:hover,
+  .page.rd .dock-corner a[aria-current="true"] {
+    background: color-mix(in oklab, var(--rd-paper) 94%, transparent);
+    color: var(--rd-ink);
+  }
+}
+
+/* Nothing printed, nothing pinned. */
+@media print {
+  .page.rd .dock { display: none; }
+}
