@@ -1482,17 +1482,4 @@
 
 
 
-/* A mark that ships as artwork on its own dark field, rather than a cut-out on
-   transparency, keeps that field: a dark tile reads as deliberate on the paper
-   surfaces and disappears into the dark ones, where the monochrome invert the
-   rest of the strip uses would leave a solid white block. */
-.page.rd .rd-ticker .rd-brand-tile,
-.page.rd .rd-credit-brand .rd-brand-tile,
-.page.rd[data-rd-theme="sepia"] .rd-credit-brand .rd-brand-tile,
-.page.rd[data-rd-theme="light"] .rd-credit-brand .rd-brand-tile {
-  box-sizing: content-box;
-  padding: 0.12rem 0.16rem;
-  background: #0d0f14;
-  filter: none;
-  opacity: 1;
-}
+

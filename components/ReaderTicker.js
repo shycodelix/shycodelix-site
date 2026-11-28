@@ -8,9 +8,7 @@ const ITEMS = [
   // description of the work. Everything below it is the rest of the record.
   { label: "Red Bull", note: "League operations, logistics & events producer · Red Bull Wings Cup 2026", logo: "/brands/red-bull.svg", width: 225, height: 36 },
   { label: "Mineski Philippines", note: "League operations, logistics & events producer · Red Bull Wings Cup 2026", logo: "/brands/mineski-philippines.png", width: 1707, height: 1707 },
-  // Shipped as artwork on its own dark field rather than a cut-out, so it keeps
-  // that field instead of being forced into a monochrome invert.
-  { label: "Webmasters Esports", note: "League operations, logistics & events producer · Red Bull Wings Cup 2026", logo: "/brands/webmasters-esports.png", width: 470, height: 646, tile: true },
+  { label: "Webmasters Esports", note: "League operations, logistics & events producer · Red Bull Wings Cup 2026", logo: "/brands/webmasters-esports.png", width: 470, height: 646 },
   { label: "Avante Esports", note: "Founder & CEO · delivery partner, Red Bull Wings Cup 2026", logo: "/avante/logo-white.svg", width: 1920, height: 1080 },
   { label: "Ascendant Group", note: "Co-founder · sports, esports & events production, Red Bull Wings Cup 2026" },
   { label: "PUBG Mobile Esports", note: "Short-form video editor · global social campaign", logo: "/brands/pubg-mobile.png", width: 455, height: 268 },
@@ -51,7 +49,7 @@ export default function ReaderTicker() {
                 <b key={`${item.label}-${k}`}>
                   {item.logo ? (
                     <img
-                      className={item.tile ? "rd-brand-logo rd-brand-tile" : "rd-brand-logo"}
+                      className="rd-brand-logo"
                       src={item.logo}
                       alt=""
                       width={item.width}
@@ -72,7 +70,7 @@ export default function ReaderTicker() {
             <span className="rd-credit-brand">
               {item.logo ? (
                 <img
-                  className={item.tile ? "rd-brand-logo rd-brand-tile" : "rd-brand-logo"}
+                  className="rd-brand-logo"
                   src={item.logo}
                   alt={item.label}
                   width={item.width}
