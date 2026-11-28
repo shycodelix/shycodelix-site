@@ -16,15 +16,15 @@ export const caseStudies = {
     slug: "red-bull-wings-cup",
     disciplines: ["Operations", "Production"],
     tags: ["League operations", "Live production", "University esports"],
-    kicker: "Red Bull Wings Cup — University of Cebu qualifier",
+    kicker: "Red Bull Wings Cup 2026 — University of Cebu qualifier",
     title: "A campus qualifier, built to run",
     standfirst:
-      "League operations, event logistics and live floor production for the Red Bull Wings Cup university qualifier at the University of Cebu, delivered with Avante Esports and Ascendant Group.",
+      "League operations, event logistics and live floor production for the Red Bull Wings Cup 2026 university qualifier at the University of Cebu, run with Mineski Philippines and delivered with Avante Esports, Ascendant Group and Webmasters Esports.",
     meta: [
-      ["Event", "Red Bull Wings Cup 2026 · University qualifier"],
+      ["Event", "Red Bull Wings Cup 2026 · University of Cebu qualifier"],
       ["Venue", "University of Cebu"],
-      ["Role", "League operations, logistics & live production"],
-      ["Partners", "Avante Esports · Ascendant Group"],
+      ["Role", "League operations, logistics & events producer"],
+      ["Partners", "Mineski Philippines · Avante Esports · Ascendant Group · Webmasters Esports"],
       ["Year", "2026"],
     ],
     lead: {
@@ -47,7 +47,7 @@ export const caseStudies = {
         n: "02",
         h: "Coordination behind the bracket",
         p: [
-          "Working alongside Avante Esports and Ascendant Group, I supported league operations, logistics and live event production. The job was to keep teams, schedules and on-floor activity aligned across the event day.",
+          "Red Bull brought the event, Mineski Philippines brought the ground game, and Avante Esports, Ascendant Group and Webmasters Esports made up the delivery crew. My part was league operations, logistics and live floor production: keeping teams, schedules and on-floor activity aligned across the event day.",
         ],
       },
       {
@@ -98,13 +98,13 @@ export const caseStudies = {
     ],
     assets: [
       {
-        label: "Red Bull Wings Cup event archive",
+        label: "Red Bull Wings Cup 2026 event archive",
         href: "https://drive.google.com/drive/folders/17WLLb2B4uRH7EU3DJsPlUL8PlZdmq_d9",
         note: "Selected event photographs and source material.",
       },
     ],
     verify: {
-      label: "Red Bull Wings Cup event archive",
+      label: "Red Bull Wings Cup 2026 event archive",
       href: "https://drive.google.com/drive/folders/17WLLb2B4uRH7EU3DJsPlUL8PlZdmq_d9",
     },
   },
