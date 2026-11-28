@@ -102,8 +102,7 @@
 .page.rd .rd-portrait { border-radius: 0; border: 0; }
 .page.rd .rd-hero-rule { height: 1px; background: rgba(0, 0, 0, 0.25); }
 
-/* The statement is the personal introduction; the showreel follows it, as in
-   the reference, before the work index begins. */
+/* The statement is the personal introduction before the work index begins. */
 .page.rd .rd-statement {
   max-width: 66rem;
   margin: clamp(4rem, 9vw, 8rem) auto clamp(3.5rem, 8vw, 6rem);
@@ -134,42 +133,6 @@
   font-size: 0.72rem;
   letter-spacing: 0;
   text-transform: none;
-}
-
-/* Rounded reel plate, with the reference's outlined play pill. */
-.page.rd .rd-showreel {
-  margin-top: 0;
-  padding: clamp(1.2rem, 3vw, 2rem) clamp(1.1rem, 2vw, 1.5rem);
-  background: transparent;
-  color: var(--rd-text);
-  perspective: 1200px;
-}
-.page.rd .rd-showreel-head {
-  max-width: 68rem;
-  margin-bottom: 0.7rem;
-}
-.page.rd .rd-showreel-head .rd-mono { color: var(--rd-ink-soft); }
-.page.rd .rd-showreel-head > p:last-child { color: var(--rd-text); }
-.page.rd .rd-showreel-frame {
-  overflow: hidden;
-  border-radius: clamp(1rem, 2vw, 1.6rem);
-  background: #d6d6d6;
-  box-shadow: none;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-.page.rd .rd-showreel-frame video {
-  max-height: 78svh;
-  border-radius: inherit;
-  background: #d6d6d6;
-  object-fit: cover;
-}
-.page.rd .rd-showreel-frame figcaption {
-  padding: 0.65rem 0.9rem;
-  background: #fff;
-  color: #555;
-  font-family: var(--font-grotesk), var(--font-body), sans-serif;
-  font-size: 0.75rem;
 }
 
 /* Featured work: one moving display line, image-led rows and light rules. */
@@ -714,12 +677,9 @@
   .page.rd .rd-contact-links { gap: 0.5rem 0.8rem; }
   .page.rd .rd-foot { min-height: 92svh; padding-block: 2.5rem; }
   .page.rd .rd-foot-mark { font-size: clamp(4.2rem, 21vw, 7rem); }
-  .page.rd .rd-showreel-frame video { max-height: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page.rd .rd-showreel-frame { transform: none !important; }
-  .page.rd .rd-showreel-play { transition: none; }
   .page.rd .rd-shot,
   .page.rd .rd-hero-plate { transform: none !important; }
 }
@@ -976,7 +936,7 @@
 }
 
 /* Match every band to the selected reading surface instead of leaving white
-   slabs behind the dark hero and the lower-thirds reel. */
+   slabs behind the dark hero. */
 .page.rd .rd-hero-sequence {
   height: 115svh;
   min-height: 46rem;
@@ -1000,14 +960,6 @@
 .page.rd .rd-hero-bar .rd-status {
   font-size: 0.68rem;
   letter-spacing: 0.035em;
-}
-.page.rd .rd-showreel { color: var(--rd-text); }
-.page.rd .rd-showreel-frame,
-.page.rd .rd-showreel-frame video { background: var(--rd-paper2); }
-.page.rd .rd-showreel-frame figcaption {
-  padding-left: clamp(5rem, 8vw, 7rem);
-  background: var(--rd-paper2);
-  color: var(--rd-text-soft);
 }
 .page.rd .rd-viewall { border-color: var(--rd-text); color: var(--rd-text); }
 .page.rd .rd-cta { border-color: var(--rd-ink); }
@@ -1093,7 +1045,6 @@
     min-height: max(30rem, 100vh);
   }
   .page.rd .rd-case-index .cs-index-item { grid-template-areas: "image" "copy"; }
-  .page.rd .rd-showreel-frame figcaption { padding-left: clamp(4.5rem, 8vw, 5rem); }
   .page.rd .rd-hero-copy .rh {
     max-width: 100%;
     font-size: clamp(2.6rem, 12vw, 4.25rem);

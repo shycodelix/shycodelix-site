@@ -310,12 +310,12 @@ const BOOT_CHECKS = [
 function Boot({ onDone }) {
   const [p, setP] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setP((v) => Math.min(100, v + 5)), 55);
+    const t = setInterval(() => setP((v) => Math.min(100, v + 10)), 50);
     return () => clearInterval(t);
   }, []);
   useEffect(() => {
     if (p >= 100) {
-      const t = setTimeout(onDone, 260);
+      const t = setTimeout(onDone, 180);
       return () => clearTimeout(t);
     }
   }, [p, onDone]);

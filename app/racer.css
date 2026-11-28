@@ -1,4 +1,4 @@
-/* The XP desktop's built-in arcade racer. */
+/* Shy Racing, available inside the XP desktop and as a standalone game. */
 .xp-racer { display: grid; gap: 0.55rem; }
 .racer-hud { display: flex; justify-content: space-between; gap: 0.35rem; padding: 0.35rem 0.5rem; background: #d6d1c0; border: 2px inset #fff; font-family: var(--font-micro), monospace; }
 .racer-hud span { display: grid; gap: 0.08rem; }
@@ -24,4 +24,79 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .racer-controls button { transition: none; }
+}
+
+
+.racer-page {
+  min-height: 100svh;
+  padding: clamp(1rem, 4vw, 3.5rem);
+  color: #f4f2ec;
+  background: radial-gradient(70rem 42rem at 50% -10%, #26394d, transparent 65%), #11151a;
+}
+.racer-page a { color: inherit; text-underline-offset: 0.2em; }
+.racer-page-top,
+.racer-page-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem 1.5rem;
+  width: min(64rem, 100%);
+  margin-inline: auto;
+  font-family: var(--font-micro), monospace;
+  font-size: 0.72rem;
+}
+.racer-page-top > a { font-weight: 700; text-decoration: none; }
+.racer-page-top nav { display: flex; flex-wrap: wrap; gap: 0.8rem 1.2rem; }
+.racer-page-top nav a,
+.racer-page-foot a { color: #d5d7d3; }
+.racer-page-heading {
+  width: min(64rem, 100%);
+  margin: clamp(3rem, 8vw, 6rem) auto 1.5rem;
+}
+.racer-page-label {
+  margin: 0 0 0.5rem;
+  color: #ffd76a;
+  font-family: var(--font-micro), monospace;
+  font-size: 0.68rem;
+}
+.racer-page-heading h1 {
+  margin: 0;
+  color: #f4f2ec;
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  line-height: 0.95;
+}
+.racer-page-heading > p:last-child {
+  max-width: 52ch;
+  margin-top: 0.8rem;
+  color: #c4c9ce;
+}
+.racer-window {
+  width: min(64rem, 100%);
+  margin: 0 auto;
+  overflow: hidden;
+  background: #d6d1c0;
+  border: 1px solid #7c8791;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+}
+.racer-window-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.7rem;
+  color: #fff;
+  background: linear-gradient(#4a93e8, #0a46a8);
+  font-family: var(--font-micro), monospace;
+  font-size: 0.68rem;
+}
+.racer-window-bar span:last-child { color: #dbe9ff; font-size: 0.56rem; }
+.racer-window-body { padding: clamp(0.65rem, 2vw, 1.1rem); }
+.racer-page .xp-racer { width: min(56rem, 100%); margin-inline: auto; }
+.racer-page-foot { margin-top: 1.2rem; color: #aab2b9; }
+
+@media (max-width: 36rem) {
+  .racer-page { padding: 1rem 0.75rem 1.5rem; }
+  .racer-page-top,
+  .racer-page-foot { font-size: 0.64rem; }
+  .racer-window-bar { font-size: 0.6rem; }
 }

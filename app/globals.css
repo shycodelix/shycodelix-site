@@ -1013,7 +1013,7 @@ body { -webkit-tap-highlight-color: rgba(255, 122, 26, 0.22); }
 .boot-checks li[data-state="done"] { color: #c2e8d0; }
 .boot-checks li[data-state="running"] { color: #e8f4ff; }
 .boot .bar { overflow: hidden; }
-.boot .bar i { transition: width 55ms linear; }
+.boot .bar i { transition: width 50ms linear; }
 .boot .boot-skip {
   min-width: 44px;
   min-height: 44px;

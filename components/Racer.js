@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const RECORD_KEY = "shycodelix.racer.best";
@@ -128,7 +129,7 @@ function paint(ctx, width, height, game) {
   ctx.fillRect(0, 0, width, 3);
 }
 
-export default function Racer() {
+export default function Racer({ standalone = false }) {
   const canvasRef = useRef(null);
   const game = useRef({ status: "ready", speed: 0, distance: 0, player: 0, time: 0, spawn: 1, traffic: [] });
   const keys = useRef({ left: false, right: false, gas: false, brake: false });
@@ -269,7 +270,7 @@ export default function Racer() {
         <span><small>Best</small><b>{best} m</b></span>
       </div>
       <div className="racer-screen">
-        <canvas ref={canvasRef} role="img" aria-label="A pseudo-3D night road racing game. Steer around traffic." />
+        <canvas ref={canvasRef} role="img" aria-label="Pseudo-3D road racer. Steer around traffic with the arrow keys or WASD." />
         {status !== "running" && (
           <div className="racer-overlay">
             <p className="racer-kicker">{status === "crashed" ? "Race over" : "Cebu night run"}</p>
@@ -285,7 +286,7 @@ export default function Racer() {
         <button type="button" aria-label="Brake" onPointerDown={hold("brake", true)} onPointerUp={hold("brake", false)} onPointerCancel={hold("brake", false)} onLostPointerCapture={hold("brake", false)}>Brake</button>
       </div>
       <p className="racer-help">Arrow keys or WASD to steer · hold ↑ to accelerate, ↓ to brake. Touch controls work too.</p>
-      <a className="racer-outbound" href="https://wmmtd.xyz" target="_blank" rel="noreferrer">Open WMMTD.xyz <span aria-hidden="true">↗</span></a>
+      {!standalone && <Link className="racer-outbound" href="/racer">Open Shy Racing standalone <span aria-hidden="true">↗</span></Link>}
     </section>
   );
 }

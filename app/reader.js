@@ -23,7 +23,6 @@ import ReaderSectionScrub from "../components/ReaderSectionScrub";
 import ReaderHeroMotion from "../components/ReaderHeroMotion";
 import ReaderMotionTitle from "../components/ReaderMotionTitle";
 import ReaderStatement from "../components/ReaderStatement";
-import ReaderShowreel from "../components/ReaderShowreel";
 import ReaderFooterMark from "../components/ReaderFooterMark";
 import Wordmark from "../components/Wordmark";
 import "./v2-reader.css";
@@ -162,7 +161,6 @@ export default function Profile() {
       {/* A short statement leads into the work, not a list of credentials. */}
       <ReaderStatement />
       <ReaderTheme />
-      <ReaderShowreel />
 
       <section id="work" className="rd-sec rd-work">
         <h2 className="sr-only">Featured work</h2>
@@ -409,14 +407,10 @@ export default function Profile() {
               <b>Windows XP desktop</b>
               <span>Open the nested desktop directly.</span>
             </Link>
-            <Link href="/os/desktop" prefetch={false}>
+            <Link href="/racer" prefetch={false}>
               <b>Shy Racing</b>
-              <span>A playable road racer inside the XP desktop, with touch controls.</span>
+              <span>A standalone playable road racer, with keyboard and touch controls.</span>
             </Link>
-            <a href="https://wmmtd.xyz" target="_blank" rel="noreferrer">
-              <b>WMMTD.xyz</b>
-              <span>Open the original in a new tab; the site blocks embedded play.</span>
-            </a>
           </div>
           <a className="rd-kit" href="/os">
             <img src="/kit/scene-starting.webp" alt="Starting scene from the Pixels-3 stream overlay pack" width={1200} height={675} loading="lazy" />
