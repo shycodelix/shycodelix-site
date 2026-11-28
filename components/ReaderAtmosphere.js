@@ -190,9 +190,11 @@ export default function ReaderAtmosphere() {
 
     let drift = { x: 0, y: 0, vy: 0 };
     let lean = { x: 0, y: 0 };
-    const stopDrift = subscribeDrift(({ x, y, vy }) => {
-      drift = { x, y, vy };
-    });
+    const stopDrift = reduced
+      ? () => {}
+      : subscribeDrift(({ x, y, vy }) => {
+          drift = { x, y, vy };
+        });
 
     // Scroll progress drives the sweep band, so the field answers the page moving
     // under it and not only the pointer. Read off a listener rather than every
@@ -427,18 +429,22 @@ export default function ReaderAtmosphere() {
     addEventListener("scroll", readScroll, { passive: true });
     document.addEventListener("visibilitychange", onVisibility);
 
-    applyZone.current = () => {
+    const syncZone = () => {
       readSurface();
       readZone(zoneRef.current);
       if (reduced) draw(true);
     };
+    applyZone.current = syncZone;
+    const themeObserver = new MutationObserver(syncZone);
+    themeObserver.observe(root, { attributes: true, attributeFilter: ["data-rd-theme"] });
+    syncZone();
 
-    if (reduced) draw(true);
-    else tick();
+    if (!reduced) tick();
 
     return () => {
       running = false;
       applyZone.current = null;
+      themeObserver.disconnect();
       cancelAnimationFrame(raf);
       stopDrift();
       io.disconnect();
