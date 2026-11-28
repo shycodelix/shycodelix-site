@@ -67,8 +67,8 @@ const THEMES = {
   },
 };
 
-/** The floating HUD: reading surface, text size. Section navigation lives in
- *  the dock, so it is not duplicated here. */
+/** The floating HUD: reading surface and text size. Section navigation lives
+ *  in the fixed top rail, so it is not duplicated here. */
 export default function ReaderTheme() {
   const [theme, setTheme] = useState("dark");
   const [size, setSize] = useState("default");
@@ -107,33 +107,6 @@ export default function ReaderTheme() {
       localStorage.setItem("rd-size", size);
     } catch {}
   }, [theme, size]);
-
-  // The hero sizes itself against the fold, so it has to know how much room the
-  // dock above it actually takes: the section dock plus this HUD, both of which
-  // wrap. Measured from the document instead of assumed, and published back as
-  // --rd-dock-h for the CSS to subtract.
-  useEffect(() => {
-    const root = document.querySelector(".page.rd");
-    const main = root?.querySelector("main");
-    if (!root || !main) return;
-
-    const measure = () => {
-      const offset = main.getBoundingClientRect().top - root.getBoundingClientRect().top;
-      if (offset > 0) root.style.setProperty("--rd-dock-h", `${Math.round(offset)}px`);
-    };
-
-    measure();
-    const ro = new ResizeObserver(measure);
-    root.querySelectorAll(".dock, .rd-theme-hud").forEach((el) => ro.observe(el));
-    addEventListener("resize", measure);
-    document.fonts?.ready.then(measure, () => {});
-
-    return () => {
-      ro.disconnect();
-      removeEventListener("resize", measure);
-      root.style.removeProperty("--rd-dock-h");
-    };
-  }, []);
 
   const t = THEMES[theme];
 

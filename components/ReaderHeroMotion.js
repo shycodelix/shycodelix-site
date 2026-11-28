@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { READER_MOTION } from "./readerMotion";
 
 export default function ReaderHeroMotion() {
   const ref = useRef(null);
@@ -19,76 +20,75 @@ export default function ReaderHeroMotion() {
 
     let onPointerMove;
     let onPointerLeave;
+    const motion = READER_MOTION.hero;
     const ctx = gsap.context(() => {
       const plates = gsap.utils.toArray(".rd-hero-plate", scene);
       const routes = graphic ? gsap.utils.toArray("[data-route]", graphic) : [];
       const nodes = graphic ? gsap.utils.toArray("[data-node]", graphic) : [];
-      const tiltX = gsap.quickTo(collage, "rotationX", { duration: 0.6, ease: "power3.out" });
-      const tiltY = gsap.quickTo(collage, "rotationY", { duration: 0.6, ease: "power3.out" });
+      const pointerEase = { duration: motion.pointer.duration, ease: motion.pointer.ease };
+      const tiltX = gsap.quickTo(collage, "rotationX", pointerEase);
+      const tiltY = gsap.quickTo(collage, "rotationY", pointerEase);
 
       onPointerMove = (event) => {
         if (event.pointerType !== "mouse") return;
         const bounds = scene.getBoundingClientRect();
         const x = (event.clientX - bounds.left) / bounds.width - 0.5;
         const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-        tiltX(-y * 3);
-        tiltY(x * 4);
+        tiltX(-y * motion.pointer.tiltX);
+        tiltY(x * motion.pointer.tiltY);
       };
       onPointerLeave = () => {
         tiltX(0);
         tiltY(0);
       };
-      gsap.set(collage, { transformPerspective: 1300, transformStyle: "preserve-3d" });
+      gsap.set(collage, { transformPerspective: motion.pointer.perspective, transformStyle: "preserve-3d" });
       gsap.from(plates, {
-        y: 30,
+        y: motion.entrance.y,
         opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.075,
+        duration: motion.entrance.duration,
+        ease: motion.entrance.ease,
+        stagger: motion.entrance.stagger,
         clearProps: "opacity,y",
       });
       if (routes.length) {
         gsap.fromTo(routes, { strokeDashoffset: 1 }, {
           strokeDashoffset: 0,
-          duration: 1.5,
-          stagger: 0.18,
-          delay: 0.15,
-          ease: "power2.out",
+          ...motion.route,
         });
       }
       if (nodes.length) {
-        gsap.fromTo(nodes, { scale: 0.25, autoAlpha: 0 }, {
+        gsap.fromTo(nodes, { scale: motion.node.scale, autoAlpha: 0 }, {
           scale: 1,
-          autoAlpha: 0.78,
-          duration: 0.72,
-          stagger: 0.12,
-          delay: 0.35,
-          ease: "power3.out",
+          autoAlpha: motion.node.alpha,
+          duration: motion.node.duration,
+          stagger: motion.node.stagger,
+          delay: motion.node.delay,
+          ease: motion.node.ease,
         });
       }
 
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: hero,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 0.8,
+          start: motion.scroll.start,
+          end: motion.scroll.end,
+          scrub: motion.scroll.scrub,
         },
       });
 
       timeline
         .to(plates, {
-          x: (i) => (i % 2 ? 1 : -1) * (150 + i * 22),
-          y: (i) => (i % 2 ? -1 : 1) * (95 + i * 16),
-          rotation: (i) => (i % 2 ? 12 : -12),
-          scale: 1.22,
-          opacity: 0.12,
+          x: (i) => (i % 2 ? 1 : -1) * (motion.scroll.plateX + i * motion.scroll.plateXStep),
+          y: (i) => (i % 2 ? -1 : 1) * (motion.scroll.plateY + i * motion.scroll.plateYStep),
+          rotation: (i) => (i % 2 ? 1 : -1) * motion.scroll.rotation,
+          scale: motion.scroll.scale,
+          opacity: motion.scroll.plateOpacity,
           ease: "none",
-          stagger: 0.04,
+          stagger: motion.scroll.plateStagger,
         }, 0)
-        .to(".rd-hero-copy", { y: -92, opacity: 0.12, scale: 0.95, ease: "none" }, 0)
-        .to(".rd-hero-bar", { y: -28, opacity: 0.2, ease: "none" }, 0);
-      if (graphic) timeline.to(graphic, { y: -18, scale: 1.025, opacity: 0.04, ease: "none" }, 0);
+        .to(".rd-hero-copy", { y: motion.scroll.copyY, opacity: motion.scroll.copyOpacity, scale: motion.scroll.copyScale, ease: "none" }, 0)
+        .to(".rd-hero-bar", { y: motion.scroll.barY, opacity: motion.scroll.barOpacity, ease: "none" }, 0);
+      if (graphic) timeline.to(graphic, { y: motion.scroll.graphicY, scale: motion.scroll.graphicScale, opacity: motion.scroll.graphicOpacity, ease: "none" }, 0);
     }, scene);
 
     scene.addEventListener("pointermove", onPointerMove, { passive: true });

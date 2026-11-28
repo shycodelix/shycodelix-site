@@ -2,6 +2,7 @@
 import { ReactLenis } from "lenis/react";
 import { useEffect, useState } from "react";
 import LenisGsap from "./LenisGsap";
+import { READER_MOTION } from "./readerMotion";
 
 export default function SmoothScroll({ children }) {
   const [reduce, setReduce] = useState(false);
@@ -12,7 +13,7 @@ export default function SmoothScroll({ children }) {
   // autoRaf: false — GSAP's ticker steps Lenis (see LenisGsap), so the scroll
   // and the scroll-linked tweens share one frame instead of two loops.
   return (
-    <ReactLenis root options={{ lerp: 0.1, wheelMultiplier: 1, autoRaf: false }}>
+    <ReactLenis root options={{ ...READER_MOTION.lenis, autoRaf: false }}>
       <LenisGsap />
       {children}
     </ReactLenis>

@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { READER_MOTION } from "./readerMotion";
 
 /* ---------------------------------------------------------------------------
    ReaderScrollChoreo — GSAP ScrollTrigger scroll-scrubbed choreography for
@@ -25,9 +26,9 @@ export default function ReaderScrollChoreo({
   // does not (it is a div.rh), so it passes ".rh" and used to get a null target
   // and no choreography at all.
   target = "h2",
-  scrub = 1.2,
-  headerSkew = 1.1,
-  headerY = 36,
+  scrub = READER_MOTION.sectionHeader.scrub,
+  headerSkew = READER_MOTION.sectionHeader.skew,
+  headerY = READER_MOTION.sectionHeader.y,
   ...rest
 }) {
   const wrapper = useRef(null);
@@ -46,8 +47,8 @@ export default function ReaderScrollChoreo({
     // Pin the section's choreography scroll range to the section itself.
     const trigger = ScrollTrigger.create({
       trigger: w,
-      start: "top bottom-=60",
-      end: "bottom top+=60",
+      start: READER_MOTION.sectionHeader.start,
+      end: READER_MOTION.sectionHeader.end,
       scrub: scrub,
       onUpdate: (self) => {
         const p = self.progress; // 0..1 through the section

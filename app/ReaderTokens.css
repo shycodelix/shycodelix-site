@@ -9,8 +9,70 @@
   --rd-outline-width: 0.45px;
   --rd-outline-color: var(--rd-halo, rgba(18, 18, 17, 0.55));
   --rd-outline-glow: var(--rd-halo-soft, rgba(18, 18, 17, 0.32));
-  --rd-outline-blur: 16px;
+  --rd-nav-height: calc(3.25rem + env(safe-area-inset-top, 0px));
 }
+
+/* The fixed rail stays compact, translucent and legible across all three
+   reading surfaces, with the active destination marked by a single ink line. */
+.page.rd .rd-topbar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  min-height: var(--rd-nav-height);
+  padding: env(safe-area-inset-top, 0px) max(1rem, env(safe-area-inset-right, 0px)) 0 max(1rem, env(safe-area-inset-left, 0px));
+  border-bottom: 1px solid var(--rd-line);
+  background: color-mix(in oklab, var(--rd-paper) 92%, transparent);
+  color: var(--rd-text);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.page.rd .rd-topbar-mark {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--rd-ink);
+  font-family: var(--font-grotesk), var(--font-body), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-decoration: none;
+}
+.page.rd .rd-topbar-mark span { color: var(--rd-accent-ink, var(--rd-accent)); }
+.page.rd .rd-topbar-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 1.6rem);
+}
+.page.rd .rd-topbar-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 0.15rem;
+  border-bottom: 1px solid transparent;
+  color: var(--rd-text);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: lowercase;
+  transition: color var(--rd-motion-fast) var(--rd-motion-ease), border-color var(--rd-motion-fast) var(--rd-motion-ease);
+}
+.page.rd .rd-topbar-links a:hover,
+.page.rd .rd-topbar-links a[aria-current="true"] {
+  border-bottom-color: var(--rd-accent-ink, var(--rd-accent));
+  color: var(--rd-ink);
+}
+.page.rd .rd-topbar-mark:focus-visible,
+.page.rd .rd-topbar-links a:focus-visible {
+  outline: 2px solid var(--rd-accent-ink, var(--rd-accent));
+  outline-offset: 3px;
+}
+.page.rd .rd-sec > h2 { top: calc(var(--rd-nav-height) + 0.75rem); }
 
 /* These three destinations share a page measure and section cadence while the
    atmosphere gives each one its own palette and drawing language. */
@@ -20,7 +82,7 @@
   padding-inline: clamp(1.1rem, 6vw, 5rem);
   padding-block: clamp(4rem, 8vw, 7rem);
   border-top: 1px solid var(--rd-line);
-  scroll-margin-top: 2rem;
+  scroll-margin-top: calc(var(--rd-nav-height) + 0.75rem);
 }
 .page.rd #work > .rd-motion-title,
 .page.rd #lab > .rd-motion-title {
@@ -62,7 +124,7 @@
 .page.rd .rd-foot-mark {
   -webkit-text-stroke: var(--rd-outline-width) var(--rd-outline-color);
   paint-order: stroke fill;
-  text-shadow: 0 0 var(--rd-outline-blur) var(--rd-outline-glow);
+  text-shadow: 0 1px 2px var(--rd-outline-glow);
   transition:
     -webkit-text-stroke-color var(--rd-motion-settle) var(--rd-motion-ease),
     text-shadow var(--rd-motion-settle) var(--rd-motion-ease);
@@ -108,11 +170,14 @@
     padding-block: 3.5rem;
   }
   .page.rd #work.rd-sec > .rd-col { width: 100%; }
+  .page.rd .rd-topbar-links { gap: clamp(0.35rem, 2.5vw, 0.8rem); }
+  .page.rd .rd-topbar-links a { font-size: 0.78rem; }
   .page.rd .rd-lab-links { grid-template-columns: minmax(0, 1fr); }
   .page.rd .rd-lab-links a + a { padding-left: 0; border-left: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .page.rd .rd-topbar-links a,
   .page.rd .rd-motion-title-text,
   .page.rd .rd-hero-copy .rh-lines,
   .page.rd .rd-contact-lead,
@@ -124,7 +189,14 @@
 }
 
 
+@media (max-width: 22rem) {
+  .page.rd .rd-topbar { padding-inline: max(0.65rem, env(safe-area-inset-left, 0px)) max(0.65rem, env(safe-area-inset-right, 0px)); }
+  .page.rd .rd-topbar-links { gap: 0.2rem; }
+  .page.rd .rd-topbar-links a { font-size: 0.72rem; }
+}
+
 @media print {
+  .page.rd .rd-topbar { display: none; }
   .page.rd .rd-hero-copy .rh-lines,
   .page.rd .rd-motion-title-text,
   .page.rd .rd-contact-lead,

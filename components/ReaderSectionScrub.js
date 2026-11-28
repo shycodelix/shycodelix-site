@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { prefersReducedMotion } from "./gsapTick";
+import { READER_MOTION } from "./readerMotion";
 
 /* ---------------------------------------------------------------------------
    ReaderSectionScrub — one scrubbed timeline for a whole reader section.
@@ -23,9 +24,6 @@ import { prefersReducedMotion } from "./gsapTick";
    prose section it drifts the whole column under the paragraph in front of you.
    --------------------------------------------------------------------------- */
 
-const LIFT = 38;   // px the blocks rise from
-const DRIFT = 4.5; // percent of vertical drift for framed media
-
 export default function ReaderSectionScrub({ target }) {
   useEffect(() => {
     const el = document.getElementById(target);
@@ -43,17 +41,17 @@ export default function ReaderSectionScrub({ target }) {
         defaults: { ease: "none" },
         scrollTrigger: {
           trigger: el,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
+          start: READER_MOTION.sectionContent.start,
+          end: READER_MOTION.sectionContent.end,
+          scrub: READER_MOTION.sectionContent.scrub,
         },
       });
 
       if (blocks.length) {
-        tl.fromTo(blocks, { y: LIFT }, { y: 0, duration: 0.45 }, 0);
+        tl.fromTo(blocks, { y: READER_MOTION.sectionContent.lift }, { y: 0, duration: READER_MOTION.sectionContent.blockDuration }, 0);
       }
       if (media.length) {
-        tl.fromTo(media, { scale: 1.05, yPercent: DRIFT }, { scale: 1, yPercent: -DRIFT }, 0);
+        tl.fromTo(media, { scale: READER_MOTION.sectionContent.mediaScale, yPercent: READER_MOTION.sectionContent.mediaDrift }, { scale: 1, yPercent: -READER_MOTION.sectionContent.mediaDrift }, 0);
       }
     }, el);
 

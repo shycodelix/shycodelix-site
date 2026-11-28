@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { READER_MOTION } from "./readerMotion";
 
 export default function ReaderMotionTitle({ text }) {
   const ref = useRef(null);
@@ -18,9 +19,9 @@ export default function ReaderMotionTitle({ text }) {
         ease: "none",
         scrollTrigger: {
           trigger: root,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
+          start: READER_MOTION.title.start,
+          end: READER_MOTION.title.end,
+          scrub: READER_MOTION.title.scrub,
           invalidateOnRefresh: true,
         },
       });

@@ -1280,14 +1280,14 @@
   --rd-halo-soft: rgba(255, 253, 247, 0.55);
 }
 
-.page.rd .rd-hero-copy .rh,
+.page.rd .rd-hero-copy .rh-lines,
 .page.rd .rd-motion-title-text,
 .page.rd .rd-contact-lead,
 .page.rd .rd-contact-line,
 .page.rd .rd-foot-mark {
   -webkit-text-stroke: 0.45px var(--rd-halo);
   paint-order: stroke fill;
-  text-shadow: 0 0 16px var(--rd-halo-soft);
+  text-shadow: 0 1px 2px var(--rd-halo-soft);
 }
 
 .page.rd .rd-hero-bar,
@@ -1297,7 +1297,7 @@
 .page.rd .rd-shot figcaption,
 .page.rd .rd-lab-copy,
 .page.rd .rd-kit-body b {
-  text-shadow: 0 1px 3px var(--rd-halo-soft), 0 0 12px var(--rd-halo-soft);
+  text-shadow: 0 1px 2px var(--rd-halo-soft);
 }
 
 /* The contact band is dark on every reading surface, so its ink keeps a dark
@@ -1309,7 +1309,7 @@
 }
 
 @media print {
-  .page.rd .rd-hero-copy .rh,
+  .page.rd .rd-hero-copy .rh-lines,
   .page.rd .rd-motion-title-text,
   .page.rd .rd-contact-lead,
   .page.rd .rd-contact-line,

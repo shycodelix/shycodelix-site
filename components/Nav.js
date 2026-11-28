@@ -3,19 +3,12 @@ import Link from "next/link";
 import { useLenis } from "lenis/react";
 import { useEffect, useRef, useState } from "react";
 import { publishLenisVelocityOnScrollTick } from "./scrollTick";
+import { READER_MOTION } from "./readerMotion";
 
 const sectionIds = ["work", "about", "verified", "experience", "skills", "avante", "career", "setup", "lab", "contact"];
 
-/* The rail: four labels pinned to the four corners of the viewport, the way the
-   mirror target does it — wordmark top-left, the work index top-right, the
-   person bottom-left, the room bottom-right. Nothing sits in a bar, so no
-   height is spent above the hero and the labels float over the page instead of
-   pushing it down. Secondary sections stay in the page's reading order rather
-   than competing with the three primary destinations.
-
-   The corner labels are anchors (`about` jumps to the about section) or routes
-   (`work`, `lab`), which is what makes the four corners read as a map of the
-   site rather than a scroll spy. */
+/* A compact top rail keeps the three main destinations together while the
+   reader's sections stay in their original order below. */
 export default function Nav() {
   const [active, setActive] = useState("");
   const bar = useRef(null);
@@ -33,7 +26,7 @@ export default function Nav() {
   function go(e, id) {
     if (!lenis) return;
     e.preventDefault();
-    lenis.scrollTo("#" + id, { duration: 1.6 });
+    lenis.scrollTo("#" + id, { duration: READER_MOTION.navigation.aboutScroll });
   }
 
   useEffect(() => {
@@ -57,23 +50,15 @@ export default function Nav() {
   return (
     <>
       <div className="progress" ref={bar} aria-hidden="true" />
-      <nav className="dock" data-active={active} aria-label="Primary navigation">
-        <a className="dock-mark" href="#content" aria-label="shycodelix — top of the reader">
+      <nav className="rd-topbar" data-active={active} aria-label="Primary navigation">
+        <a className="rd-topbar-mark" href="#content" aria-label="shycodelix — top of the reader">
           shy<span aria-hidden="true">*</span>
         </a>
-
-        <div className="dock-corner" data-corner="work">
+        <div className="rd-topbar-links">
           <Link href="/work" prefetch={false} aria-current={active === "work" ? "true" : undefined}>work</Link>
-        </div>
-
-        <div className="dock-corner" data-corner="about">
           <a href="#about" onClick={(e) => go(e, "about")} aria-current={active === "about" ? "true" : undefined}>about</a>
-        </div>
-
-        <div className="dock-corner" data-corner="lab">
           <Link href="/os" prefetch={false} aria-current={active === "lab" ? "true" : undefined}>lab</Link>
         </div>
-
       </nav>
     </>
   );
