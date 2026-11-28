@@ -390,13 +390,34 @@
   --rd-accent: #ff4a00;
   --rd-accent-ink: #ff6a30;
   --rd-on-accent: #111;
-  background: #000;
+  background: color-mix(in oklab, #000 42%, transparent);
   color: #f5f5f5;
 }
 .page.rd .rd-inter.rd-inter-dark {
   margin-block: 0;
   border-color: #222;
-  background: #000;
+  background: color-mix(in oklab, #000 42%, transparent);
+}
+.page.rd[data-rd-theme="sepia"] #avante,
+.page.rd[data-rd-theme="sepia"] #career,
+.page.rd[data-rd-theme="sepia"] #setup,
+.page.rd[data-rd-theme="sepia"] #lab,
+.page.rd[data-rd-theme="sepia"] .rd-contact,
+.page.rd[data-rd-theme="sepia"] .rd-foot,
+.page.rd[data-rd-theme="light"] #avante,
+.page.rd[data-rd-theme="light"] #career,
+.page.rd[data-rd-theme="light"] #setup,
+.page.rd[data-rd-theme="light"] #lab,
+.page.rd[data-rd-theme="light"] .rd-contact,
+.page.rd[data-rd-theme="light"] .rd-foot {
+  background: color-mix(in oklab, #000 82%, transparent);
+}
+.page.rd[data-rd-theme="dark"] .rd-contact {
+  background: color-mix(in oklab, #000 58%, transparent);
+}
+.page.rd[data-rd-theme="sepia"] .rd-inter.rd-inter-dark,
+.page.rd[data-rd-theme="light"] .rd-inter.rd-inter-dark {
+  background: color-mix(in oklab, #000 82%, transparent);
 }
 .page.rd #avante {
   border-block: 1px solid rgba(255, 255, 255, 0.16);
@@ -1000,7 +1021,11 @@
   height: 100svh;
   min-height: 34rem;
   min-height: max(34rem, 100vh);
-  background: var(--rd-reader-bg, var(--rd-paper));
+  background: color-mix(in oklab, var(--rd-reader-bg, var(--rd-paper)) 78%, transparent);
+}
+.page.rd[data-rd-theme="dark"] .rd-hero-sticky,
+.page.rd:not([data-rd-theme]) .rd-hero-sticky {
+  background: transparent;
 }
 .page.rd .rd-hero-plate:nth-child(1) { top: 12%; }
 .page.rd .rd-hero-plate:nth-child(2) { top: 11%; }

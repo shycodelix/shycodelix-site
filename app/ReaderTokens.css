@@ -108,7 +108,7 @@
 .page.rd #lab {
   --rd-outline-color: rgba(8, 8, 8, 0.72);
   --rd-outline-glow: rgba(0, 0, 0, 0.52);
-  background: color-mix(in oklab, #111 84%, transparent);
+  background: color-mix(in oklab, #111 42%, transparent);
 }
 .page.rd .rd-contact {
   --rd-outline-color: rgba(8, 8, 8, 0.72);
